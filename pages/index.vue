@@ -54,7 +54,7 @@ onMounted(() => {
     anime({
       targets: '.secure-icon path', 
       fill: {
-        value: '#3498db',
+        value: '#FFFFFF',
         duration: 500,
         easing: 'easeInOutQuad'
       }
@@ -134,7 +134,7 @@ const handleRegister = () => {
                 </p>
             </div>
             <div class="hero-btn">
-                <UIRoundedButton data-bs-toggle="modal" data-bs-target="#createAccountModal">
+                <UIRoundedButton data-bs-toggle="modal" data-bs-target="#loginAccountModal">
                   <h6>Start Archive Now !</h6>
                 </UIRoundedButton>
             </div>
@@ -404,6 +404,14 @@ const handleRegister = () => {
         font-weight: 500;
         font-size: 20px;
     }
+    &:hover{
+              h6{
+                color:black;
+              }
+              background-color: white;
+              cursor: pointer;
+              transition-duration: 250ms;
+          }
 }
 
 .btn-close{

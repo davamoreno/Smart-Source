@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  ssr : true,
+  ssr: true,
 
   app: {
     head: {
@@ -15,13 +15,19 @@ export default defineNuxtConfig({
         { property: 'og:image', content: '/og-image.png' }
       ],
       link: [
+        {
+          rel: 'stylesheet', href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+          , integrity: "sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+          , crossorigin: 'anonymous', referrerpolicy: 'no-referrer'
+        },
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'preconnect', href:'https://fonts.googleapis.com'},
-        { rel: 'preconnect', href:'https://fonts.gstatic.com'},
-        { rel: 'stylesheet', href:'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap'}
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap' }
       ],
       script: [
         { src: 'https://example.com/script.js', async: true },
+        { src: "https://kit.fontawesome.com/f1a55980af.js" }
       ]
     }
   },
@@ -42,8 +48,8 @@ export default defineNuxtConfig({
 
   build: {
     transpile: [
-      'animejs', 
-      'pusher-js' 
+      'animejs',
+      'pusher-js'
     ],
     extractCSS: true,
     optimizeCSS: true,

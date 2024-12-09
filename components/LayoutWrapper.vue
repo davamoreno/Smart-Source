@@ -19,25 +19,25 @@ const handleLogin = () =>{
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-list collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <NuxtLink to="/" class="nav-link active" aria-current="page">Home</NuxtLink> 
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
+            <li class="nav-item me-4 ">
+              <NuxtLink to="/" class="nav-link " aria-current="page">Home</NuxtLink> 
             </li>
-            <li class="nav-item">
-              <NuxtLink to="/Categories" class="nav-link active" aria-current="page">Categories</NuxtLink> 
+            <li class="nav-item me-4">
+              <NuxtLink to="/Categories" class="nav-link " aria-current="page">Categories</NuxtLink> 
             </li>
-            <li class="nav-item">
-              <NuxtLink to="/papers" class="nav-link active" aria-current="page">Papers</NuxtLink> 
+            <li class="nav-item me-4">
+              <NuxtLink to="/papers" class="nav-link " aria-current="page">Papers</NuxtLink> 
             </li>
-            <li class="nav-item">
-              <NuxtLink to="/about-us" class="nav-link active">About Us</NuxtLink> 
+            <li class="nav-item me-4">
+              <NuxtLink to="/about-us" class="nav-link ">About Us</NuxtLink> 
             </li>
             </ul>
           <div class="d-flex navbar-btn" style="margin-left: 100px;">
-            <button class="btn me-auto btn-primary" data-bs-toggle="modal" data-bs-target="#createAccountModal">
+            <button class="btn me-auto btn-primary" data-bs-toggle="modal" data-bs-target="#loginAccountModal">
               <NuxtLink class="nav-link">Sign In</NuxtLink> 
             </button>
-            <button class="btn ms-4 btn-outline-primary" style="margin-right  : 100px;" data-bs-toggle="modal" data-bs-target="#loginAccountModal">
+            <button class="btn ms-4 btn-outline-primary" style="margin-right  : 100px;" data-bs-toggle="modal" data-bs-target="#createAccountModal">
               <NuxtLink class="nav-link">Sign Up</NuxtLink> 
             </button>
           </div>
@@ -48,7 +48,7 @@ const handleLogin = () =>{
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-2" id="createAccountModalLabel">Create an account</h1>
+              <h1 class="modal-title fs-2" id="createAccountModalLabel">Login to your account</h1>
               <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="d-flex justify-content-center modal-body">
@@ -92,10 +92,15 @@ const handleLogin = () =>{
       ul {
         li {
           a {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins';
             font-weight: bold;
             font-size: 14px;
             text-decoration: none;
+            color: black;
+        }
+          a:hover {
+              color:red;
+              cursor: pointer;
           }
         }
       }

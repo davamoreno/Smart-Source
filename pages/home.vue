@@ -1,11 +1,20 @@
+<script setup>
+
+import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { onMounted, computed} from 'vue';
+
+const memberAuthStore = useMemberAuthStore();
+const user = computed(() => memberAuthStore.userProfile);
+
+</script>
+
 <template>
   <div class="container-fluid">
     <div class="row">
-      <!-- Sidebar -->
       <aside class="col-md-3 sidebar pt-5">
         <div class="text-center">
           <img src="https://via.placeholder.com/80" alt="Profile" class="profile-img mb-3" />
-          <h4>Jessica Chandra</h4>
+          <h4>{{ user.username }}</h4>
           <p>Politeknik Negeri Bali</p>
           <p>Teknologi Informasi</p>
           <button class="btn btn-primary btn-sm">Edit Profile</button>
@@ -84,28 +93,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import DocumentCard from '../components/DocumentCard.vue';
-
-export default {
-  components: { DocumentCard },
-  data() {
-    return {
-      latestDocuments: [
-        { title: 'Title Document', category: 'Makalah', publisher: 'Ozza Afreza' },
-        { title: 'Title Document', category: 'Jurnal', publisher: 'Ozza Afreza' },
-        { title: 'Title Document', category: 'Laporan Praktikum', publisher: 'Ozza Afreza' },
-      ],
-      likedDocuments: [
-        { title: 'Title Document', category: 'Skripsi', publisher: 'Ozza Afreza' },
-        { title: 'Title Document', category: 'Skripsi', publisher: 'Ozza Afreza' },
-        { title: 'Title Document', category: 'Skripsi', publisher: 'Ozza Afreza' },
-      ],
-    };
-  },
-};
-</script>
 
 <style lang="scss">
 

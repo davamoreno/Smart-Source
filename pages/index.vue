@@ -3,6 +3,12 @@ import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { onMounted, ref } from 'vue';
 import anime from 'animejs';
 
+definePageMeta({
+  middleware: 'auth',
+  requiresGuest: true,
+  requiresAuth: true
+});
+
 onMounted(() => {
   const quickAnimation = () => {
     anime({
@@ -358,6 +364,14 @@ const handleRegister = () => {
     margin-top: 120px;
 }
 
+.hero-btn{
+  button:hover{
+    h6{
+      color: #000000;
+    }
+  }
+}
+
 .main{
     margin-bottom: 200px;
     &-search{
@@ -408,7 +422,7 @@ const handleRegister = () => {
               h6{
                 color:black;
               }
-              background-color: white;
+              background-color: transparent;
               cursor: pointer;
               transition-duration: 250ms;
           }

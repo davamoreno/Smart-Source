@@ -1,9 +1,9 @@
 <script setup>
-const { $bs } = useNuxtApp();
+const { $bootstrap } = useNuxtApp();
 
 onMounted(() => {
   try {
-    const collapse = new $bs.Collapse('#navbarSupportedContent');
+    const collapse = new $bootstrap.Collapse('#navbarSupportedContent');
     collapse.show();
   } catch (e) {
     console.log('Bootstrap error: ', e);

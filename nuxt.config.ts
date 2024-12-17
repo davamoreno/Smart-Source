@@ -40,6 +40,11 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
   ],
 
+  plugins: [
+    '~/plugins/bootstrap.client',
+    '~/plugins/auth-check'
+  ],
+
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_URL || 'http://localhost:3000'

@@ -1,11 +1,44 @@
 <script setup>
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { onMounted, computed} from 'vue';
+import { useRouter } from 'vue-router';
+const {$bootstrap} = useNuxtApp();
 
 const memberAuthStore = useMemberAuthStore();
+const user = computed(() => memberAuthStore.userProfile);
+const router = useRouter();
 
-const handleLogin = () =>{
-  memberAuthStore.login();
+async function handleLogin() { 
+  try {
+    await memberAuthStore.login();
+
+    if (memberAuthStore.isLogin) {
+      console.log('Login successful!');
+      const modal = document.getElementById('loginAccountModal');
+      const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+      bootstrapModal.hide();
+      
+      await memberAuthStore.getUserProfile(); 
+      navigateTo('/home');
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+  }
 }
+
+await handleLogin();
+
+onMounted(() => {
+  const cookieToken = useCookie('jwt');
+  if (cookieToken.value) {
+    console.log('Token ditemukan:', cookieToken.value);
+    memberAuthStore.isLogin = true;
+    memberAuthStore.getUserProfile();
+          router.push('/home');
+  } else {
+    console.log('Token tidak ditemukan, user belum login');
+  }
+});
 
 </script>
 
@@ -33,13 +66,16 @@ const handleLogin = () =>{
               <NuxtLink to="/about-us" class="nav-link ">About Us</NuxtLink> 
             </li>
             </ul>
-          <div class="d-flex navbar-btn" style="margin-left: 100px;">
+          <div class="d-flex navbar-btn" style="margin-left: 100px;" v-if="!memberAuthStore.isLogin">
             <button class="btn me-auto btn-primary" data-bs-toggle="modal" data-bs-target="#loginAccountModal">
               <NuxtLink class="nav-link">Sign In</NuxtLink> 
             </button>
             <button class="btn ms-4 btn-outline-primary" style="margin-right  : 100px;" data-bs-toggle="modal" data-bs-target="#createAccountModal">
               <NuxtLink class="nav-link">Sign Up</NuxtLink> 
             </button>
+          </div>
+          <div v-else>
+            
           </div>
         </div>
       </div>

@@ -11,9 +11,9 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   // Redirect jika user sudah login dan mencoba ke halaman guest
-//   if (to.meta.requiresGuest && memberAuthStore.isLogin) {
-//     return navigateTo('/home');
-//   }
+  if (to.meta.requiresGuest && memberAuthStore.isLogin) {
+    return navigateTo('/home');
+  }
 
   // Redirect jika halaman butuh auth, tetapi user belum login
   if (to.meta.requiresAuth && !memberAuthStore.isLogin) {

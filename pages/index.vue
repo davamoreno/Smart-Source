@@ -1,12 +1,12 @@
 <script setup>
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { onMounted, ref } from 'vue';
+import { definePageMeta } from '#build/imports';
 import anime from 'animejs';
 
 definePageMeta({
   middleware: 'auth',
   requiresGuest: true,
-  requiresAuth: true
 });
 
 onMounted(() => {

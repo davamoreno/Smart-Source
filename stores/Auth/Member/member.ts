@@ -89,6 +89,31 @@ async function getUserProfile(){
   }
 }
 
+async function logout() {
+  try{
+    const response = await axios.post('http://localhost:8000/api/member/logout', 
+    {
+
+    },
+    {
+      headers : {
+        Authorization : `Bearer ${useCookie('jwt').value}`
+      },
+    }
+  );
+  const cookieToken = useCookie('jwt');
+  cookieToken.value = null;
+
+  token.value = null;
+  isLogin.value = false;
+  userProfile.value = {};
+
+  console.log('logout success');
+  }catch(err){
+    console.log('err', err);
+  }
+}
+
 return {
   setLoginStatus,
   register,
@@ -103,6 +128,7 @@ return {
   isLoading,
   error,
   userProfile,
-  getUserProfile
+  getUserProfile,
+  logout
 }
 });

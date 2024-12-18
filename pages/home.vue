@@ -1,7 +1,13 @@
 <script setup>
 
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
-import { onMounted, computed} from 'vue';
+import { onMounted, computed } from 'vue';
+import { definePageMeta } from '#build/imports';
+
+definePageMeta({
+  middleware : 'auth',
+  requiresAuth : true
+});
 
 const memberAuthStore = useMemberAuthStore();
 const user = computed(() => memberAuthStore.userProfile);
@@ -11,40 +17,7 @@ const user = computed(() => memberAuthStore.userProfile);
 <template>
   <div class="container-fluid">
     <div class="row">
-      <aside class="col-md-3 sidebar pt-5">
-        <div class="text-center">
-          <img src="https://via.placeholder.com/80" alt="Profile" class="profile-img mb-3" />
-          <h4>{{ user.username }}</h4>
-          <p>Politeknik Negeri Bali</p>
-          <p>Teknologi Informasi</p>
-          <button class="btn btn-primary btn-sm">Edit Profile</button>
-        </div>
-        <hr />
-        <nav class="nav flex-column">
-          <div class="container px-5">
-          <div class="menu-item ms-4">
-            <img src="/images/newpost.svg" alt="New Post Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">New Post</a>
-          </div>
-          <div class="menu-item ms-4">
-            <img src="/images/history.svg" alt="History Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">History</a>
-          </div>
-          <div class="menu-item ms-4">
-            <img src="/images/bookmark.svg" alt="Bookmark Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">Bookmarks</a>
-          </div>
-          <div class="menu-item ms-4">
-            <img src="/images/mypost.svg" alt="My Post Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">My Post</a>
-          </div>
-          <div class="menu-item logout ms-4">
-            <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />
-            <a class="nav-link" href="#">Log Out</a>
-          </div>
-        </div>
-        </nav>
-      </aside>
+      <SideBar/>
 
       <!-- Main Content -->
       <div class="col-md-9">
@@ -92,29 +65,13 @@ const user = computed(() => memberAuthStore.userProfile);
       </div>
     </div>
   </div>
+  
 </template>
 
 <style lang="scss">
 
 body {
   background-color: #ffe6eb;
-}
-
-.sidebar {
-  background-color: #ffffff;
-  min-height: 100vh;
-  padding: 20px;
-  border-right: 2px solid #e5e5e5;
-  border-left: 2px solid #e5e5e5;  /* Garis di sisi kiri (Opsional) */
-  border-top: 2px solid #e5e5e5;   /* Garis di sisi atas (Opsional) */
-  border-bottom: 2px solid #e5e5e5;/* Garis di sisi bawah (Opsional) */
-}
-
-.profile-img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .pink-header {

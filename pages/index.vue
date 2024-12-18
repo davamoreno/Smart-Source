@@ -135,7 +135,7 @@ const handleRegister = () => {
             </div>
             <div class="hero-btn">
                 <UIRoundedButton data-bs-toggle="modal" data-bs-target="#createAccountModal">
-                  <h6>Start Archive Now !</h6>
+                  <h6>Start Archive Now!</h6>
                 </UIRoundedButton>
             </div>
         </div>

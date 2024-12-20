@@ -48,8 +48,8 @@ defineEmits(['update:modelValue'])
   input {
     border: 1px solid;
     background-color: #D9D9D9;
-    width: 100%;
-    height: 64px;
+    width: 420px;
+    height: 60px;
     padding: 10px;
     box-sizing: border-box;
   }

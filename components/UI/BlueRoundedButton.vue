@@ -15,6 +15,7 @@
       font-weight: bold;
       text-align: center;
       cursor: pointer;
+      margin-top: 20px;
     }
   
     @media (max-width: 768px) {

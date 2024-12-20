@@ -301,17 +301,41 @@ const handleRegister = () => {
             <div class="d-flex justify-content-center modal-body">
               <form @submit.prevent="handleRegister">
                   <UIInput id="username" label="Username" placeholder="Enter your username" v-model="memberAuthStore.username" />
-                  <UIInput id="email" label="Email address" type="email" placeholder="Enter your email address" v-model="memberAuthStore.email" />  
+                  <div v-if="memberAuthStore.error?.username" class="text-danger">
+                      {{ memberAuthStore.error.username[0] }}
+                   </div>
+                  <UIInput id="email" label="Email address" type="email" placeholder="Enter your email address" v-model="memberAuthStore.email" />
+                  <div v-if="memberAuthStore.error?.email" class="text-danger">
+                      {{ memberAuthStore.error.email[0] }}
+                   </div>  
                   <UIInput id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
+                  <div v-if="memberAuthStore.error?.password" class="text-danger">
+                      {{ memberAuthStore.error.password[0] }}
+                   </div>  
                   <UIInput id="confirmPassword" label="Confirm Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.confirmPassword" />
-                  <div class="d-flex justify-content-center"> 
-                    <UIBlueRoundedButton type="submit">
-                        Create account
-                    </UIBlueRoundedButton>
+                  <div v-if="memberAuthStore.error?.confirmPassword" class="text-danger">
+                      {{ memberAuthStore.error.confirmPassword[0] }}
                   </div>
+                  <div v-if="memberAuthStore.isLoading" class="text-danger">
+                   <UIBlueRoundedButton disabled>
+                     Processing your request...
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div v-else class="d-flex justify-content-center">
+                   <UIBlueRoundedButton type="submit">
+                     Create account
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div
+                   v-if="
+                     !memberAuthStore.isLoading &&
+                     memberAuthStore.success &&
+                     !memberAuthStore.error
+                   "
+                   class="text-success mt-2">
+                Account created successfully!
+                </div>
               </form>
-                <div v-if="memberAuthStore.isLoading">Loading...</div>
-                <div v-if="memberAuthStore.error" class="text-danger">{{ memberAuthStore.error }}</div>
             </div>
             <div class="d-flex justify-content-center">
               <p>Already Have An Account? <a href="#"><span style="color: blue;">Log In</span></a></p>

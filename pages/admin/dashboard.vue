@@ -8,16 +8,10 @@ definePageMeta({
 
 <template>
     <div class="d-flex">
-      <!-- Sidebar -->
       <AdminSideBar />
-  
-      <!-- Main Content -->
       <main class="flex-grow-1 p-4 bg-light">
         <div class="container-fluid">
-          <!-- Header -->
           <h2 class="fw-bold mb-4">Dashboard</h2>
-  
-          <!-- Stat Cards -->
           <div class="row g-3 mb-4">
             <div class="col-md-3">
               <div class="card stat-card shadow-sm">
@@ -56,8 +50,6 @@ definePageMeta({
               </div>
             </div>
           </div>
-  
-          <!-- Category & Paper Type Tables -->
           <div class="row g-4 mb-4">
             <div class="col-md-6">
               <div class="card shadow-sm">
@@ -85,7 +77,6 @@ definePageMeta({
                         <td>Tourism</td>
                         <td><button class="btn btn-danger btn-sm">Delete</button></td>
                       </tr>
-                      <!-- Tambahkan data lain di sini -->
                     </tbody>
                   </table>
                 </div>
@@ -119,14 +110,12 @@ definePageMeta({
                         <td>Jurnal</td>
                         <td><button class="btn btn-danger btn-sm">Delete</button></td>
                       </tr>
-                      <!-- Tambahkan data lain di sini -->
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-  
           <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h6 class="mb-0">University</h6>

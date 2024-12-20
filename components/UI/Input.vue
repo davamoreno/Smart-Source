@@ -26,29 +26,44 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-    <div class="mb-3 form">
-      <label :for="id" class="form-label">{{ label }}</label>
-      <input 
-        :type="type" 
-        class="form-control" 
-        :id="id" 
-        :placeholder="placeholder"
-   
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-      >
-    </div>
+  <div class="mb-3 form">
+    <label :for="id" class="form-label">{{ label }}</label>
+    <input 
+      :type="type" 
+      class="form-control" 
+      :id="id" 
+      :placeholder="placeholder"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    >
+  </div>
 </template>
 
 <style scoped>
-  label{
+  label {
     width: 100%;
     height: 24px;
   }
-  input{
+
+  input {
     border: 1px solid;
     background-color: #D9D9D9;
-    width: 426px;
+    width: 100%;
     height: 64px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 768px) {
+    input {
+      height: 50px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    input {
+      height: 45px;
+      font-size: 14px;
+    }
   }
 </style>

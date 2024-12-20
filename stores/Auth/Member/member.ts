@@ -15,30 +15,47 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const token = ref(null);
   const isLogin = ref(false);
   const userProfile = ref({});
+  const success = ref(false);
 
   function setLoginStatus(status: boolean) {
     isLogin.value = status;
   }
 
-  async function register() { 
+  async function register() {
     try {
       isLoading.value = true;
       error.value = null;
+      success.value = false;
 
       const response = await axios.post('http://localhost:8000/api/member/register', {
-        Headers : {
-          'content-type' : 'application/json'
-        },
         username: username.value,
         email: email.value,
         password: password.value,
+        confirmPassword: confirmPassword.value,
       });
 
+      if (confirmPassword.value != password.value) {
+        error.value = {confirmPassword : ['password confirmation is not macth with your password.']};
+        return;
+      }
+
       console.log('Registration successful:', response.data);
+      success.value = true;
+      username.value = '';
+      email.value = '';
+      password.value = '';
+      confirmPassword.value = '';
     } catch (err) {
-      console.log(err, 'error');
+      if (err.response && err.response.status === 422) {
+        error.value = err.response.data.errors;
+      }
+      else {
+        error.value = 'An unexpected error occurred. Please try again.';
+      }
+    } finally {
+      isLoading.value = false;
+    }
   }
-};
 
 async function login() {
   try{

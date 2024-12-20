@@ -26,7 +26,7 @@ defineEmits(['update:modelValue'])
 </script>
 
 <template>
-  <div class="mb-3 form">
+  <div class="form">
     <label :for="id" class="form-label">{{ label }}</label>
     <input 
       :type="type" 
@@ -56,12 +56,14 @@ defineEmits(['update:modelValue'])
 
   @media (max-width: 768px) {
     input {
+      width: 300px;
       height: 50px;
     }
   }
 
   @media (max-width: 480px) {
     input {
+      width: 200px;
       height: 45px;
       font-size: 14px;
     }

@@ -1,5 +1,6 @@
-<script setup>
-const { $bootstrap } = useNuxtApp();
+<script setup lang="ts">
+const { $bootstrap }  = useNuxtApp();
+const { data } = await useAsyncData('count', () => $fetch('/api/count'));
 
 onMounted(() => {
   try {

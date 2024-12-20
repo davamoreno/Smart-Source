@@ -13,15 +13,15 @@
             <div class="container px-5 py-3">
                 <div class="menu-item pb-4">
                     <img src="/assets/images/admin1.svg" alt="" class="menu-icon" style="padding-right: 3px; vertical-align: 0%;">
-                    <a href="#" class="text-white text-decoration-none fw-bold">Dashboard</a>
+                    <a href="/admin/dashboard" class="text-white text-decoration-none fw-bold">Dashboard</a>
                 </div>
                 <div class="menu-item pb-4">
                     <img src="/assets/images/home.svg" alt="" class="menu-icon" style="padding-right: 3px; vertical-align: 0%;">
-                    <a href="#" class="text-white text-decoration-none fw-bold">Manage Posts</a>
+                    <a href="/admin/managepost" class="text-white text-decoration-none fw-bold">Manage Posts</a>
                 </div>
                 <div class="menu-item pb-3">
                     <i class="fa-regular fa-flag me-2 text-white"></i>
-                    <a href="#" class="text-white text-decoration-none fw-bold">Manage Reports</a>
+                    <a href="/admin/managereport" class="text-white text-decoration-none fw-bold">Manage Reports</a>
                 </div>
                 <div class="menu-item">
                     <div class="accordion" id="accordionSidebar">

@@ -60,7 +60,7 @@ onMounted(() => {
     anime({
       targets: '.secure-icon path', 
       fill: {
-        value: '#FFFFFF',
+        value: '#4169e1',
         duration: 500,
         easing: 'easeInOutQuad'
       }
@@ -152,12 +152,12 @@ const handleRegister = () => {
     <div class="why-us mb-5">
         <div class="">
             <div class="text-center">
-                <h1 style="font-size: 32px; padding-top: 24px;">Why Choose Our Platform?</h1>
+                <h1>Why Choose Our Platform?</h1>
             </div>
         </div>
         <div class="container d-flex align-items-center justify-content-center content">
             <div class="text-center col-4">
-                <h2 style="font-size: 20px;">Quick And Easy Access</h2>
+                <h2>Quick And Easy Access</h2>
                 <div class="quick-icon my-5">
                     <svg width="68" height="53" viewBox="0 0 68 53" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g filter="url(#filter0_d_69_48)">
@@ -186,7 +186,7 @@ const handleRegister = () => {
                 </p>
             </div>
             <div class="text-center col-4">
-                <h2 style="font-size: 20px;">Organize And Secure</h2>
+                <h2>Organize And Secure</h2>
                 <div class="secure-icon my-5"> 
                     <svg width="60" height="45" viewBox="0 0 60 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M59.7841 39.1777C56.3185 34.6178 54.4421 29.0481 54.4421 23.3207V2.58955C54.4421 1.15966 53.3339 0 51.9673 0H8.03273C6.66609 0 5.55879 1.15966 5.55879 2.58955V23.3198C5.55879 29.0477 3.68204 34.6178 0.215742 39.1777C0.0760547 39.361 0 39.5878 0 39.8231V42.9341C0 44.0758 0.884531 45 1.97461 45H58.0254C59.1155 45 60 44.0758 60 42.9341V39.8231C60 39.5878 59.9239 39.361 59.7841 39.1777ZM9.04992 16.0746C9.04992 9.21478 14.6109 3.65381 21.4707 3.65381H38.5292C45.389 3.65381 50.95 9.21478 50.95 16.0746C50.95 22.9344 45.389 28.4953 38.5292 28.4953H21.4707C14.6109 28.4953 9.04992 22.9344 9.04992 16.0746ZM35.6393 40.9812C35.6393 41.8438 34.94 42.5431 34.0774 42.5431H25.9226C25.06 42.5431 24.3607 41.8438 24.3607 40.9812C24.3607 40.1185 25.06 39.4192 25.9226 39.4192H34.0774C34.94 39.4192 35.6393 40.1185 35.6393 40.9812Z" fill="white" style="transition: fill 0.5s ease-in-out;"/>
@@ -197,7 +197,7 @@ const handleRegister = () => {
                 </p>
             </div>
             <div class="text-center col-4">
-                <h2 style="font-size: 20px;">Support Multiple Document</h2>
+                <h2>Support Multiple Document</h2>
                 <div class="my-5">
                     <img class="document-icon" src="/assets/images/Document.svg" alt="">
                 </div>
@@ -322,110 +322,323 @@ const handleRegister = () => {
 </template>
 
 <style lang="scss" scoped>
-    .hero{
+    .hero {
     margin-top: 50px;
-    &-title{
-        // margin-top: 40px;
-        h1{
+
+    &-title {
+        h1 {
             font-size: 48px;
             letter-spacing: 5px;
             font-weight: 900;
-            // font-weight: bolder;
         }
-        p{
+        p {
             margin-top: 50px;
             width: 66%;
         }
     }
-    &-btn{
-      button{
-          h6{
-            letter-spacing: 2px;
-            margin-top: 7px;
-            font-size: 16px;
-            font-weight: 700;
-            color: #ffffff;
+
+    &-btn {
+        button {
+            h6 {
+                letter-spacing: 2px;
+                margin-top: 7px;
+                font-size: 16px;
+                font-weight: 700;
+                color: #ffffff;
+            }
         }
-      }
+    }
+    @media (max-width: 768px) {
+        margin-top: 30px;
+
+        &-title {
+            h1 {
+                font-size: 36px;
+                letter-spacing: 3px;
+            }
+            p {
+                margin-top: 30px;
+                width: 100%;
+            }
+        }
+
+        &-btn {
+            button h6 {
+                font-size: 14px;
+                letter-spacing: 1.5px;
+            }
+        }
+        img{
+          display: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        &-title h1 {
+            font-size: 28px;
+        }
+
+        &-title p {
+            font-size: 14px;
+        }
+
+        &-btn button h6 {
+            font-size: 12px;
+        }
+
+        img {
+            display: none;
+        }
     }
 }
 
-.why-us{
-        background-color: #1E1E1E;
+
+.why-us {
+    background-color: #1E1E1E;
+    width: 100%;
+    height: 480px;
+    margin-bottom: 20px;
+
+    h1{
+      font-size: 36px;
+      padding-top: 32px;
+      color: #FFFFFF;
+    }
+    h2{
+      color: #ffffff;
+      font-size: 26px;
+    }
+    p{
+      color: #ffffff;
+      font-size: 18px;
+    }
+
+    svg {
+        width: 100%; 
+        height: auto;
+        max-width: 60px;
+    }
+
+    img{
+      width: 100%;
+      height: auto;
+      max-width: 55px;
+    }
+
+    @media(max-width: 1024px){
+      width: 100%;
+      height: 500px;
+      margin-bottom: 20px;
+      h1{
+        font-size: 36px;
+        margin-top: 32px;
+        color: #FFFFFF;
+      }
+      h2{
+        color: #ffffff;
+        font-size: 22px;
+      }
+      p{
+        color: #ffffff;
+        font-size: 18px;
+      }
+      svg {
+          width: 100%; 
+          height: auto;
+          max-width: 50px;
+      }
+
+      img{
         width: 100%;
-        height: 466px;
-        margin-bottom: 10px;
-        h1,h2,h3,h4,h5,h6,p{
-            color: #ffffff;
+        height: auto;
+        max-width: 45px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: auto;
+
+      height: auto;
+        svg {
+            max-width: 50px;
+        }
+        h2 {
+          font-size: 16px;
+        }
+        p{
+          font-size: 12px;
+        }
+
+        img{
+          max-width: 50px;
+          height: 43px;
         }
     }
 
-.content{
+    @media (max-width: 480px) {
+      width: auto;
+      height: auto;
+        h1{
+          font-size: 16px;
+          padding-top: 32px;
+          max-width: 100%;
+        }
+        h2{
+          font-size: 12px;
+          max-width: 100%;
+        }
+        p{
+          font-size: 8px;
+          max-width: 100%;
+        }
+        svg {
+            max-width: 25px;
+        }
+        img{
+          max-width: 25px;
+          height: 26px;
+        }
+    }
+}
+
+.content {
     margin-top: 120px;
 }
 
-.hero-btn{
-  button:hover{
-    h6{
-      color: #000000;
+.hero-btn {
+    button:hover {
+        h6 {
+            color: #000000;
+        }
+    }
+}
+
+.main {
+  margin-bottom: 200px;
+
+  &-search {
+    width: 450px;
+    height: 50px;
+    border-radius: 50px;
+    background-color: transparent;
+    border-color: #000000;
+    position: relative;
+    padding-left: 50px;
+
+    &:focus {
+      background-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      width: 300px;
+      height: 40px;
+      padding-left: 40px;
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      height: 40px;
+      padding-left: 40px;
+    }
+  }
+
+  &-icon {
+    position: absolute;
+    margin: 5px 0 0 13px;
+    pointer-events: none;
+
+    @media (max-width: 768px) {
+      margin: 4px 0 0 10px;
+    }
+  }
+
+  &-category {
+    margin-top: 100px;
+
+    @media (max-width: 768px) {
+      margin-top: 50px;
+    }
+
+    @media (max-width: 480px) {
+      margin-top: 30px;
     }
   }
 }
 
-.main{
-    margin-bottom: 200px;
-    &-search{
-        width: 450px;
-        height: 50px;
-        border-radius: 50px;
-        background-color: transparent;
-        border-color: #000000;
-        position: relative;
-        padding-left: 50px;
-        &:focus{
-            background-color: transparent;
-        }
-    }
-    &-icon{
-        position: absolute;
-        margin: 5px 0 0 13px;
-        pointer-events: none;
-    }
-    &-category{
-        margin-top: 100px;
-    }
-}
 .category-card {
-    display: flex;
-    align-items: center; 
-    margin: 20px 10px 20px 30px;
-    a{
-        text-decoration: none;
-    }
+  display: flex;
+  align-items: center;
+  margin: 20px 10px 20px 30px;
+
+  a {
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    margin: 15px 5px 15px 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    margin: 10px 0;
+    flex-direction: column;
+    text-align: center;
+  }
 }
 
 .category-card img {
   width: 70px;
   height: 70px;
+
+  @media (max-width: 768px) {
+    width: 60px;
+    height: 60px;
+  }
+
+  @media (max-width: 480px) {
+    width: 50px;
+    height: 50px;
+  }
 }
 
-.see-more-btn{
-    width: 237px;
-    height: 36px;
-    border-radius: 30px;
-    h6{
-        color: #FFFFFF;
-        font-weight: 500;
-        font-size: 20px;
+.see-more-btn {
+  width: 237px;
+  height: 36px;
+  border-radius: 30px;
+
+  h6 {
+    color: #ffffff;
+    font-weight: 500;
+    font-size: 20px;
+
+    @media (max-width: 768px) {
+      font-size: 18px;
     }
-    &:hover{
-              h6{
-                color:black;
-              }
-              background-color: transparent;
-              cursor: pointer;
-              transition-duration: 250ms;
-          }
+
+    @media (max-width: 480px) {
+      font-size: 16px;
+    }
+  }
+
+  &:hover {
+    h6 {
+      color: black;
+    }
+    background-color: transparent;
+    cursor: pointer;
+    transition-duration: 250ms;
+  }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 32px;
+  }
+
+  @media (max-width: 480px) {
+    width: 180px;
+    height: 30px;
+  }
 }
 
 .btn-close{

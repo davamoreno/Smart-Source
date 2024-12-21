@@ -1,8 +1,10 @@
 <script setup>
 
+import { onMounted, computed } from 'vue';
+
 definePageMeta({
-    layout : 'blank'
-})
+    layout : 'blank',
+});
 
 </script>
 

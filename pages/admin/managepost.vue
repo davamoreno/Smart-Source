@@ -7,7 +7,7 @@ definePageMeta({
 <template>
     <div class="d-flex">
         <AdminSideBar />
-        <div class="flex-grow-1 p-4 bg-light" style="height: 695px;">
+        <div class="flex-grow-1 p-4 bg-light adminpost">
             <div class="container-fluid">
                 <h2 class="fw-bold mb-4">Manage Post</h2>
                 <div class="card shadow-sm">
@@ -78,3 +78,15 @@ definePageMeta({
         </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+
+  .adminpost{
+    max-height: 100%;
+    height: 695px;
+    @media(max-width: 576px){
+      height: 800px;
+    }
+  }
+
+</style>

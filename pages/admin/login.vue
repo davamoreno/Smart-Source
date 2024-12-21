@@ -1,40 +1,64 @@
 <script setup>
-import Blank from '~/layouts/blank.vue';
+import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
 
-    definePageMeta({
-        layout : 'blank',
-    })
+definePageMeta({
+  layout : 'blank',
+  middleware : 'auth',
+  requiresGuest : true
+});
+
+const router = useRouter();
+const adminAuthStore = useAdminAuthStore();
+
+async function handleLogin() { 
+  try {
+    await adminAuthStore.adminLogin();
+
+    if (adminAuthStore.isLogin) {
+      navigateTo('/admin/dashboard');
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+  }
+}
 </script>
 
 <template>
-    <div class="login-page d-flex justify-content-center align-items-center">
-      <div class="login-container text-center">
-        <div class="illustration mb-4">
-          <img src="/assets/images/login.png" alt="Illustration" class="img-fluid" />
-        </div>
-        <form class="login-form">
-          <div class="mb-3 position-relative">
-            <i class="fa-solid fa-user icon"></i>
-            <input
-              type="text"
-              class="form-control login-input"
-              placeholder="USERNAME"
-            />
-          </div>
-          <div class="mb-3 position-relative">
-            <i class="fa-solid fa-lock icon"></i>
-            <input
-              type="password"
-              class="form-control login-input"
-              placeholder="PASSWORD"
-            />
-          </div>
-          <button type="submit" class="btn btn-primary w-100 login-btn">
-            LOGIN
-          </button>
-        </form>
+  <div class="login-page d-flex justify-content-center align-items-center">
+    <div class="login-container text-center">
+      <div class="illustration mb-4">
+        <img src="/assets/images/login.png" alt="Illustration" class="img-fluid" />
       </div>
+      <form class="login-form" @submit.prevent="handleLogin">
+        <div class="mb-3 position-relative">
+          <i class="fa-solid fa-user icon"></i>
+          <input
+            v-model="adminAuthStore.identifier"
+            type="text"
+            class="form-control login-input"
+            placeholder="USERNAME"
+            required
+          />
+        </div>
+        <div class="mb-3 position-relative">
+          <i class="fa-solid fa-lock icon"></i>
+          <input
+            v-model="adminAuthStore.password"
+            type="password"
+            class="form-control login-input"
+            placeholder="PASSWORD"
+            required
+          />
+        </div>
+        <div class="text-danger mb-3"></div>
+        <button class="btn btn-primary w-100 login-btn">
+         Login
+        </button>
+      </form>
     </div>
+  </div>
 </template>
 
   <style lang="scss" scoped>

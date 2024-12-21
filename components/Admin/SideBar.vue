@@ -1,12 +1,40 @@
+<script setup>
+import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const adminStore = useAdminAuthStore();
+
+const admin = computed(() => adminStore.adminProfile);
+
+function logoutHandler() {
+    adminStore.logout().then(() => {
+        router.push('/admin/login');
+    });
+}
+
+onMounted(() => {
+  const cookieToken = useCookie('jwt');
+  if (cookieToken.value) {
+    adminStore.isLogin = true;
+    adminStore.getAdminProfile();
+  } else {
+    console.log('Token tidak ditemukan, user belum login');
+  }
+});
+
+</script>
+
 <template>
     <aside class="col-md-3" style="background-color: #152259; width: 250px; height: auto;" >
         <div class="col pt-4" style="justify-content: center; text-align: center; border-bottom: 1px solid white;">
             <img src="/assets/images/AdminProfile.jpg" alt="" style="width: 98px; height: 100px; border-radius: 50%;">
             <h6 class="pt-2" style="color: white; font-weight: bold; font-family: Kumbh Sans; font-size: 18px;">
-                Admin
+                {{ admin.role }}
             </h6>
             <p class="text-white fw-light" style="font-family: unset; font-size: 14px">
-                Abhi Triyatna
+                {{ admin.username }}
             </p>
         </div>
         <nav class="nav flex-column">
@@ -29,7 +57,7 @@
                             <h2 class="accordion-header">
                                 <button class="accordion-button text-white bg-transparent border-0 shadow-none collapsed fw-bold" data-bs-toggle="collapse" data-bs-target="#dataPostMenu"
                                         aria-expanded="false" aria-controls="dataPostMenu" style="padding: 0;">
-                                    <i class="fas fa-chart-bar me-2" />
+                                    <i class="fas fa-chart-bar me-2"></i>
                                     <p style="margin-top: 13px; margin-right: 20px;">Data Post</p>
                                 </button>
                             </h2>
@@ -61,14 +89,20 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="admin.role === 'super_admin'" class="menu-item pb-4">
+                    <i class="fa-regular fa-circle-user text-white"></i>
+                    <a href="/admin/manageadmin" class="text-white text-decoration-none ms-1 fw-bold">Manage Admin</a>
+                </div>
+
                 <div class="menu-item pb-4">
                     <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />
-                    <a href="#"  class="text-decoration-none ms-2 text-danger fw-bold" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
+                    <button @click="logoutHandler" class="btn text-decoration-none ms-1 text-danger fw-bold">Log Out</button>
                 </div>
             </div>
         </nav>
     </aside>
 </template>
+
 
 <style scoped lang="scss">
     .accordion-button::after{

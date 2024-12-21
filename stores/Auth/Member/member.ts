@@ -76,12 +76,11 @@ async function login() {
       }
     },
   );
+
     token.value = response.data.access_token;
     isLogin.value = true;
     const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
     cookieToken.value = token.value;
-    console.log('cookie', cookieToken.value);
-    console.log('Login Success', response.data, cookieToken.value);
   }
   catch(err){
     console.error('err', err.response ? err.response.data : err);
@@ -98,8 +97,6 @@ async function getUserProfile(){
       }
     })
     userProfile.value = response.data;
-
-    console.log('user', userProfile.value);
   }
   catch(err){
     console.log(err, 'error')

@@ -8,10 +8,13 @@ export default defineNuxtPlugin((nuxtApp) => {
   
     if (pinia) {
       const { useMemberAuthStore } = require('~/stores/Auth/Member/member');
+      // const { useAdminAuthStore } = require('~/stores/Auth/Admin/admin');
+      // const adminAuthStore = useAdminAuthStore(pinia);
       const memberAuthStore = useMemberAuthStore(pinia);
   
       if (token.value) {
         memberAuthStore.setLoginStatus(true);
+        // adminAuthStore.setLoginStatus(true);
       }
     }
 });

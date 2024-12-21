@@ -10,7 +10,7 @@ const user = computed( () => member.userProfile);
 
 function logoutHandler() {
     member.logout().then(() => {
-        router.push('/');
+        return navigateTo('/');
     });
 }
 

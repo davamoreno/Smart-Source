@@ -2,10 +2,9 @@
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { onMounted, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-const {$bootstrap} = useNuxtApp();
+const { $bootstrap } = useNuxtApp();
 
 const memberAuthStore = useMemberAuthStore();
-const user = computed(() => memberAuthStore.userProfile);
 const router = useRouter();
 
 const isNavOpen = ref(false);
@@ -96,7 +95,7 @@ onMounted(() => {
             data-bs-target="#createAccountModal">Sign Up</a>
         </div>
         <div v-else>
-
+    
         </div>
       </div>
     </div>

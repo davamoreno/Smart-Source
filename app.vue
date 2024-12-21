@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const { $bootstrap }  = useNuxtApp();
 const { data } = await useAsyncData('count', () => $fetch('/api/count'));
+import { SpeedInsights } from '@vercel/speed-insights/vue';
 
 onMounted(() => {
   try {
@@ -13,6 +14,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <SpeedInsights />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>

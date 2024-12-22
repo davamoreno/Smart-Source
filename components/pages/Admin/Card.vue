@@ -1,3 +1,14 @@
+<script setup>
+  import { onMounted } from 'vue';
+  import { useCategoryStore } from '~/stores/AdminManagement/category';
+
+  const category = useCategoryStore();
+
+  onMounted(() => {
+    category.totalItems
+  });
+</script>
+
 <template>
     <div class="row g-3 mb-4">
       <div class="col-md-3">
@@ -22,7 +33,7 @@
         <div class="card stat-card shadow-sm">
           <div class="card-body text-center">
             <i class="fa-solid fa-book stat-icon text-success"></i>
-            <h5 class="stat-value">6</h5>
+            <h5 class="stat-value">{{ category.totalItems }}</h5>
             <p class="stat-label">Category</p>
           </div>
         </div>

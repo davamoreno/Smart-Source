@@ -14,110 +14,8 @@ definePageMeta({
       <main class="flex-grow-1 p-4 bg-light">
         <div class="container-fluid">
           <h2 class="fw-bold mb-4">Dashboard</h2>
-          <div class="row g-3 mb-4">
-            <div class="col-md-3">
-              <div class="card stat-card shadow-sm">
-                <div class="card-body text-center">
-                  <i class="fas fa-plus-circle stat-icon text-primary"></i>
-                  <h5 class="stat-value">2</h5>
-                  <p class="stat-label">Post Created</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card stat-card shadow-sm">
-                <div class="card-body text-center">
-                  <i class="fa-regular fa-flag stat-icon text-info"></i>
-                  <h5 class="stat-value">10</h5>
-                  <p class="stat-label">Received Report</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card stat-card shadow-sm">
-                <div class="card-body text-center">
-                  <i class="fa-solid fa-book stat-icon text-success"></i>
-                  <h5 class="stat-value">6</h5>
-                  <p class="stat-label">Category</p>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="card stat-card shadow-sm">
-                <div class="card-body text-center">
-                  <i class="fas fa-file-alt stat-icon text-warning"></i>
-                  <h5 class="stat-value">6</h5>
-                  <p class="stat-label">Paper Type</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row g-4 mb-4">
-            <div class="col-md-6">
-              <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                  <h6 class="mb-0">Category</h6>
-                  <button class="btn btn-primary btn-sm">Add Category</button>
-                </div>
-                <div class="card-body p-0">
-                  <table class="table table-bordered table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th>No.</th>
-                        <th>Category</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Sains & Math</td>
-                        <td><button class="btn btn-danger btn-sm">Delete</button></td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Tourism</td>
-                        <td><button class="btn btn-danger btn-sm">Delete</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="card shadow-sm">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                  <h6 class="mb-0">Paper Type</h6>
-                  <button class="btn btn-primary btn-sm">Add Paper Type</button>
-                </div>
-                <div class="card-body p-0">
-                  <table class="table table-bordered table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th>No.</th>
-                        <th>Paper Type</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td>Makalah</td>
-                        <td class="justify-content-center">
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Jurnal</td>
-                        <td><button class="btn btn-danger btn-sm">Delete</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PagesAdminCard />
+          <PagesAdminPaperAndCategory />
           <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h6 class="mb-0">University</h6>
@@ -216,25 +114,7 @@ definePageMeta({
     
   </template>
   
-  <style scoped lang="scss">
-  .stat-card {
-    border: none;
-    background: white;
-  
-    .stat-icon {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-  
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-    }
-  
-    .stat-label {
-      color: #6c757d;
-      font-size: 14px;
-    }
-  }
-  </style>
+<style scoped lang="scss">
+
+</style>
   

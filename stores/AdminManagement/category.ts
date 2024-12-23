@@ -8,6 +8,7 @@ export const useCategoryStore = defineStore('Category', () => {
     const isLoading = ref(false);
     const error = ref(null);
     const name = ref('');
+    const newCategoryName = ref('');
     const categories = ref([]);
     const currentPage = ref(1);
     const perPage = ref(5);
@@ -72,6 +73,22 @@ export const useCategoryStore = defineStore('Category', () => {
             isLoading.value = false;
         }
     }
+    
+    async function deleteCategory(id : Number) {
+         try{
+            error.value = null;
+
+            const response = await axios.delete(`http://127.0.0.1:8000/api/delete/category/${id}`,
+            {
+                headers : {
+                    "Authorization": `Bearer ${useCookie('jwt').value}`
+                },
+            }
+        )
+        }catch(err){
+
+        }
+    }
 
     return {
         isLoading,
@@ -86,5 +103,6 @@ export const useCategoryStore = defineStore('Category', () => {
         perPage,
         totalItems,
         getCategories,
+        deleteCategory
     }
 });

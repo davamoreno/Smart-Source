@@ -4,10 +4,10 @@ import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { onMounted, computed } from 'vue';
 import { definePageMeta } from '#build/imports';
 
-definePageMeta({
-  middleware : 'auth',
-  requiresAuth : true
-});
+// definePageMeta({
+//   middleware : 'auth',
+//   requiresAuth : true
+// });
 
 const memberAuthStore = useMemberAuthStore();
 const user = computed(() => memberAuthStore.userProfile);
@@ -70,81 +70,5 @@ const user = computed(() => memberAuthStore.userProfile);
 
 <style lang="scss">
 
-body {
-  background-color: #ffe6eb;
-}
-
-.pink-header {
-  color: #000;
-}
-
-.menu-item.logout {
-  .nav-link {
-    color: red;
-  }
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  text-align: left;
-  gap: 5px; /* Jarak antara ikon dan teks */
-  margin-bottom: 10px; /* Jarak antar menu */
-
-  .menu-icon {
-    margin-right: 5px;
-    width: 24px; /* Ukuran ikon */
-    height: auto;
-  }
-
-  .nav-link {
-    font-weight: bold;
-    text-decoration: none;
-    font-size: 16px;
-    color: #333;
-    transition: color 0.3s ease;
-
-  }
-}
-
-.menu-item .nav-link {
-  padding-left: 0;
-}
-
-.view-more {
-  font-size: 14px;
-  color: #000;
-  text-decoration: none;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #000;
-    text-decoration: underline;
-  }
-}
-
-.sidebar {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #333;
-  line-height: 1.5;
-}
-
-.sidebar h4 {
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-
-.sidebar p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 5px;
-}
-
-.profile-img {
-  border-radius: 50%;
-}
 
 </style>

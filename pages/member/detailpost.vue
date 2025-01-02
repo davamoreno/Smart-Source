@@ -79,7 +79,7 @@
                 </button>
                 <small class="fw-medium">Like</small>
                 <button class="btn btn-link ms-3" style="width: 50px; height: 50px;">
-                        <img src="/public/images/reply.svg" alt="" style="width: 40px; height: 40px; padding-bottom: 3px;">
+                        <img src="/public/images/Reply.svg" alt="" style="width: 40px; height: 40px; padding-bottom: 3px;">
                 </button>
                 <small class="fw-medium">Reply</small>
             </span>

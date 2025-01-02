@@ -125,9 +125,9 @@ onMounted(() => {
         </div>
     </div>
     <main>
-      <slot /> 
+      <slot />
     </main>
-    <footer class="d-flex justify-content-center bg-primary py-3 position-absolute bottom-0 start-50 translate-middle-x w-100">
+    <footer class="d-flex justify-content-center bg-primary py-3">
       <p class="text-white mb-0">&copy; 2023 Smart Source</p>
     </footer>
   </template>

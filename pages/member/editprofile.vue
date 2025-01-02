@@ -1,5 +1,5 @@
 <template>
-
+<div style="height: 520px;">
 <div class="container border border-black border-opacity-25 rounded-5">
     <div class="row justify-content-around">
 
@@ -59,10 +59,14 @@
                     </div> 
                     <div class="form-group row pt-5"> 
                         <label for="university" class="col-sm-3 col-form-label">University</label> 
-                        <div class="col-sm-9"> 
-                            <input type="text" class="form-control" id="university" name="university" value="Politeknik Ngeri Bali">
-                            <img src="/public/images/searchlogo.svg" alt="" class="position-absolute">
-                        </div> 
+                        <div class="col-sm-9 position-relative">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="university" name="university" value="Politeknik Ngeri Bali" placeholder="Enter university name">
+                                <span class="input-group-text position-absolute end-0 border-0 pt-2" style="background: transparent;">
+                                <img src="/public/images/searchlogo.svg" alt="search icon" style="width: 20px; height: 20px;">
+                                </span>
+                            </div>
+                        </div>
                     </div> 
                     <div class="form-group row pt-5"> 
                         <label for="faculty" class="col-sm-3 col-form-label">Faculty</label> 
@@ -91,7 +95,7 @@
   
   
 </div>
-
+</div>
 
 </template>
 

@@ -3,7 +3,7 @@
     <div class="row justify-content-center">
       <div class="col-md-4 col-sm-6 mb-4" v-for="category in categories" :key="category.name">
         <div class="category-card" :style="{ backgroundColor: category.bgColor }">
-          <!-- Perbaikan Sintaks -->
+          <!-- Perbaikan Sintakssss -->
           <div class="category-image" :style="{ backgroundImage: `url(${category.imageUrl})` }"></div>
           <h5 class="category-title">{{ category.name }}</h5>
         </div>

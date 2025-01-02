@@ -8,6 +8,10 @@ const router = useRouter();
 
 const user = computed( () => member.userProfile);
 
+onMounted(() => {
+  member.userProfile;
+});
+
 function logoutHandler() {
     member.logout().then(() => {
         return navigateTo('/');
@@ -17,14 +21,14 @@ function logoutHandler() {
 
 </script>
 
-<template>
+<template>  
     <aside class="col-md-3 sidebar pt-5">
-        <div class="text-center">
-          <img src="https://via.placeholder.com/80" alt="Profile" class="profile-img mb-3" />
+        <div class="text-center"> 
+          <img :src="'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path" alt="" class="profile-img mb-3">
           <h4>{{ user.username }}</h4>
           <p>Politeknik Negeri Bali</p>
           <p>Teknologi Informasi</p>
-          <button class="btn btn-primary btn-sm px-4">Edit Profile</button>
+          <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
         </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">

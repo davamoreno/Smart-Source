@@ -1,3 +1,12 @@
+<script>
+export default {
+  name: "UploadForm",
+};
+
+import DragDropUpload from '~/components/DragDropUpload.vue';
+
+</script>
+
 <template>
     <div class="container my-5" style="max-width: 820px;">
       <h2 class="text-center my-4">Upload your document</h2>
@@ -60,15 +69,6 @@
       </form>
     </div>
   </template>
-  
-  <script>
-  export default {
-    name: "UploadForm",
-  };
-
-  import DragDropUpload from '~/components/DragDropUpload.vue';
-
-  </script>
   
   <style scoped>
   .container {

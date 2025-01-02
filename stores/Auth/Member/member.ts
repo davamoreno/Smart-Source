@@ -92,10 +92,11 @@ async function login() {
 async function getUserProfile(){
   try{
     const response = await axios.get('http://localhost:8000/api/user/profile', {
-      headers : {
+      headers : { 
         'Authorization' : `Bearer ${useCookie('jwt').value}`
       }
     })
+    console.log('image', response.data.user_profile)
     userProfile.value = response.data;
   }
   catch(err){

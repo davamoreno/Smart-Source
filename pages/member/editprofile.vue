@@ -1,3 +1,34 @@
+<script setup>
+import { computed } from 'vue';
+import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { useProfileStore } from '~/stores/Auth/Member/memberprofile';
+import { ref, onMounted } from 'vue';
+const imageSrc = ref(null);
+
+const member = useMemberAuthStore();
+const user = computed( () => member.userProfile);
+
+onMounted(() => {
+    member.userProfile;
+})
+const profileStore = useProfileStore();
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+    profileStore.user_profile = file;
+};
+
+const uploadProfileImage = async () => {
+  try {
+    const response = await profileStore.createImageProfile();
+    console.log('Upload berhasil:', response);
+  } catch (err) {
+    console.error('Upload gagal:', err);
+  }
+};
+
+</script>
+
 <template>
 <div style="height: 520px;">
 <div class="container border border-black border-opacity-25 rounded-5">
@@ -5,17 +36,18 @@
 
         <div class="col-3 border border-black border-opacity-75 rounded-4">
             <div class="row justify-content-center">
-                <img src="/public/images/defaultprofile.svg" alt="" style="width: 110px; height: 110px;">
+                <img class="mt-3" :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg' " alt="Profile Image"  style="width: 130px; height: 100px; border-radius: 60%;" />
             </div>
             <div class="row text-center">
-                <h6>Martinus Yonathon</h6>
+                <h6>{{ user.username }}</h6>
             </div>
             <div class="row text-center">
                 <small>Politeknik Ngeri Bali</small>
                 <small>Teknik Silat</small>
             </div>
             <div class="row px-5 mt-4 justify-content-center">
-                <button type="button" class="btn btn-outline-dark w-75">Change Picture</button>
+                <input type="file" @change="handleFileUpload" />
+                
             </div>
         </div>
 
@@ -54,14 +86,14 @@
                     <div class="form-group row"> 
                         <label for="username" class="col-sm-3 col-form-label">Username</label> 
                         <div class="col-sm-9"> 
-                            <input type="text" class="form-control" id="username" name="username" value="Martinus Yonathon"> 
+                            <input type="text" class="form-control" id="username" name="username" :value="user.username"> 
                         </div> 
                     </div> 
                     <div class="form-group row pt-5"> 
                         <label for="university" class="col-sm-3 col-form-label">University</label> 
                         <div class="col-sm-9 position-relative">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="university" name="university" value="Politeknik Ngeri Bali" placeholder="Enter university name">
+                                <input type="text" class="form-control" id="university" name="university" :value="user.university" placeholder="Enter university name">
                                 <span class="input-group-text position-absolute end-0 border-0 pt-2" style="background: transparent;">
                                 <img src="/public/images/searchlogo.svg" alt="search icon" style="width: 20px; height: 20px;">
                                 </span>
@@ -88,8 +120,8 @@
     </div>
 
     <div class="col-5 text-end pe-4 pt-4">
-            <button type="submit" class="btn me-3 btn-outline-dark">Cancel</button>
-            <button type="submit" class="btn btn-dark me-3">Save Changes</button>
+            <button type="submit" class="btn me-3 btn-outline-dark">Cancel</button> 
+            <button type="submit" @click="uploadProfileImage" class="btn btn-dark me-3">Save Changes</button>
     </div>
 </div>
   
@@ -99,7 +131,7 @@
 
 </template>
 
-<style>
+<style lang="scss" scoped>
 
 
 .container {

@@ -4,6 +4,8 @@ import { onMounted, computed } from 'vue';
 
 definePageMeta({
     layout : 'blank',
+    middleware : 'auth',
+    requiresAuth : true
 });
 
 </script>

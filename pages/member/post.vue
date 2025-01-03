@@ -15,7 +15,7 @@
         <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -42,7 +42,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -69,7 +69,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -96,7 +96,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -123,7 +123,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -150,7 +150,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -177,7 +177,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>
@@ -204,7 +204,7 @@
          <div class="card col" style="width: 250px; height: 400px;">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
-                  <button class="rounded-circle" style="width: 40px; height: 40px;">
+                  <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                     <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                   </button>
                 </span>

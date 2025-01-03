@@ -31,23 +31,23 @@ function logoutHandler() {
           <!-- <div class="container px-5"> -->
           <div class="menu-item ms-4 pt-3">
             <img src="/images/newpost.svg" alt="New Post Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">New Post</a>
+            <NuxtLink to="/member/uploadpost" class="nav-link text-dark" aria-current="page">New Post</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/history.svg" alt="History Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">History</a>
+            <NuxtLink to="/member/history" class="nav-link text-dark" aria-current="page">History</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/bookmark.svg" alt="Bookmark Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">Bookmarks</a>
+            <NuxtLink to="/member/BookmarkCard" class="nav-link text-dark" aria-current="page">Bookmark</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/mypost.svg" alt="My Post Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">My Post</a>
+            <NuxtLink to="/member/mypost" class="nav-link text-dark" aria-current="page">My Post</NuxtLink>
           </div>
           <div class="menu-item logout ms-4 pt-3">
             <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />
-            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
+            <NuxtLink to="/" class="nav-link text-dark" aria-current="page">Log out</NuxtLink>
           </div>
         <!-- </div> -->
         </nav>

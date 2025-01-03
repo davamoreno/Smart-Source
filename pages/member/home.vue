@@ -15,7 +15,7 @@ const user = computed(() => memberAuthStore.userProfile);
 </script>
 
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid overflow-x-hidden">
     <div class="row">
       <SideBar/>
 
@@ -69,6 +69,5 @@ const user = computed(() => memberAuthStore.userProfile);
 </template>
 
 <style lang="scss">
-
 
 </style>

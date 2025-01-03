@@ -99,7 +99,7 @@
 
 </template>
 
-<style>
+<style scoped>
 
 
 .container {

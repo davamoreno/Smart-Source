@@ -46,7 +46,7 @@ function logoutHandler() {
             <a class="nav-link text-dark" href="#">My Post</a>
           </div>
           <div class="menu-item logout ms-4 pt-3">
-            <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />
+            <img src="/images/logout.svg" alt="Logout Iconpppp" class="menu-icon" />
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
           </div>
         <!-- </div> -->

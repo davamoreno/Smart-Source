@@ -3,18 +3,21 @@ import { computed } from 'vue';
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { useProfileStore } from '~/stores/Auth/Member/memberprofile';
 import { ref, onMounted } from 'vue';
-const imageSrc = ref(null);
+import { useRouter } from 'vue-router';
 
+const imageSrc = ref(null);
 const member = useMemberAuthStore();
-const user = computed( () => member.userProfile);
+const profileStore = useProfileStore();
 
 onMounted(() => {
     member.userProfile;
-})
-const profileStore = useProfileStore();
+});
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
+  if (file) {
+    imageSrc.value = URL.createObjectURL(file); 
+  }
   profileStore.user_profile = file;
 };
 
@@ -22,9 +25,28 @@ const uploadProfileImage = async () => {
   try {
     const response = await profileStore.createImageProfile();
     console.log('Upload berhasil:', response);
+    if (response.data && response.data.file_path) {
+      member.userProfile.user_profile.file_path = response.data.file_path;
+      imageSrc.value = 'http://localhost:8000/storage/' + response.data.file_path;
+    }
+
+    // Send updated data to backend if needed
+    const updateResponse = await member.register(updatedData);
+    console.log('Profile updated successfully:', updateResponse);
+
   } catch (err) {
     console.error('Upload gagal:', err);
   }
+};
+
+const saveProfileData = () => {
+    member.register();
+    console.log('Data profil disimpan');
+};
+
+const handleSave = async () => {
+  await uploadProfileImage();  
+  saveProfileData();
 };
 
 
@@ -37,14 +59,14 @@ const uploadProfileImage = async () => {
 
         <div class="col-3 border border-black border-opacity-75 rounded-4">
             <div class="row justify-content-center">
-                <img class="mt-3" :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg' " alt="Profile Image"  style="width: 130px; height: 100px; border-radius: 60%;" />
+                <img class="mt-3" :src="imageSrc || (member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg')" alt="Profile Image"  style="width: 130px; height: 100px; border-radius: 60%;" />
             </div>
             <div class="row text-center">
-                <h6>{{ user.username }}</h6>
+                <h6>{{ member.userProfile.username }}</h6>
             </div>
             <div class="row text-center">
-                <small>Politeknik Ngeri Bali</small>
-                <small>Teknik Silat</small>
+                <small>{{ member.userProfile.university ? member.userProfile.university  : '-' }}</small>
+                <small>{{ member.userProfile.faculty ? member.userProfile.faculty : '-' }}</small>
             </div>
             <div class="row px-5 mt-4 justify-content-center">
                 <input type="file" @change="handleFileUpload" />
@@ -87,14 +109,14 @@ const uploadProfileImage = async () => {
                     <div class="form-group row"> 
                         <label for="username" class="col-sm-3 col-form-label">Username</label> 
                         <div class="col-sm-9"> 
-                            <input type="text" class="form-control" id="username" name="username" :value="user.username"> 
+                            <input type="text" class="form-control" id="username" name="username" v-model="member.username"> 
                         </div> 
                     </div> 
                     <div class="form-group row pt-5"> 
                         <label for="university" class="col-sm-3 col-form-label">University</label> 
                         <div class="col-sm-9 position-relative">
                             <div class="input-group">
-                                <input type="text" class="form-control" id="university" name="university" :value="user.university" placeholder="Enter university name">
+                                <input type="text" class="form-control" id="university" name="university" :value="member.userProfile.university" placeholder="Enter university name">
                                 <span class="input-group-text position-absolute end-0 border-0 pt-2" style="background: transparent;">
                                 <img src="/public/images/searchlogo.svg" alt="search icon" style="width: 20px; height: 20px;">
                                 </span>
@@ -122,7 +144,7 @@ const uploadProfileImage = async () => {
 
     <div class="col-5 text-end pe-4 pt-4">
             <button type="submit" class="btn me-3 btn-outline-dark">Cancel</button> 
-            <button type="submit" @click="uploadProfileImage" class="btn btn-dark me-3">Save Changes</button>
+            <button type="submit" @click="handleSave" class="btn btn-dark me-3">Save Changes</button>
     </div>
 </div>
   

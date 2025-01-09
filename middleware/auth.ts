@@ -4,37 +4,39 @@ import { useAdminAuthStore } from "~/stores/Auth/Admin/admin";
 import axios from "axios";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  const token = useCookie('jwt');
   const memberAuthStore = useMemberAuthStore();
   const adminAuthStore = useAdminAuthStore();
+  const token = useCookie('jwt').value;
   const url = 'http://localhost:8000/api/';
 
-  if (token.value) {
-    try {
-      let response = await axios.get(`${url}admin/profile`, {
-        headers: {
-          Authorization: `Bearer ${token.value}`,
-        },
-      });
+  if (!token) {
+    return navigateTo('/login');
+  }
 
-      adminAuthStore.setLoginStatus(true);
-    } catch (error) {
-      try {
-        let response = await axios.get(`${url}user/profile`, {
-          headers: {
-            Authorization: `Bearer ${token.value}`,
-          },
-        });
-        memberAuthStore.setLoginStatus(true);
-      } catch (error) {
-        token.value = null;
-        adminAuthStore.setLoginStatus(false);
-        memberAuthStore.setLoginStatus(false);
-      }
+  try {
+    // Validasi Admin
+    await axios.get(`${url}admin/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    adminAuthStore.setLoginStatus(true); // Admin berhasil login
+    memberAuthStore.setLoginStatus(false); // Pastikan member logout
+  } catch (adminError) {
+    try {
+      // Validasi Member
+      await axios.get(`${url}user/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      memberAuthStore.setLoginStatus(true); // Member berhasil login
+      adminAuthStore.setLoginStatus(false); // Pastikan admin logout
+    } catch (memberError) {
+      // Jika validasi admin dan member gagal, reset status dan redirect ke login
+      adminAuthStore.setLoginStatus(false);
+      memberAuthStore.setLoginStatus(false);
+      return navigateTo('/login');
     }
   }
 
-  // Halaman hanya untuk tamu
+
   if (to.meta.requiresGuest && (memberAuthStore.isLogin || adminAuthStore.isLogin)) {
     if(memberAuthStore.isLogin){
       return navigateTo('/home')

@@ -1,15 +1,4 @@
 <script setup>
-import { useMemberAuthStore } from '~/stores/Auth/Member/member';
-import { onMounted, computed } from 'vue';
-import { definePageMeta } from '#build/imports';
-
-// definePageMeta({
-//   middleware : 'auth',
-//   requiresAuth : true
-// });
-
-const memberAuthStore = useMemberAuthStore();
-const user = computed(() => memberAuthStore.userProfile);
 
 </script>
 

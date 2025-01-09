@@ -53,6 +53,7 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
         error.value = 'An unexpected error occurred. Please try again.';
       }
     } finally {
+      success.value = true;
       isLoading.value = false;
     }
   }

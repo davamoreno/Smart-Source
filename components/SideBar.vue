@@ -6,10 +6,10 @@ import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 const member = useMemberAuthStore();
 const router = useRouter();
 
-const user = computed( () => member.userProfile);
-
-onMounted(() => {
-  member.userProfile;
+onMounted(async () => {
+  if (!member.userProfile) {
+    await member.getUserProfile();
+  }
 });
 
 function logoutHandler() {
@@ -24,8 +24,8 @@ function logoutHandler() {
 <template>  
     <aside class="col-md-3 sidebar pt-5">
         <div class="text-center"> 
-          <img :src="'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path" alt="" class="profile-img mb-3">
-          <h4>{{ user.username }}</h4>
+          <img :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
+          <h4>{{ member.userProfile.username }}</h4>
           <p>Politeknik Negeri Bali</p>
           <p>Teknologi Informasi</p>
           <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>

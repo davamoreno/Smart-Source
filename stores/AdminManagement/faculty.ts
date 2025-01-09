@@ -15,26 +15,57 @@ export const usefacultyStore = defineStore('faculty', () => {
     const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
     const url = "http://127.0.0.1:8000/api/";
 
-async function createFaculty(){
-    try{
-        error.value = null;
+    async function createFaculty(){
+        try{
+            error.value = null;
 
-        const response = await axios.post(`${url}faculty`, {
-            name : name.value,
-            university_id: selectedUniversity.value,
-        },
-        {
-            headers : {
-                "Content-Type": "application/json", 
-                "Authorization": `Bearer ${useCookie('jwt').value}`
+            const response = await axios.post(`${url}faculty`, {
+                name : name.value,
+                university_id: selectedUniversity.value,
+            },
+            {
+                headers : {
+                    "Content-Type": "application/json", 
+                    "Authorization": `Bearer ${useCookie('jwt').value}`
+                }
             }
+        )
+
+        const data = response.data;
+        console.log("Hello", data);
+        }catch(err){
+
+            return error.value = err.response?.data;
         }
-    )
-    
-    const data = response.data;
-    console.log("Hello", data);
-    }catch(err){
-        
-        return error.value = err.response?.data;
     }
-    }});
+
+    async function getFaculty(page = 1){
+        try{
+            error.value = null;
+    
+            const response = await axios.get(`${url}get/faculties?page=${page}`,
+            {
+                headers : {
+                    "Content-Type": "application/json", 
+                    "Authorization": `Bearer ${useCookie('jwt').value}`
+                },
+            }
+        )
+        faculty.value = response.data.data;
+        totalItems.value = response.data.total;
+        currentPage.value = page;
+        }catch(err){
+    
+        }
+    }
+
+    return {
+        createFaculty,
+        selectedUniversity,
+        name,
+        getFaculty,
+        faculty,
+        perPage,
+        currentPage
+    }
+});

@@ -35,7 +35,7 @@ function logoutHandler() {
           <!-- <div class="container px-5"> -->
           <div class="menu-item ms-4 pt-3">
             <img src="/images/newpost.svg" alt="New Post Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">New Post</a>
+            <NuxtLink to="/member/uploadpost"class="nav-link text-dark" >New Post</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/history.svg" alt="History Icon" class="menu-icon" />

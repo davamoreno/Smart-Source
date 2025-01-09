@@ -1,7 +1,21 @@
 <script setup>
 definePageMeta({
     layout : 'blank'
-})
+});
+
+import { onMounted } from 'vue';
+import { postAdminStore } from '~/stores/AdminManagement/post';
+
+const post = postAdminStore();
+
+onMounted(() => {
+  post.getPendingPost();
+});
+
+function changePage(page) {
+  post.getPendingPost(page);
+}
+
 </script>
 
 <template>
@@ -24,14 +38,22 @@ definePageMeta({
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Politeknik Negeri Bali</td>
-                    <td>20/20/2024</td>
+                  <tr v-for="(posts, index) in post.posts" :key="posts.id">
+                    <td>{{ index + 1 + (post.currentPage - 1) * post.perPage }}</td>
+                    <td>{{ posts.title }}</td>
+                    <td>{{ posts.created_at }}</td>
                     <td style="justify-items: center;">
-                        <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">Pending</p>
+                        <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">{{ posts.status }}</p>
                     </td>
-                    <td>20</td>  
+                    <td>
+                      <a v-if="posts.file" 
+                       :href="`http://127.0.0.1:8000/storage/${posts.file.file_path}`" 
+                       target="_blank"
+                       class="btn btn-sm btn-primary text-white">
+                      <i class="fa-solid fa-eye"></i> View File
+                    </a>
+                      <span v-else>File not available</span>
+                    </td>
                     <td><a class="btn btn-sm text-white g-3 ms-2" style="background-color: #1D4ED8;">
                             <i class="fa-regular fa-floppy-disk"></i>
                             Allow
@@ -41,39 +63,34 @@ definePageMeta({
                             Deny
                         </a></td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Universitas Jember</td>
-                    <td>21/20/2024</td>
-                    <td class="col-3" style="justify-items: center;">
-                        <p class="rounded-5 bg-warning text-center text-white text-sm" style="height: 100%; width: 100px; margin-top: 10px;">Pending</p>
-                    </td>
-                    <td>21</td>
-                    <td>
-                        <a class="btn btn-sm text-white ms-2" style="background-color: #1D4ED8;">
-                            <i class="fa-regular fa-floppy-disk"></i>
-                            Allow
-                        </a>
-                        <a class="btn btn-warning btn-sm text-white ms-2" >
-                            <i class="fa-regular fa-floppy-disk"></i>
-                            Deny
-                        </a>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
             </div>
+            <div class="card-footer">
+                <nav aria-label="Pagination">
+                    <ul class="pagination justify-content-center mt-3">
+                        <li class="page-item" :class="{ disabled: post.currentPage === 1 }">
+                            <button class="page-link" @click="changePage(post.currentPage - 1)" :disabled="post.currentPage === 1">
+                                &laquo; Previous
+                            </button>
+                        </li>
+                        <li v-for="page in post.visiblePages"
+                            :key="page"
+                            :class="{ 'btn-primary' : post.currentPage === page }"
+                            class="page-item">               
+                            <button class="page-link" @click="changePage(page)">
+                                {{ page }}
+                            </button>
+                        </li>
+                        <li class="page-item" :class="{ disabled: post.currentPage === post.totalPages }">
+                            <button class="page-link" @click="changePage(post.currentPage + 1)" :disabled="post.currentPage === post.totalPages">
+                                Next &raquo;
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
           </div>
-  
-          <nav class="mt-4 mb-5">
-            <ul class="pagination justify-content-center">
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">4</a></li>
-              <li class="page-item"><a class="page-link" href="#">5</a></li>
-            </ul>
-          </nav>
             </div>
         </div>
     </div>

@@ -15,7 +15,7 @@ const profileStore = useProfileStore();
 
 const handleFileUpload = (event) => {
   const file = event.target.files[0];
-    profileStore.user_profile = file;
+  profileStore.user_profile = file;
 };
 
 const uploadProfileImage = async () => {
@@ -26,6 +26,7 @@ const uploadProfileImage = async () => {
     console.error('Upload gagal:', err);
   }
 };
+
 
 </script>
 

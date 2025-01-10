@@ -11,6 +11,7 @@ export const postAdminStore = defineStore('postAdminStore', () => {
     const maxVisiblePages = 10;
     const totalItems = ref(0);
     const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
+    const status = ref('');
     const url = "http://127.0.0.1:8000/api/";
 
 
@@ -31,10 +32,6 @@ export const postAdminStore = defineStore('postAdminStore', () => {
             
         }
     }
-    
-    async function getFile() {
-        
-    }
 
     const visiblePages = computed(() => {
         const startPage = Math.max(1, currentPage.value - Math.floor(maxVisiblePages / 2));
@@ -46,6 +43,26 @@ export const postAdminStore = defineStore('postAdminStore', () => {
     function changePage(page : any) {
         if (page >= 1 && page <= totalPages.value) {
             getPendingPost(page);
+        }
+    }
+
+
+    async function postValidation(id : number){
+        try {
+            const response = await axios.put(`${url}post/validation?id=${id}`, {
+                status : status.value
+            },
+            {
+               headers : {
+                "Content-Type" : "application/json",
+                "Authorization" : `Bearer ${useCookie('jwt').value}`
+               } 
+            }
+        )
+
+            console.log('response', response.data.post.status);
+        } catch (error) {
+            console.error('err', err.response ? err.response.data.post.status : err);
         }
     }
 

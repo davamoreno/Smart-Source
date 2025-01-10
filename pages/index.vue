@@ -1,13 +1,12 @@
 <script setup>
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
 import { onMounted, ref } from 'vue';
-import { definePageMeta } from '#build/imports';
 import anime from 'animejs';
 
-definePageMeta({
-  middleware: 'auth',
-  requiresGuest: true,
-});
+const memberAuth = useMemberAuthStore();
+const adminAuth = useAdminAuthStore();
+
 
 onMounted(() => {
   const quickAnimation = () => {
@@ -108,14 +107,6 @@ onMounted(() => {
   
 });
 
-const memberAuthStore = useMemberAuthStore();
-
-
-
-// onMounted(() => {
-//   useMemberAuthStore.fetchFaculties;
-// });
-
 </script>
 
 <template>
@@ -137,7 +128,15 @@ const memberAuthStore = useMemberAuthStore();
                     It's time to turn your hard-earned knowledge into a lasting digital legacy!
                 </p>
             </div>
-            <div class="hero-btn">
+            <div class="hero-btn" v-if="memberAuth.userProfile.role === 'member'">
+              <UIRoundedButton>
+                  <NuxtLink to="/home"><h6>Start Archive Now !</h6></NuxtLink>
+              </UIRoundedButton>
+            </div>
+            <div v-if="adminAuth.adminProfile.role === 'super_admin' || adminAuth.adminProfile.role === 'admin'">
+
+            </div>
+            <div class="hero-btn" v-if="!memberAuth.isLogin && !adminAuth.isLogin">
                 <UIRoundedButton data-bs-toggle="modal" data-bs-target="#loginAccountModal">
                   <h6>Start Archive Now !</h6>
                 </UIRoundedButton>

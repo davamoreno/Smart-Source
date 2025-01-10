@@ -1,5 +1,7 @@
 <script setup>
-
+definePageMeta({
+  middleware : 'member-auth',
+});
 </script>
 
 <template>

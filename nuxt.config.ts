@@ -42,8 +42,7 @@ export default defineNuxtConfig({
   ],
 
   plugins: [
-    '~/plugins/bootstrap.client',
-    '~/plugins/auth-check',
+    '~/plugins/bootstrap.client'
   ],
 
   runtimeConfig: {

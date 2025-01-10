@@ -16,6 +16,7 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const isLogin = ref(false);
   const userProfile = ref({});
   const success = ref(false);
+  const role = ref(null);
 
   function setLoginStatus(status: boolean) {
     isLogin.value = status;
@@ -79,7 +80,8 @@ async function login() {
   );
 
     token.value = response.data.access_token;
-    isLogin.value = true;
+    role.value = response.data.role;
+    setLoginStatus(true);   
     const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
     cookieToken.value = token.value;
   }

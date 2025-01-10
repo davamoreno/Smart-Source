@@ -103,7 +103,9 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
               'Authorization' : `Bearer ${useCookie('jwt').value}`
             },  
           })
+          
           adminProfile.value = response.data;
+          console.log('admin',  response.data);
         }
         catch(err){
           console.log(err, 'error')

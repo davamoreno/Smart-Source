@@ -36,6 +36,7 @@ async function handleLogin() {
       bootstrapModal.hide();
       
       await memberAuthStore.getUserProfile();
+      router.push('/home');
     }
   } catch (error) {
     console.error('Login failed:', error);
@@ -56,10 +57,12 @@ onMounted(() => {
     memberAuthStore.isLoading = false;
   }, 500);
 });
+
+
 </script>
 
 <template>
-    <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg">
     <div class="navbar-container container-fluid">
       <a class="navbar-brand">
         <img src="/assets/images/logo.svg" alt="" class="navbar-icon" />
@@ -90,7 +93,6 @@ onMounted(() => {
             <NuxtLink to="/about-us" class="nav-link">About Us</NuxtLink>
           </li>
         </ul>
-        <div v-if="memberAuthStore.isLoading">Loading...</div>
         <div
           class="d-flex navbar-btn"
           style="margin-left: 100px;"
@@ -106,12 +108,12 @@ onMounted(() => {
             data-bs-toggle="modal"
             data-bs-target="#createAccountModal">Sign Up</a>
         </div>
-        <div v-if="!isLoading && memberAuthStore.isLogin">
-          <div class="navbar-container container-fluid"></div>
-        </div>
       </div>
     </div>
   </nav>
+    <div v-if="!isLoading && memberAuthStore.isLogin">
+          <div class="navbar-container container-fluid"></div>
+     </div>
     <div class="modal fade" id="loginAccountModal" tabindex="-1" aria-labelledby="loginAccountModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -191,13 +193,10 @@ onMounted(() => {
     <main>
       <slot />
     </main>
-    <footer class="d-flex justify-content-center bg-primary py-3">
+    <footer class="d-flex justify-content-center bg-dark py-3">
       <p class="text-white mb-0">&copy; 2023 Smart Source</p>
     </footer>
   </template>
-  
-  <script setup>
-  </script>
   
 <style scoped lang="scss">
   .navbar {

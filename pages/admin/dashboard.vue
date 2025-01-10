@@ -4,14 +4,13 @@ import { onMounted, computed } from 'vue';
 
 definePageMeta({
     layout : 'blank',
-    middleware : 'auth',
-    requiresAuth : true
+    middleware : 'admin-auth',
 });
 
 </script>
 
 <template>
-    <div class="d-flex">
+    <div class="d-flex" >
       <AdminSideBar />
       <main class="flex-grow-1 p-4 bg-light">
         <div class="container-fluid">

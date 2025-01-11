@@ -17,8 +17,4 @@ export default defineNuxtRouteMiddleware(async (to) => {
       return navigateTo('/');
     }
   }
-
-  if (to.path === '/') {
-    return navigateTo('/home');
-  }
 });

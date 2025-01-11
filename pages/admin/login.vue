@@ -5,7 +5,9 @@ import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
 import { useCookie } from '#app';
 
 definePageMeta({
-  layout : 'blank'
+  middleware : 'admin-auth',
+  layout : 'blank',
+  requiresGuest : true,
 });
 
 const router = useRouter();
@@ -14,10 +16,8 @@ const adminAuthStore = useAdminAuthStore();
 async function handleLogin() { 
   try {
     await adminAuthStore.adminLogin();
-
     if (adminAuthStore.isLogin) {
       navigateTo('/admin/dashboard');
-      router.removeRoute('/admin/login');
     }
   } catch (error) {
     console.error('Login failed:', error);

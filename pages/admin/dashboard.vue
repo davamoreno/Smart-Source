@@ -5,6 +5,7 @@ import { onMounted, computed } from 'vue';
 definePageMeta({
     layout : 'blank',
     middleware : 'admin-auth',
+    requiresAuth: true,  
 });
 
 </script>

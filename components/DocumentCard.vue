@@ -1,6 +1,5 @@
 <template>
   <div class="col-auto">
-    
     <div class="document-card">
       <a href="" style="text-decoration: none;">
         <div class="card-header text-center">

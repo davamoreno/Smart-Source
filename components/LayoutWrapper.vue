@@ -96,7 +96,7 @@ onMounted(() => {
         <div
           class="d-flex navbar-btn"
           style="margin-left: 100px;"
-          v-if="!isLoading && !memberAuthStore.isLogin">
+          v-if="!isLoading && !memberAuthStore.isLogin ">
           <a
             class="btn me-auto btn-primary"
             data-bs-toggle="modal"

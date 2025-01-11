@@ -1,18 +1,42 @@
+<script setup>
+import { ref, onMounted, computed} from 'vue';
+import { useRoute } from 'vue-router';
+import { usePostStore } from '~/stores/MemberContent/post';
+import axios from 'axios';
+
+const post = usePostStore();
+const route = useRoute();
+
+onMounted(async () => {
+    const postId = route.params.id;
+    await post.showPostDetail(postId);
+});
+
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('en-GB', { 
+    day: '2-digit', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+}
+</script>
+
 <template>
     <div class="container-fluid py-3 my-5 overflow-x-hidden" style="padding-left: 80px; padding-right: 80px;">
-        <h4 class="fw-bolder">Review dan Analisis Terhadap IoT:  Fungsi, Spesifikasi, Implementasi, 
-            serta Isu Sosial dan Etika
+        <h4 class="fw-bolder">
+            {{ post.postDetail?.title || 'Loading...' }}
         </h4>
         <div class="row mt-4">
             <span>
-                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark me-4 rounded-2 fw-semibold">Makalah</button>
-                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark rounded-2 fw-semibold">Technology</button>
+                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark me-4 rounded-2 fw-semibold">{{ post.postDetail?.paper_type.name }}</button>
+                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark rounded-2 fw-semibold">{{ post.postDetail?.category.name }}</button>
             </span>
         </div>
         <div class="row mt-4">
-            <p>Published by <a href="">Ozza Afreza</a> on 28 November 2024</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <h6>10 LIKES</h6>
+            <p>Published by <a href="">{{ post.postDetail?.user.username }}</a> on {{ formatDate(post.postDetail?.created_at) }}</p>
+            <p>{{ post.postDetail?.description }}</p>
+            <h6>{{ post.postDetail?.likes_count }} Likes</h6>
         </div>
         <div class="row mt-4">
             <span>
@@ -38,7 +62,7 @@
         </div>
 
         <div class="row mt-5 justify-content-center">
-            <embed src="/pdf/contoh.pdf#toolbar=0" type="application/pdf" style="width: 1200px; height: 800px;">
+            <embed :src="`http://127.0.0.1:8000/storage/${post.postDetail?.file.file_path}#toolbar=0`" type="application/pdf" style="width: 1200px; height: 800px;">
         </div>
 
         <!-- Kolom Comment -->
@@ -51,10 +75,7 @@
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
             <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
         </div>
-        <!--  -->
-
-
-        <!-- Comment -->
+    
         <div class="row mt-5" style="padding-left: 88px; padding-right: 88px;">
             <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
             <div class="col">

@@ -22,9 +22,10 @@
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/Download.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
-                    <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
-                </button>
+                <button  style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="showModal = true">
+                     <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
+               </button>
+
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/bookmark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
@@ -40,6 +41,8 @@
         <div class="row mt-5 justify-content-center">
             <embed src="/pdf/contoh.pdf#toolbar=0" type="application/pdf" style="width: 1200px; height: 800px;">
         </div>
+
+
 
         <!-- Kolom Comment -->
         <div class="row mt-5" style="padding-left: 90px; padding-right: 90px;">
@@ -122,4 +125,56 @@
 
     </div>
 
+<!-- modal report -->
+<div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-0">     
+        <button type="button" class="btn-close" @click="showModal = false" aria-label="Close"></button>  
+      </div>
+      <h5 class="modal-title text-center w-100 mb-2">Report Post</h5>
+      <div class="modal-body text-center mb-4 ">
+        <p class="mb-4">Please make sure you are only reporting posts that violate our community guidelines.</p>
+        <textarea class="form-control mb-4 " rows="5" placeholder="Enter your report"></textarea>
+        <button type="button" class="btn btn-dark rounded-3 w-100 py-2" @click="">Submit Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  
+
+
+
+
 </template>
+<script>
+export default {
+  data() {
+    return {
+      showModal: false
+    };
+  }
+
+}
+</script>
+
+<style scoped>
+.modal-header {
+  justify-content: space-between;
+}
+.modal-body p {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+.btn-dark {
+  background-color: black;
+  border: none;
+}
+.btn-dark:hover {
+    border: 1px solid black;
+  background-color:white;
+  color: black
+}
+
+</style>

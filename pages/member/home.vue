@@ -35,7 +35,7 @@ const nextSlide = () => {
 </script>
 
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid overflow-x-hidden">
     <div class="row">
       <SideBar/>
 
@@ -113,6 +113,5 @@ const nextSlide = () => {
 </template>
 
 <style lang="scss">
-
 
 </style>

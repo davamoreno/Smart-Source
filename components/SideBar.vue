@@ -22,7 +22,7 @@ function logoutHandler() {
 
 <template>  
     <aside class="col-md-3 sidebar pt-5">
-        <div class="text-center"> 
+      <div class="text-center"> 
           <img :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
           <h4>{{ member.userProfile.username }}</h4>
           <p>{{ member.userProfile.faculty.university.name }}</p>
@@ -34,19 +34,19 @@ function logoutHandler() {
           <!-- <div class="container px-5"> -->
           <div class="menu-item ms-4 pt-3">
             <img src="/images/newpost.svg" alt="New Post Icon" class="menu-icon" />
-            <NuxtLink to="/member/uploadpost"class="nav-link text-dark" >New Post</NuxtLink>
+            <NuxtLink to="/member/uploadpost" class="nav-link text-dark" aria-current="page">New Post</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/history.svg" alt="History Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">History</a>
+            <NuxtLink to="/member/history" class="nav-link text-dark" aria-current="page">History</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/bookmark.svg" alt="Bookmark Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">Bookmarks</a>
+            <NuxtLink to="/member/BookmarkCard" class="nav-link text-dark" aria-current="page">Bookmark</NuxtLink>
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/mypost.svg" alt="My Post Icon" class="menu-icon" />
-            <NuxtLink to="/member/mypost"class="nav-link text-dark" >My Post</NuxtLink>
+            <NuxtLink to="/member/mypost" class="nav-link text-dark" aria-current="page">My Post</NuxtLink>
           </div>
           <div class="menu-item logout ms-4 pt-3">
             <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />

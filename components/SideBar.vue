@@ -51,7 +51,7 @@ function logoutHandler() {
           </div>
           <div class="menu-item logout ms-4 pt-3">
             <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />
-            <NuxtLink to="/" class="nav-link text-dark" aria-current="page">Log out</NuxtLink>
+            <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
           </div>
         <!-- </div> -->
         </nav>

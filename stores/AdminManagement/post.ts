@@ -5,6 +5,8 @@ import axios from 'axios';
 export const postAdminStore = defineStore('postAdmin', {
   state: () => ({
     posts: [],
+    reports : [],
+    totalItems : [],
     url: 'http://127.0.0.1:8000/api/',
   }),
   actions: {
@@ -20,7 +22,43 @@ export const postAdminStore = defineStore('postAdmin', {
         console.error('Failed to fetch posts:', error);
       }
     },
-    updatePostStatus(id : number, status : any) {
+    async getPendingReport(page = 1) {
+      try {
+        const response = await axios.get(`${this.url}post/report/pending?page=${page}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.reports = response.data.post.data;
+        this.totalItems = response.data;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },updateReportStatus(id : number, report_status : any) {
+      const report = this.reports.find(p => p.id === id);
+      if (report) {
+        report.report_status = report_status;
+      }
+    },
+    async reportValidation(id : number, report_status : any) {
+      try {
+        const response = await axios.post(`${this.url}post/report/handle/${id}`,
+          { report_status },
+          { params : {
+              _method : 'put'
+            },
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${useCookie('jwt').value}`
+            }
+          }
+        );
+        this.updateReportStatus(id, response.data.post.report_status);
+        console.log(`Post ${id} status updated to ${report_status}`);
+      } catch (error) {
+        console.error('Failed to update post status:', error.response?.data || error);
+      }
+    },updatePostStatus(id : number, status : any) {
       const post = this.posts.find(p => p.id === id);
       if (post) {
         post.status = status;
@@ -47,5 +85,5 @@ export const postAdminStore = defineStore('postAdmin', {
         console.error('Failed to update post status:', error.response?.data || error);
       }
     }
-  },
+  }
 });

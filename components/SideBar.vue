@@ -18,7 +18,6 @@ function logoutHandler() {
     });
 }
 
-
 </script>
 
 <template>  
@@ -26,8 +25,8 @@ function logoutHandler() {
         <div class="text-center"> 
           <img :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
           <h4>{{ member.userProfile.username }}</h4>
-          <p>Politeknik Negeri Bali</p>
-          <p>Teknologi Informasi</p>
+          <p>{{ member.userProfile.faculty.university.name }}</p>
+          <p>{{ member.userProfile.faculty.name }}</p>
           <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
         </div>
         <hr />
@@ -47,13 +46,12 @@ function logoutHandler() {
           </div>
           <div class="menu-item ms-4 pt-3">
             <img src="/images/mypost.svg" alt="My Post Icon" class="menu-icon" />
-            <a class="nav-link text-dark" href="#">My Post</a>
+            <NuxtLink to="/member/mypost"class="nav-link text-dark" >My Post</NuxtLink>
           </div>
           <div class="menu-item logout ms-4 pt-3">
             <img src="/images/logout.svg" alt="Logout Icon" class="menu-icon" />
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">Log Out</a>
           </div>
-        <!-- </div> -->
         </nav>
       </aside>
       <div class="modal" id="logoutModal" tabindex="-1" role="dialog" aria-hidden="true">

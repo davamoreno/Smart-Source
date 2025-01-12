@@ -16,6 +16,11 @@ export const usePostStore = defineStore('postStore', () => {
     const page = ref(1);
     const pageCount = ref(1);
     const postDetail = ref();
+    const isLiked = ref(false);
+    const reason = ref('');
+    const report = ref('');
+    const userPost = ref([]);
+    const status = ref('');
 
     function clearError() {
         setTimeout(() => {
@@ -74,15 +79,120 @@ export const usePostStore = defineStore('postStore', () => {
             loading.value = false;
         }
     }
-    async function  showPostDetail(id : number) {
+    async function showPostDetail(id : number) {
         try {
-            const response = await axios.get(`${url}user/post/${id}`);
-            console.log("Response data:", response.data); 
+            const response = await axios.get(`${url}user/post/${id}`,{
+                headers : {
+                    Authorization : `Bearer ${useCookie('jwt').value}`
+                }
+            });
             postDetail.value = response.data[0];
         } catch (error) {
             console.error('Error fetching post detail:', error);
         }
     }
+    async function createLike(id : number) {
+        try {
+            if (postDetail.value && postDetail.value.id === id) {
+                postDetail.value.like = true;
+                postDetail.value.likes_count += 1;
+            }
+            const response = await axios.post(`${url}post/like/${id}`, {}, {
+                headers : {
+                    Authorization : `Bearer ${useCookie('jwt').value}`
+                }
+            });
+            const updatedPost = response.data;
+            
+         
+    
+            console.log('Like Successful:', response.data.message);
+        }catch (error) {
+            if (postDetail.value && postDetail.value.id === id) {
+                postDetail.value.like = false;
+                postDetail.value.likes_count -= 1;
+            }
+            console.error('Error Message:', error.message);
+        }finally{
+            isLiked.value = true
+        }
+    }
+    async function deleteLike(id : number) {
+        try {
+            if (postDetail.value && postDetail.value.id === id) {
+                postDetail.value.like = false;
+                postDetail.value.likes_count -= 1;
+            }
+            const response = await axios.post(`${url}post/like/${id}`, {}, {
+                params : {
+                    '_method' : 'delete'
+                },
+                headers : {
+                    Authorization : `Bearer ${useCookie('jwt').value}`
+                }
+            });
+            const updatedPost = response.data;
+            console.log('Like Successful:', response.data.message);
+        }catch (error) {
+            if (postDetail.value && postDetail.value.id === id) {
+                postDetail.value.like = true;
+                postDetail.value.likes_count += 1;
+            }
+                console.error('Error Message:', error.message);
+        }finally{
+            isLiked.value = false;
+        }
+    }
+
+    async function createReport(id : number){
+        try{
+            const formData = new FormData();
+            formData.append('reason', reason.value);
+          
+            const response = await axios.post(`${url}post/report/${id}`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data", 
+                    "Authorization": `Bearer ${useCookie('jwt').value}`,
+                }
+            });
+            report.value = response.data;
+        }
+        catch{
+            
+        }
+    }
+
+    async function myPost() {
+        try {
+            const response = await axios.get(`${url}user/mypost`, {
+                headers: {
+                    "Authorization": `Bearer ${useCookie('jwt').value}`
+                }
+            });
+            
+            // Pastikan response.data.posts sesuai dengan format yang dikirimkan API
+            if (response.data.posts) {
+                userPost.value = response.data.posts;
+                console.log('response :', response.data);
+            } else {
+                console.log('No posts found');
+            }
+        } catch (error) {
+            // Menangani error dengan lebih spesifik
+            if (error.response) {
+                // Server merespon dengan status error
+                console.error('Error Response Data:', error.response.data);
+                console.error('Error Response Status:', error.response.status);
+            } else if (error.request) {
+                // Tidak ada respons dari server
+                console.error('Error Request:', error.request);
+            } else {
+                // Masalah lain saat pengaturan request
+                console.error('Error Message:', error.message);
+            }
+        }
+    }
+
 
     function resetForm() {
         title.value = '';
@@ -105,6 +215,15 @@ export const usePostStore = defineStore('postStore', () => {
         resetForm,
         getPost,
         showPostDetail,
-        postDetail
+        postDetail,
+        createLike,
+        deleteLike,
+        isLiked,
+        createReport,
+        reason,
+        report,
+        myPost,
+        userPost,
+        status
     };
 });

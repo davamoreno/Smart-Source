@@ -15,17 +15,29 @@ const toggleNav = () => {
 };
 
 async function handleRegister() {
-  await memberAuthStore.register();
-  if (memberAuthStore.success = true) {
+  try {
+    await memberAuthStore.register();
+    if (memberAuthStore.success === true) {
+      const modal = document.getElementById('createAccountModal');
+      const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+      if (bootstrapModal) bootstrapModal.show();
+    } else {
+      const modal = document.getElementById('createAccountModal');
+      const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+      if (bootstrapModal) bootstrapModal.hide();
+
+      const loginModalEl = document.getElementById('loginAccountModal');
+      const loginModal = new $bootstrap.Modal(loginModalEl); 
+      loginModal.show();
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+
     const modal = document.getElementById('createAccountModal');
     const bootstrapModal = $bootstrap.Modal.getInstance(modal);
-    bootstrapModal.hide(); 
-
-    const loginModalEl = document.getElementById('loginAccountModal');
-    const loginModal = new $bootstrap.Modal(loginModalEl);
-    loginModal.show();
+    if (bootstrapModal) bootstrapModal.show();
   }
-};
+}
 
 async function handleLogin() { 
   try {
@@ -123,13 +135,30 @@ onMounted(() => {
             </div>
             <div class="d-flex justify-content-center modal-body">
               <form @submit.prevent="handleLogin">
-                  <UIInput id="identifier" label="Username/Email Address" type="text" placeholder="Enter your username or email address" v-model="memberAuthStore.identifier" />  
+                  <UIInput id="identifier" label="Username/Email Address" type="text" placeholder="Enter your username or email address" v-model="memberAuthStore.identifier" />
+                  <div v-if="memberAuthStore.error?.identifier" class="text-danger">
+                      {{ memberAuthStore.error.identifier[0] }}
+                   </div>  
                   <UIInput id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
-                  <div class="d-flex justify-content-center"> 
-                    <UIBlueRoundedButton type="submit">
-                        Login
-                    </UIBlueRoundedButton>
-                  </div>
+                   <div v-if="memberAuthStore.isLoading" class="text-danger">
+                   <UIBlueRoundedButton disabled>
+                     Processing your request...
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div v-else class="d-flex justify-content-center">
+                   <UIBlueRoundedButton type="submit">
+                      Login
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div
+                   v-if="
+                     !memberAuthStore.isLoading &&
+                     memberAuthStore.isLogin &&
+                     !memberAuthStore.error
+                   "
+                   class="text-success mt-2">
+                    Login Successfully!
+                </div>
               </form>
             </div>
             <div class="d-flex justify-content-center">

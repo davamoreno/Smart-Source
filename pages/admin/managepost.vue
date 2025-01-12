@@ -5,8 +5,6 @@ definePageMeta({
 
 import { onMounted } from 'vue';
 import { postAdminStore } from '~/stores/AdminManagement/post';
-import axios from 'axios';
-import { useCookie } from '#app';
 
 const post = postAdminStore();
 

@@ -85,11 +85,10 @@ const nextSlide = () => {
           </div>
         </section>
         <section v-else>
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center justify-content-center">
             <P>No Post available</P>
           </div>
         </section>
-                
         <section class="mt-5 px-5 pb-5">
           <div class="row">
             <div class="col-10"><h5 class="pink-header">Most Liked Documents</h5></div>

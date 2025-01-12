@@ -6,7 +6,7 @@ const university = useUniversityStore();
 const faculty = usefacultyStore();
 
 async function handleCreateFaculty () {
-  await faculty.createFaculty ();
+  await faculty.createFaculty();
 }
 
 onMounted(() => {

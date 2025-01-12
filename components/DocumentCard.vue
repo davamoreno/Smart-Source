@@ -21,31 +21,37 @@
         <p class="document-publisher">Published by {{ publisher }}</p>
         </div>
       </a>
-      <button class="btn">
+      <button class="btn" @click="createdLike(post.postDetail.id)">
         <img src="/images/heart.svg" alt="Love" class="icon-love" />
       </button>
     </div>
   </div>
 </template>
   
-  <script>
-  export default {
-    props: {
-      title: {
-        type: String,
-        required: true,
-      },
-      category: {
-        type: String,
-        required: true,
-      },
-      publisher: {
-        type: String,
-        required: true,
-      },
-    },
-  };
-  </script>
+<script setup>
+import { defineProps } from 'vue';
+import { usePostStore } from '~/stores/MemberContent/post';
+
+const post = usePostStore();
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+  },
+  publisher: {
+    type: String,
+    required: true,
+  },
+});
+
+const createdLike = async (postId) => {
+    await post.createLike(postId);
+};
+</script>
   
   <style lang="scss">
   /* Styling Document Card */

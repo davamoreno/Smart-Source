@@ -17,7 +17,9 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const userProfile = ref({});
   const success = ref(false);
   const role = ref(null);
-
+  const url = 'http://localhost:8000/api/';
+  const selectedUniversity = ref('');
+  const selectedFaculty = ref('');
   function setLoginStatus(status: boolean) {
     isLogin.value = status;
   }
@@ -41,7 +43,6 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
       }
 
       console.log('Registration successful:', response.data);
-      success.value = true;
       username.value = '';
       email.value = '';
       password.value = '';
@@ -49,14 +50,15 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
     } catch (err) {
       if (err.response && err.response.status === 422) {
         error.value = err.response.data.errors;
+        success.value = false;
       }
       else {
         error.value = 'An unexpected error occurred. Please try again.';
       }
-    } finally {
-      success.value = true;
-      isLoading.value = false;
-    }
+      } finally {
+        success.value = true;
+        isLoading.value = false;
+      }
   }
 
 async function login() {
@@ -84,9 +86,16 @@ async function login() {
     setLoginStatus(true);   
     const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
     cookieToken.value = token.value;
+    identifier.value = '';
+    password.value = '';
   }
   catch(err){
-    console.error('err', err.response ? err.response.data : err);
+    if (err.response && err.response.status === 422) {
+      error.value = err.response.data.errors;
+    }
+    else {
+      error.value = 'An unexpected error occurred. Please try again.';
+    }
   }finally{
     isLoading.value = false;
   }
@@ -109,10 +118,7 @@ async function getUserProfile(){
 
 async function logout() {
   try{
-    const response = await axios.post('http://localhost:8000/api/member/logout', 
-    {
-
-    },
+    const response = await axios.post('http://localhost:8000/api/member/logout', {},
     {
       headers : {
         Authorization : `Bearer ${useCookie('jwt').value}`
@@ -131,6 +137,40 @@ async function logout() {
     console.log('err', err);
   }
 }
+async function updateProfile() {
+  try {
+    isLoading.value = true;
+    error.value = null;
+    const response = await axios.post(`${url}user/edit/profile`,
+      {
+        username: username.value,
+        faculty_id: selectedFaculty.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${useCookie('jwt').value}`,
+        },
+      }
+    );
+
+    userProfile.value = response.data.user;
+    console.log('Profile updated successfully:', response.data);
+
+    success.value = true;
+  } catch (err) {
+    if (err.response && err.response.status === 422) {
+      error.value = err.response.data.errors;
+    } else if (err.response && err.response.status === 401) {
+      error.value = 'User not authenticated.';
+    } else {
+      error.value = 'An unexpected error occurred. Please try again.';
+    }
+    success.value = false;
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 
 return {
   setLoginStatus,
@@ -145,8 +185,12 @@ return {
   isLogin,
   isLoading,
   error,
+  success,
   userProfile,
   getUserProfile,
-  logout
+  logout,
+  updateProfile,
+  selectedFaculty,
+  selectedUniversity
 }
 });

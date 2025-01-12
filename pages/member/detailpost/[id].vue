@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/MemberContent/post';
 import axios from 'axios';
 
+const isLiked = ref(false);
 const post = usePostStore();
 const route = useRoute();
 const showModal = ref(false);
@@ -21,6 +22,19 @@ const formatDate = (dateStr) => {
     year: 'numeric' 
   });
 }
+
+const createdLike = async (postId) => {
+    await post.createLike(postId);
+};
+
+const deletedLike = async (postId) => {
+    await post.deleteLike(postId);
+};
+
+const reportHandle = async (postId) => {
+    await post.createReport(postId);
+}
+
 </script>
 
 <template>
@@ -41,9 +55,12 @@ const formatDate = (dateStr) => {
         </div>
         <div class="row mt-4">
             <span>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
-                    <img src="/public/images/heart.svg" alt="" style="height: 50px; width: 50px;" class="position-absolute top-50 start-50 translate-middle">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="createdLike(post.postDetail?.id)" v-if="post.postDetail?.like === false">
+                    <img src='/public/images/heart.svg' alt="" style="height: 50px; width: 50px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedLike(post.postDetail?.id)" v-if="post.postDetail?.like === true">
+                    <img src='/public/images/heart-fill.svg' alt="" style="height: 50px; width: 26px;" class="position-absolute top-50 start-50 translate-middle">
+                </button>   
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/Download.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
@@ -145,8 +162,10 @@ const formatDate = (dateStr) => {
               <h5 class="modal-title text-center w-100 mb-2">Report Post</h5>
               <div class="modal-body text-center mb-4 ">
                 <p class="mb-4">Please make sure you are only reporting posts that violate our community guidelines.</p>
-                <textarea class="form-control mb-4 " rows="5" placeholder="Enter your report"></textarea>
-                <button type="button" class="btn btn-dark rounded-3 w-100 py-2" @click="">Submit Report</button>
+                <form @submit.prevent="reportHandle(post.postDetail?.id)">
+                    <textarea class="form-control mb-4 " rows="5" placeholder="Enter your report" v-model="post.reason"></textarea>
+                    <button class="btn btn-dark rounded-3 w-100 py-2" type="submit">Submit Report</button>
+                </form>
               </div>
             </div>
         </div>
@@ -167,7 +186,12 @@ const formatDate = (dateStr) => {
 }
 .btn-dark:hover {
     border: 1px solid black;
-  background-color:white;
-  color: black
+    background-color:white;
+    color: black
+}
+
+.btn-light:hover{
+    background-color:white;
+    color: black
 }
 </style>

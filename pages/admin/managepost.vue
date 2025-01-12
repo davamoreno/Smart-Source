@@ -77,7 +77,7 @@ onMounted(() => {
                     </button>
                     <button
                       class="btn btn-warning btn-sm text-white ms-2"
-                      @click="post.postValidate(post.id, 'deny')"
+                      @click="postValidate(post.id, 'deny')"
                     >
                       <i class="fa-regular fa-floppy-disk"></i> Deny
                     </button>

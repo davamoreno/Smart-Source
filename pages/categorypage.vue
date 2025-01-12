@@ -6,6 +6,9 @@
           <div class="folder-name">{{ folder.name }}</div>
           <div class="folder-icon"></div>
         </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

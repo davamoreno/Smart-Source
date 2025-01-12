@@ -5,11 +5,14 @@
 
     async function handleCreateUniversity(){
        await universityStore.createUniversity();
-        // if (!categoryUniversity.isLoading) {
-        //     const modal = document.getElementById('universityModal');
-        //     const bootstrapModal = $bootstrap.Modal.getInstance(modal);
-        //     bootstrapModal.hide();   
-        // }
+        if (!universityStore.isLoading) {
+            const modal = document.getElementById('universityModal');
+            const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+            bootstrapModal.hide();   
+            
+            await universityStore.getUniversity();
+            universityStore.name = '';
+        }
     }
 
     onMounted(() => {

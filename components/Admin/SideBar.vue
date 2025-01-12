@@ -6,8 +6,6 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const adminStore = useAdminAuthStore();
 
-const admin = computed(() => adminStore.adminProfile);
-
 function logoutHandler() {
     adminStore.logout().then(() => {
         router.push('/admin/login');
@@ -31,10 +29,10 @@ onMounted(() => {
         <div class="col pt-4" style="justify-content: center; text-align: center; border-bottom: 1px solid white;">
             <img src="/assets/images/AdminProfile.jpg" alt="" style="width: 98px; height: 100px; border-radius: 50%;">
             <h6 class="pt-2" style="color: white; font-weight: bold; font-family: Kumbh Sans; font-size: 18px;">
-                {{ admin.role }}
+                {{ adminStore.adminProfile.role }}
             </h6>
             <p class="text-white fw-light" style="font-family: unset; font-size: 14px">
-                {{ admin.username }}
+                {{ adminStore.adminProfile.username }}
             </p>
         </div>
         <nav class="nav flex-column">
@@ -89,7 +87,7 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <div v-if="admin.role === 'super_admin'" class="menu-item pb-4">
+                <div v-if="adminStore.adminProfile.role === 'super_admin'" class="menu-item pb-4">
                     <i class="fa-regular fa-circle-user text-white"></i>
                     <a href="/admin/manageadmin" class="text-white text-decoration-none ms-1 fw-bold">Manage Admin</a>
                 </div>

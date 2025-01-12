@@ -80,7 +80,6 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
             },
         );
 
-        //Ini Untuk Menyimpan Data User(token, role)
         token.value = response.data.access_token;
         role.value = response.data.role;
         isLogin.value = true;
@@ -103,7 +102,9 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
               'Authorization' : `Bearer ${useCookie('jwt').value}`
             },  
           })
+          
           adminProfile.value = response.data;
+          console.log('admin',  response.data);
         }
         catch(err){
           console.log(err, 'error')
@@ -126,7 +127,7 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
         cookieToken.value = null;
       
         token.value = null;
-        isLogin.value = false;
+        setLoginStatus(false);
         adminProfile.value = {};
         role.value = null;
 

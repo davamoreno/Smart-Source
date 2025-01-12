@@ -3,13 +3,9 @@
     <div class="row">
       <div class="col-md-4 mb-4" v-for="folder in folders" :key="folder.name">
         <div class="folder-card">
-  <div class="folder-name">{{ folder.name }}</div>
-  <div class="folder-icon"></div>
-</div>
-
-      </div>
-    </div>
-  </div>
+          <div class="folder-name">{{ folder.name }}</div>
+          <div class="folder-icon"></div>
+        </div>
 </template>
 
 <script>

@@ -28,7 +28,6 @@
 
     async function handleDeleteCategory(id) {
       await categoryStore.deleteCategory(id);
-
       await categoryStore.getCategories();
       categoryStore.name = '';
     }
@@ -51,7 +50,6 @@
 
     async function handleDeletePaper(id) {
       await paperStore.deletePaper(id);
-
       await paperStore.getPaper();
       paperStore.name = '';
     }

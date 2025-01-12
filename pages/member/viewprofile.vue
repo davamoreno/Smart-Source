@@ -105,37 +105,38 @@
   </template>
   
   
-  <script>
-export default {
-  data() {
-    return {
-      profileImage: "https://via.placeholder.com/120", // Ganti dengan URL foto profil
-      name: "Ozza Afreza",
-      university: "Politeknik Negeri Bali",
-      department: "Teknologi Informasi",
-      uploads: 10,
-      likedPosts: 30,
-      recentPosts: [
-        {
-          image: "https://via.placeholder.com/60",
-          title: "Makalah",
-          description: "Review dan Analisis...",
-        },
-        {
-          image: "https://via.placeholder.com/60",
-          title: "Makalah",
-          description: "Review dan Analisis...",
-        },
-        {
-          image: "https://via.placeholder.com/60",
-          title: "Makalah",
-          description: "Review dan Analisis...",
-        },
-      ],
-    };
-  },
-};
+<script>
+  export default {
+    data() {
+      return {
+        profileImage: "https://via.placeholder.com/120", // Ganti dengan URL foto profil
+        name: "Ozza Afreza",
+        university: "Politeknik Negeri Bali",
+        department: "Teknologi Informasi",
+        uploads: 10,
+        likedPosts: 30,
+        recentPosts: [
+          {
+            image: "https://via.placeholder.com/60",
+            title: "Makalah",
+            description: "Review dan Analisis...",
+          },
+          {
+            image: "https://via.placeholder.com/60",
+            title: "Makalah",
+            description: "Review dan Analisis...",
+          },
+          {
+            image: "https://via.placeholder.com/60",
+            title: "Makalah",
+            description: "Review dan Analisis...",
+          },
+        ],
+      };
+    },
+  };
 </script>
+
 <style scoped>
 .card {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);

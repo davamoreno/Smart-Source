@@ -1,17 +1,37 @@
 <script setup>
+import { onMounted } from 'vue';
+import { usePostStore } from '~/stores/MemberContent/post';
+import DocumentCard from '~/components/DocumentCard.vue';
 
-import { useMemberAuthStore } from '~/stores/Auth/Member/member';
-import { onMounted, computed } from 'vue';
-import { definePageMeta } from '#build/imports';
+const postStore = usePostStore();
 
-// definePageMeta({
-//   middleware : 'auth',
-//   requiresAuth : true
-// });
+onMounted(() => {
+  postStore.getPost();
+});
 
-const memberAuthStore = useMemberAuthStore();
-const user = computed(() => memberAuthStore.userProfile);
+definePageMeta({
+  middleware : 'member-auth',
+});
 
+const startIndex = ref(0);
+const postsPerPage = 3;
+
+const currentPosts = computed(() => {
+  return postStore.posts.slice(startIndex.value, startIndex.value + postsPerPage);
+});
+
+const prevSlide = () => {
+  if (startIndex.value > 0) {
+    startIndex.value -= 1;
+  }
+};
+
+
+const nextSlide = () => {
+  if (startIndex.value + postsPerPage < postStore.posts.length) {
+    startIndex.value += 1;
+  }
+};
 </script>
 
 <template>
@@ -19,7 +39,6 @@ const user = computed(() => memberAuthStore.userProfile);
     <div class="row">
       <SideBar/>
 
-      <!-- Main Content -->
       <div class="col-md-9">
         <div class="mb-3 p-5">
           <input type="text" class="form-control" placeholder="Search for documents..." />
@@ -31,20 +50,46 @@ const user = computed(() => memberAuthStore.userProfile);
               <a href="#" class="view-more">View More</a>
             </div>
           </div>
-        <!-- Latest Documents -->
-        <section class="px-5">
-          <div class="row" style="gap: 30px">
-            <DocumentCard
-              v-for="(doc, index) in latestDocuments"
-              :key="index"
-              :title="doc.title"
-              :category="doc.category"
-              :publisher="doc.publisher"
-            />
+
+        <section class="px-5" v-if="postStore.posts.length > 0">
+          <div class="d-flex align-items-center">
+            <button
+              @click="prevSlide"
+              class="btn btn-secondary me-3"
+              :disabled="startIndex === 0"
+            >
+              &lt;
+            </button>
+          
+            <div class="row" style="gap: 30px; overflow: hidden;">
+              <router-link
+                v-for="(post, index) in currentPosts"
+                :key="index"
+                :to="`/member/detailpost/${post.id}`"
+                class="col-auto text-decoration-none"
+              >
+                <DocumentCard
+                  :title="post.title"
+                  :category="post.category.name"
+                  :publisher="post.user.username"
+                />
+              </router-link>
+            </div>
+          
+            <button
+              @click="nextSlide"
+              class="btn btn-secondary ms-3"
+              :disabled="startIndex + postsPerPage >= postStore.posts.length">
+              &gt;
+            </button>
           </div>
         </section>
-
-        <!-- Most Liked Documents -->
+        <section v-else>
+          <div class="d-flex align-items-center">
+            <P>No Post available</P>
+          </div>
+        </section>
+                
         <section class="mt-5 px-5 pb-5">
           <div class="row">
             <div class="col-10"><h5 class="pink-header">Most Liked Documents</h5></div>

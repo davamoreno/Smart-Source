@@ -1,18 +1,43 @@
+<script setup>
+import { ref, onMounted, computed} from 'vue';
+import { useRoute } from 'vue-router';
+import { usePostStore } from '~/stores/MemberContent/post';
+import axios from 'axios';
+
+const post = usePostStore();
+const route = useRoute();
+const showModal = ref(false);
+
+onMounted(async () => {
+    const postId = route.params.id;
+    await post.showPostDetail(postId);
+});
+
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('en-GB', { 
+    day: '2-digit', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+}
+</script>
+
 <template>
     <div class="container-fluid py-3 my-5 overflow-x-hidden" style="padding-left: 80px; padding-right: 80px;">
-        <h4 class="fw-bolder">Review dan Analisis Terhadap IoT:  Fungsi, Spesifikasi, Implementasi, 
-            serta Isu Sosial dan Etika
+        <h4 class="fw-bolder">
+            {{ post.postDetail?.title || 'Loading...' }}
         </h4>
         <div class="row mt-4">
             <span>
-                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark me-4 rounded-2 fw-semibold">Makalah</button>
-                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark rounded-2 fw-semibold">Technology</button>
+                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark me-4 rounded-2 fw-semibold">{{ post.postDetail?.paper_type.name }}</button>
+                <button style="height: 36px; width: 120px;" class="btn btn-light btn-outline-dark rounded-2 fw-semibold">{{ post.postDetail?.category.name }}</button>
             </span>
         </div>
         <div class="row mt-4">
-            <p>Published by <a href="">Ozza Afreza</a> on 28 November 2024</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <h6>10 LIKES</h6>
+            <p>Published by <a href="">{{ post.postDetail?.user.username }}</a> on {{ formatDate(post.postDetail?.created_at) }}</p>
+            <p>{{ post.postDetail?.description }}</p>
+            <h6>{{ post.postDetail?.likes_count }} Likes</h6>
         </div>
         <div class="row mt-4">
             <span>
@@ -23,7 +48,7 @@
                     <img src="/public/images/Download.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
-                    <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
+                    <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle" @click="showModal = true">
                 </button>
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/bookmark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
@@ -38,10 +63,9 @@
         </div>
 
         <div class="row mt-5 justify-content-center">
-            <embed src="/pdf/contoh.pdf#toolbar=0" type="application/pdf" style="width: 1200px; height: 800px;">
+            <embed :src="`http://127.0.0.1:8000/storage/${post.postDetail?.file.file_path}#toolbar=0`" type="application/pdf" style="width: 1200px; height: 800px;">
         </div>
 
-        <!-- Kolom Comment -->
         <div class="row mt-5" style="padding-left: 90px; padding-right: 90px;">
             <p class="fs-4 pb-4">Comments</p>
             <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
@@ -51,10 +75,7 @@
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
             <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
         </div>
-        <!--  -->
-
-
-        <!-- Comment -->
+    
         <div class="row mt-5" style="padding-left: 88px; padding-right: 88px;">
             <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
             <div class="col">
@@ -84,9 +105,7 @@
                 <small class="fw-medium">Reply</small>
             </span>
         </div>
-        <!--  -->
-
-        <!-- Kolom Child Comment -->
+   
         <div class="row mt-5" style="padding-left: 155px; padding-right: 90px;">
             <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
             <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1050px; background-color: transparent;">
@@ -95,9 +114,7 @@
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
             <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
         </div>
-        <!--  -->
-
-        <!-- Child Comment -->
+     
         <div class="row mt-5" style="padding-left: 205px; padding-right: 88px;">
             <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
             <div class="col">
@@ -118,8 +135,39 @@
                 <small class="fw-medium">Like</small>
             </span>
         </div>
-        <!--  -->
-
     </div>
-
+    <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header border-0">     
+                <button type="button" class="btn-close" @click="showModal = false" aria-label="Close"></button>  
+              </div>
+              <h5 class="modal-title text-center w-100 mb-2">Report Post</h5>
+              <div class="modal-body text-center mb-4 ">
+                <p class="mb-4">Please make sure you are only reporting posts that violate our community guidelines.</p>
+                <textarea class="form-control mb-4 " rows="5" placeholder="Enter your report"></textarea>
+                <button type="button" class="btn btn-dark rounded-3 w-100 py-2" @click="">Submit Report</button>
+              </div>
+            </div>
+        </div>
+    </div>
 </template>
+
+<style scoped>
+.modal-header {
+  justify-content: space-between;
+}
+.modal-body p {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+.btn-dark {
+  background-color: black;
+  border: none;
+}
+.btn-dark:hover {
+    border: 1px solid black;
+  background-color:white;
+  color: black
+}
+</style>

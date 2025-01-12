@@ -28,7 +28,7 @@
   };
   </script>
   
-  <style lang="scss">
+  <style lang="scss" scoped>
   
   .container-fluid {
     background-color: #f8e9e9;
@@ -39,7 +39,7 @@
     width: 100%;
     max-width: 300px;
     height: 200px;
-    background-color: #007bff;
+    background-color: #292929 ;
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -48,6 +48,10 @@
     padding: 20px;
     text-align: center;
   }
+  .folder-card:hover{
+    transition: transform 0.1s ease-in-out;
+    transform: scale(1.1);
+  }
   
   .folder-icon {
     width: 67px;
@@ -55,7 +59,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url('/public/images/path-to-folder-icon.svg');
+    background-image: url('/public/images/paperpage.svg');
     margin-bottom: 10px;
   }
   

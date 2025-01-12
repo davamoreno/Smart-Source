@@ -11,11 +11,13 @@ export const useUniversityStore = defineStore('University', () => {
     const perPage = ref(5);
     const maxVisiblePages = 5;
     const totalItems = ref(0);
+    const isLoading = ref(true);
     const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
     const url = "http://127.0.0.1:8000/api/";
 
 async function createUniversity(){
     try{
+        isLoading.value = true;
         error.value = null;
 
         const response = await axios.post(`${url}university`, {
@@ -34,6 +36,8 @@ async function createUniversity(){
     }catch(err){
         
         return error.value = err.response?.data;
+    }finally{
+        isLoading.value = false;
     }
 }
 async function getUniversity(page = 1){
@@ -76,7 +80,8 @@ return {
     error,
     getUniversity,
     createUniversity,
-    deleteUniversity
+    deleteUniversity,
+    isLoading
 }
 
 

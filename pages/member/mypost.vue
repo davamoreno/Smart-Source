@@ -22,7 +22,31 @@
                     </ul>
                 </div>
                 <div class="col-2 py-5">
-                    <button class="btn btn-outline-danger btn-sm px-5 py-2">Delete</button>
+                    <button class="btn btn-outline-danger btn-sm px-5 py-2"  data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                </div>
+
+                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <span class="d-flex">
+                                    <img src="/public/images/trash.svg" alt="">
+                                    <p style="color: #FF5E5E;" class="ps-2 pt-3 fs-4 fw-medium">Delete</p>
+                                </span>
+                                <div class="d-flex justify-content-center">
+                                    <H4 class="mt-4 mb-5 fw-light">Confirm to delete ?</H4>
+                                </div>
+                                <div class="row py-3">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-danger btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal">No</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3">Yes</button> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

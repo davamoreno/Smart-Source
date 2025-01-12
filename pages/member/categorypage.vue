@@ -1,11 +1,10 @@
 <template>
   <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row justify-content-center">
-      <div class="col-md-4 col-sm-6 mb-4" v-for="category in categories" :key="category.name">
-        <div class="category-card" :style="{ backgroundColor: category.bgColor }">
-          <!-- Perbaikan Sintaks -->
-          <div class="category-image" :style="{ backgroundImage: `url(${category.imageUrl})` }"></div>
-          <h5 class="category-title">{{ category.name }}</h5>
+    <div class="row">
+      <div class="col-md-4 mb-4" v-for="folder in folders" :key="folder.name">
+        <div class="folder-card">
+          <div class="folder-name">{{ folder.name }}</div>
+          <div class="folder-icon"></div>
         </div>
       </div>
     </div>
@@ -16,82 +15,61 @@
 export default {
   data() {
     return {
-      categories: [
-        {
-          name: "Sains & Math",
-          bgColor: "#ff6f61",
-          imageUrl: "/images/sainsmath.svg",
-        },
-        {
-          name: "Tourism",
-          bgColor: "#4caf50",
-          imageUrl: "/images/tourism.svg",
-        },
-        {
-          name: "Technology",
-          bgColor: "#2196f3",
-          imageUrl: "/images/technology.svg",
-        },
-        {
-          name: "Law",
-          bgColor: "#9e9e9e",
-          imageUrl: "/images/law.svg",
-        },
-        {
-          name: "Business",
-          bgColor: "#ffeb3b",
-          imageUrl: "/images/business.svg",
-        },
-        {
-          name: "Social",
-          bgColor: "#009688",
-          imageUrl: "/images/social.svg",
-        },
-      ],
+      folders: [
+        { name: 'Sains & Math' },
+        { name: 'Sains & Math' },
+        { name: 'Sains & Math ' },
+        { name: 'Sains & Math' },
+        { name: 'Sains & Math' },
+        { name: 'Sains & Math' }
+      ]
     };
-  },
+  }
 };
 </script>
 
-<style lang="scss">
-body {
-  font-family: "Poppins", sans-serif;
+<style lang="scss" scoped>
+
+.container-fluid {
   background-color: #f8e9e9;
-  margin: 0;
+  font-family: 'Poppins', sans-serif;
 }
 
-.category-card {
-  position: relative;
+.folder-card {
   width: 100%;
   max-width: 300px;
   height: 200px;
-  border-radius: 15px;
-  overflow: hidden;
+  background-color: #292929;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 15px;
-  color: #fff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+.folder-card:hover{
+  transition: transform 0.1s ease-in-out;
+    transform: scale(1.1);
 }
 
-.category-image {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+.folder-icon {
+  width: 100px;
+  height: 120px;
   background-size: cover;
   background-position: center;
-  z-index: 0;
+  background-repeat: no-repeat;
+  background-image: url('/public/images/categorypage.svg');
+  margin-top: 10px; 
 }
-
-.category-title {
-  position: relative;
-  z-index: 1;
+.folder-name {
+  color: #fff;
   font-size: 20px;
   font-weight: 600;
-  margin: 0;
+  position: absolute;
+  top: 15px; 
+  left: 20px; 
 }
+
 </style>

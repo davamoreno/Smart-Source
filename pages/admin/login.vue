@@ -2,11 +2,12 @@
 import { useRouter } from 'vue-router';
 import { onMounted } from 'vue';
 import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
+import { useCookie } from '#app';
 
 definePageMeta({
+  middleware : 'admin-auth',
   layout : 'blank',
-  middleware : 'auth',
-  requiresGuest : true
+  requiresGuest : true,
 });
 
 const router = useRouter();
@@ -15,7 +16,6 @@ const adminAuthStore = useAdminAuthStore();
 async function handleLogin() { 
   try {
     await adminAuthStore.adminLogin();
-
     if (adminAuthStore.isLogin) {
       navigateTo('/admin/dashboard');
     }
@@ -23,10 +23,24 @@ async function handleLogin() {
     console.error('Login failed:', error);
   }
 }
+
+onMounted(() => {
+  const cookieToken = useCookie('jwt');
+  if (cookieToken.value && !adminAuthStore.isLogin) {
+    console.log('Token ditemukan:', cookieToken.value);
+    adminAuthStore.isLogin = true;
+    adminAuthStore.getAdminProfile();
+  } else if (!cookieToken.value) {
+    console.log('Token tidak ditemukan, user belum login');
+  }
+  setTimeout(() => {
+    adminAuthStore.isLoading = false;
+  }, 500);
+});
 </script>
 
 <template>
-  <div class="login-page d-flex justify-content-center align-items-center">
+  <div class="login-page d-flex justify-content-center align-items-center" v-if="!adminAuthStore.isLogin">
     <div class="login-container text-center">
       <div class="illustration mb-4">
         <img src="/assets/images/login.png" alt="Illustration" class="img-fluid" />
@@ -58,6 +72,11 @@ async function handleLogin() {
         </button>
       </form>
     </div>
+  </div>
+  <div v-else>
+    <NuxtLink to="/admin/dashboard">
+      <h1>Go back</h1>
+    </NuxtLink>
   </div>
 </template>
 

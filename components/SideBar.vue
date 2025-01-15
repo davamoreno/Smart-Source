@@ -25,13 +25,14 @@ function logoutHandler() {
       <div class="text-center"> 
           <img :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
           <h4>{{ member.userProfile.username }}</h4>
-          <p>{{ member.userProfile.faculty.university.name }}</p>
-          <p>{{ member.userProfile.faculty.name }}</p>
+          <p>{{ member.userProfile?.faculty?.university?.name ? 
+                member.userProfile.faculty.university.name : '-' }}</p>
+          <p>{{ member.userProfile?.faculty?.name ?
+                member.userProfile.faculty.name : '-' }}</p>
           <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
         </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">
-          <!-- <div class="container px-5"> -->
           <div class="menu-item ms-4 pt-3">
             <img src="/images/newpost.svg" alt="New Post Icon" class="menu-icon" />
             <NuxtLink to="/member/uploadpost" class="nav-link text-dark" aria-current="page">New Post</NuxtLink>

@@ -76,11 +76,6 @@ const formatDate = (dateStr) => {
                 </div>
             </div>
         </div>
-
     </div>
-    
-
-
 </div>
-
 </template>

@@ -130,7 +130,7 @@ onMounted(() => {
             </div>
             <div class="hero-btn" v-if="memberAuth.userProfile.role === 'member'">
               <UIRoundedButton>
-                  <NuxtLink to="/home"><h6>Start Archive Now !</h6></NuxtLink>
+                  <NuxtLink to="/member/home"><h6>Start Archive Now !</h6></NuxtLink>
               </UIRoundedButton>
             </div>
             <div v-if="adminAuth.adminProfile.role === 'super_admin' || adminAuth.adminProfile.role === 'admin'">

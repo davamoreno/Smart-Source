@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import { ref } from 'vue';
 import { useCookie } from '#app';
+import { useUrlStore } from '~/stores/BaseUrl/Url';
 
 
 export const useMemberAuthStore = defineStore('memberAuth', () => {
@@ -17,9 +18,10 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const userProfile = ref({});
   const success = ref(false);
   const role = ref(null);
-  const url = 'http://localhost:8000/api/';
+  const urlStore = useUrlStore();
   const selectedUniversity = ref('');
   const selectedFaculty = ref('');
+
   function setLoginStatus(status: boolean) {
     isLogin.value = status;
   }
@@ -29,8 +31,8 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
       isLoading.value = true;
       error.value = null;
       success.value = false;
-
-      const response = await axios.post('http://localhost:8000/api/member/register', {
+      
+      const response = await axios.post(`${urlStore.url}member/register`, {
         username: username.value,
         email: email.value,
         password: password.value,
@@ -70,7 +72,7 @@ async function login() {
       throw new Error('Identifier and password are required');
     }
 
-    const response = await axios.post('http://localhost:8000/api/member/login', {
+    const response = await axios.post(`${urlStore.url}member/login`, {
       identifier: identifier.value,
       password: password.value,
     },
@@ -103,7 +105,7 @@ async function login() {
 
 async function getUserProfile(){
   try{
-    const response = await axios.get('http://localhost:8000/api/user/profile', {
+    const response = await axios.get(`${urlStore.url}user/profile`, {
       headers : { 
         'Authorization' : `Bearer ${useCookie('jwt').value}`
       }
@@ -118,7 +120,7 @@ async function getUserProfile(){
 
 async function logout() {
   try{
-    const response = await axios.post('http://localhost:8000/api/member/logout', {},
+    const response = await axios.post(`${urlStore.url}member/logout`, {},
     {
       headers : {
         Authorization : `Bearer ${useCookie('jwt').value}`
@@ -127,7 +129,6 @@ async function logout() {
   );
   const cookieToken = useCookie('jwt');
   cookieToken.value = null;
-
   token.value = null;
   isLogin.value = false;
   userProfile.value = {};
@@ -141,7 +142,7 @@ async function updateProfile() {
   try {
     isLoading.value = true;
     error.value = null;
-    const response = await axios.post(`${url}user/edit/profile`,
+    const response = await axios.post(`${urlStore.url}user/edit/profile`,
       {
         username: username.value,
         faculty_id: selectedFaculty.value,

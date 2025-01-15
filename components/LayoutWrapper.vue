@@ -48,7 +48,7 @@ async function handleLogin() {
       bootstrapModal.hide();
       
       await memberAuthStore.getUserProfile();
-      router.push('/home');
+      router.push('/member/home');
     }
   } catch (error) {
     console.error('Login failed:', error);

@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import axios from "axios";
 import { useCookie } from "#app";
+import { useUrlStore } from "~/stores/BaseUrl/Url";
 
 export const useAdminAuthStore = defineStore('adminAuth', () => {
     const username = ref('');
@@ -16,7 +17,7 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
     const role = ref(null);
     const isLogin = ref(false);
     const adminProfile = ref({});
-    const url = 'http://localhost:8000/api/';
+    const urlStore = useUrlStore();
 
     function setLoginStatus(status: boolean) {
         isLogin.value = status;
@@ -28,7 +29,7 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
             error.value = null;
             isSuccess.value = false;
             
-            let response = await axios.post(`${url}admin/register`, {
+            let response = await axios.post(`${urlStore.url}admin/register`, {
                 username : username.value,
                 email : email.value,
                 password : password.value,
@@ -69,7 +70,7 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
         isLoading.value = true;
         error.value = null;
 
-        const response = await axios.post(`${url}admin/login`, {
+        const response = await axios.post(`${urlStore.url}admin/login`, {
                 identifier : identifier.value,
                 password : password.value,
             },
@@ -97,7 +98,7 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
 
     async function getAdminProfile(){
         try{
-          const response = await axios.get(`${url}admin/profile`, {
+          const response = await axios.get(`${urlStore.url}admin/profile`, {
             headers : {
               'Authorization' : `Bearer ${useCookie('jwt').value}`
             },  
@@ -113,7 +114,7 @@ export const useAdminAuthStore = defineStore('adminAuth', () => {
 
     async function logout() {
         try{
-          const response = await axios.post(`${url}admin/logout`, 
+          const response = await axios.post(`${urlStore.url}admin/logout`, 
           {
       
           },

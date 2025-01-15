@@ -1,18 +1,19 @@
 import { useCookie } from '#app';
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { useUrlStore } from '../BaseUrl/Url';
 
 export const postAdminStore = defineStore('postAdmin', {
   state: () => ({
     posts: [],
     reports : [],
     totalItems : [],
-    url: 'http://127.0.0.1:8000/api/',
+    urlStore: useUrlStore();
   }),
   actions: {
     async getPendingPost(page = 1) {
       try {
-        const response = await axios.get(`${this.url}post/pending?page=${page}`, {
+        const response = await axios.get(`${this.urlStore.url}post/pending?page=${page}`, {
           headers: {
             "Authorization": `Bearer ${useCookie('jwt').value}`
           }
@@ -24,7 +25,7 @@ export const postAdminStore = defineStore('postAdmin', {
     },
     async getPendingReport(page = 1) {
       try {
-        const response = await axios.get(`${this.url}post/report/pending?page=${page}`, {
+        const response = await axios.get(`${this.urlStore.url}post/report/pending?page=${page}`, {
           headers: {
             "Authorization": `Bearer ${useCookie('jwt').value}`
           }
@@ -42,7 +43,7 @@ export const postAdminStore = defineStore('postAdmin', {
     },
     async reportValidation(id : number, report_status : any) {
       try {
-        const response = await axios.post(`${this.url}post/report/handle/${id}`,
+        const response = await axios.post(`${this.urlStore.url}post/report/handle/${id}`,
           { report_status },
           { params : {
               _method : 'put'
@@ -67,7 +68,7 @@ export const postAdminStore = defineStore('postAdmin', {
     async postValidation(id : number, status : any) {
       try {
         const response = await axios.post(
-          `${this.url}post/validation/${id}`,
+          `${this.urlStore.url}post/validation/${id}`,
           { status },
           {
             params : {

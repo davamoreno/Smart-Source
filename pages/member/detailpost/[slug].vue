@@ -4,14 +4,27 @@ import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/MemberContent/post';
 import axios from 'axios';
 
-const isLiked = ref(false);
 const post = usePostStore();
 const route = useRoute();
+const router = useRouter();
 const showModal = ref(false);
 
 onMounted(async () => {
-    const postId = route.params.id;
-    await post.showPostDetail(postId);
+    const slug = route.params.slug;
+
+    if (!slug) {
+        console.error('Slug is missing!');
+        router.push('/member/home');
+        return;
+    }
+
+    await post.showPostDetail(slug);
+});
+
+onActivated(async () => {
+    post.showPostDetail()
+    post.like;
+    post.likes_count;
 });
 
 const formatDate = (dateStr) => {
@@ -23,12 +36,12 @@ const formatDate = (dateStr) => {
   });
 }
 
-const createdLike = async (postId) => {
-    await post.createLike(postId);
+const createdLike = (postId) => {
+    post.createLike(postId);
 };
 
-const deletedLike = async (postId) => {
-    await post.deleteLike(postId);
+const deletedLike = (postId) => {
+    post.deleteLike(postId);
 };
 
 const reportHandle = async (postId) => {
@@ -55,10 +68,10 @@ const reportHandle = async (postId) => {
         </div>
         <div class="row mt-4">
             <span>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="createdLike(post.postDetail?.id)" v-if="post.postDetail?.like === false">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="createdLike(post.postDetail?.slug)" v-if="post.postDetail?.like === false">
                     <img src='/public/images/heart.svg' alt="" style="height: 50px; width: 50px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedLike(post.postDetail?.id)" v-if="post.postDetail?.like === true">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedLike(post.postDetail?.slug)" v-if="post.postDetail?.like === true">
                     <img src='/public/images/heart-fill.svg' alt="" style="height: 50px; width: 26px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>   
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
@@ -194,4 +207,5 @@ const reportHandle = async (postId) => {
     background-color:white;
     color: black
 }
+
 </style>

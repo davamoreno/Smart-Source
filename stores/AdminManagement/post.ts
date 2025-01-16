@@ -8,7 +8,7 @@ export const postAdminStore = defineStore('postAdmin', {
     posts: [],
     reports : [],
     totalItems : [],
-    urlStore: useUrlStore();
+    urlStore: useUrlStore(),
   }),
   actions: {
     async getPendingPost(page = 1) {

@@ -150,7 +150,7 @@ const nextSlide = () => {
         </section>
         <section v-else>
           <div class="d-flex align-items-center justify-content-center">
-            <img src="/public/images/pink-loading.gif" alt="">
+            <p>No Post Available Yet</p>
           </div>
         </section>
         <section class="mt-5 px-5 pb-5">

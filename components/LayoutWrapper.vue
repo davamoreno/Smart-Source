@@ -2,6 +2,7 @@
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { onMounted, computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useCookie } from '#app';
 const { $bootstrap } = useNuxtApp();
 
 const memberAuthStore = useMemberAuthStore();
@@ -13,42 +14,67 @@ const toggleNav = () => {
   isNavOpen.value = !isNavOpen.value;
 };
 
+async function handleRegister() {
+  try {
+    await memberAuthStore.register();
+    if (memberAuthStore.success === true) {
+      const modal = document.getElementById('createAccountModal');
+      const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+      if (bootstrapModal) bootstrapModal.show();
+    } else {
+      const modal = document.getElementById('createAccountModal');
+      const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+      if (bootstrapModal) bootstrapModal.hide();
+
+      const loginModalEl = document.getElementById('loginAccountModal');
+      const loginModal = new $bootstrap.Modal(loginModalEl); 
+      loginModal.show();
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+
+    const modal = document.getElementById('createAccountModal');
+    const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+    if (bootstrapModal) bootstrapModal.show();
+  }
+}
+
 async function handleLogin() { 
   try {
     await memberAuthStore.login();
-
     if (memberAuthStore.isLogin) {
-      console.log('Login successful!');
       const modal = document.getElementById('loginAccountModal');
       const bootstrapModal = $bootstrap.Modal.getInstance(modal);
       bootstrapModal.hide();
       
-      await memberAuthStore.getUserProfile(); 
-      navigateTo('/home');
+      await memberAuthStore.getUserProfile();
+      router.push('/member/home');
     }
   } catch (error) {
     console.error('Login failed:', error);
   }
 }
 
-await handleLogin();
 
 onMounted(() => {
   const cookieToken = useCookie('jwt');
-  if (cookieToken.value) {
+  if (cookieToken.value && !memberAuthStore.isLogin) {
     console.log('Token ditemukan:', cookieToken.value);
     memberAuthStore.isLogin = true;
     memberAuthStore.getUserProfile();
-          router.push('/home');
-  } else {
+  } else if (!cookieToken.value) {
     console.log('Token tidak ditemukan, user belum login');
   }
+  setTimeout(() => {
+    memberAuthStore.isLoading = false;
+  }, 500);
 });
+
 
 </script>
 
 <template>
-    <nav class="navbar navbar-expand-lg">
+  <nav class="navbar navbar-expand-lg">
     <div class="navbar-container container-fluid">
       <a class="navbar-brand">
         <img src="/assets/images/logo.svg" alt="" class="navbar-icon" />
@@ -67,22 +93,22 @@ onMounted(() => {
         id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item me-4">
-            <NuxtLink to="/" class="nav-link" aria-current="page">Home</NuxtLink>
+            <NuxtLink to="/member/home" class="nav-link" aria-current="page">Home</NuxtLink>
           </li>
           <li class="nav-item me-4">
-            <NuxtLink to="/Categories" class="nav-link">Categories</NuxtLink>
+            <NuxtLink to="/member/categorypage" class="nav-link">Categories</NuxtLink>
           </li>
           <li class="nav-item me-4">
-            <NuxtLink to="/papers" class="nav-link">Papers</NuxtLink>
+            <NuxtLink to="/member/paperpage" class="nav-link">Papers</NuxtLink>
           </li>
           <li class="nav-item me-4">
-            <NuxtLink to="/about-us" class="nav-link">About Us</NuxtLink>
+            <NuxtLink to="/member/about-us" class="nav-link">About Us</NuxtLink>
           </li>
         </ul>
         <div
           class="d-flex navbar-btn"
           style="margin-left: 100px;"
-          v-if="!memberAuthStore.isLogin">
+          v-if="!isLoading && !memberAuthStore.isLogin ">
           <a
             class="btn me-auto btn-primary"
             data-bs-toggle="modal"
@@ -94,12 +120,12 @@ onMounted(() => {
             data-bs-toggle="modal"
             data-bs-target="#createAccountModal">Sign Up</a>
         </div>
-        <div v-else>
-    
-        </div>
       </div>
     </div>
   </nav>
+    <div v-if="!isLoading && memberAuthStore.isLogin">
+          <div class="navbar-container container-fluid"></div>
+     </div>
     <div class="modal fade" id="loginAccountModal" tabindex="-1" aria-labelledby="loginAccountModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -109,31 +135,97 @@ onMounted(() => {
             </div>
             <div class="d-flex justify-content-center modal-body">
               <form @submit.prevent="handleLogin">
-                  <UIInput id="identifier" label="Username/Email Address" type="text" placeholder="Enter your username or email address" v-model="memberAuthStore.identifier" />  
+                  <UIInput id="identifier" label="Username/Email Address" type="text" placeholder="Enter your username or email address" v-model="memberAuthStore.identifier" />
+                  <div v-if="memberAuthStore.error?.identifier" class="text-danger">
+                      {{ memberAuthStore.error.identifier[0] }}
+                   </div>  
                   <UIInput id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
-                  <div class="d-flex justify-content-center"> 
-                    <UIBlueRoundedButton type="submit">
-                        Login
-                    </UIBlueRoundedButton>
-                  </div>
+                   <div v-if="memberAuthStore.isLoading" class="text-danger">
+                   <UIBlueRoundedButton disabled>
+                     Processing your request...
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div v-else class="d-flex justify-content-center">
+                   <UIBlueRoundedButton type="submit">
+                      Login
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div
+                   v-if="
+                     !memberAuthStore.isLoading &&
+                     memberAuthStore.isLogin &&
+                     !memberAuthStore.error
+                   "
+                   class="text-success mt-2">
+                    Login Successfully!
+                </div>
               </form>
             </div>
             <div class="d-flex justify-content-center">
-              <p>Don't Have An Account? <a href="#"><span style="color: blue;">Sign In</span></a></p>
+              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign In</span></a></p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-2" id="createAccountModalLabel">Create an account</h1>
+              <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="d-flex justify-content-center modal-body">
+              <form @submit.prevent="handleRegister">
+                  <UIInput id="username" label="Username" placeholder="Enter your username" v-model="memberAuthStore.username" />
+                  <div v-if="memberAuthStore.error?.username" class="text-danger">
+                      {{ memberAuthStore.error.username[0] }}
+                   </div>
+                  <UIInput id="email" label="Email address" type="email" placeholder="Enter your email address" v-model="memberAuthStore.email" />
+                  <div v-if="memberAuthStore.error?.email" class="text-danger">
+                      {{ memberAuthStore.error.email[0] }}
+                   </div>  
+                  <UIInput id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
+                  <div v-if="memberAuthStore.error?.password" class="text-danger">
+                      {{ memberAuthStore.error.password[0] }}
+                   </div>  
+                  <UIInput id="confirmPassword" label="Confirm Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.confirmPassword" />
+                  <div v-if="memberAuthStore.error?.confirmPassword" class="text-danger">
+                      {{ memberAuthStore.error.confirmPassword[0] }}
+                  </div>
+                  <div v-if="memberAuthStore.isLoading" class="text-danger">
+                   <UIBlueRoundedButton disabled>
+                     Processing your request...
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div v-else class="d-flex justify-content-center">
+                   <UIBlueRoundedButton type="submit">
+                     Create account
+                   </UIBlueRoundedButton>
+                 </div>
+                 <div
+                   v-if="
+                     !memberAuthStore.isLoading &&
+                     memberAuthStore.success &&
+                     !memberAuthStore.error
+                   "
+                   class="text-success mt-2">
+                Account created successfully!
+                </div>
+              </form>
+            </div>
+            <div class="d-flex justify-content-center">
+              <p>Already Have An Account? <a data-bs-toggle="modal" data-bs-target="#loginAccountModal"><span style="color: blue;">Log In</span></a></p>
             </div>
           </div>
         </div>
     </div>
     <main>
-      <slot /> 
+      <slot />
     </main>
-    <footer class="d-flex justify-content-center bg-primary py-3">
+    <footer class="d-flex justify-content-center bg-dark py-3">
       <p class="text-white mb-0">&copy; 2023 Smart Source</p>
     </footer>
   </template>
-  
-  <script setup>
-  </script>
   
 <style scoped lang="scss">
   .navbar {
@@ -249,6 +341,9 @@ onMounted(() => {
   background-color: #d9d9d9;
   padding: 20px;
   border-radius: 10px;
+  [v-cloak] {
+    display: none;
+  }
 
   .modal-header {
     h1 {

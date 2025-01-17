@@ -1,13 +1,12 @@
 <script setup>
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
 import { onMounted, ref } from 'vue';
-import { definePageMeta } from '#build/imports';
 import anime from 'animejs';
 
-definePageMeta({
-  middleware: 'auth',
-  requiresGuest: true,
-});
+const memberAuth = useMemberAuthStore();
+const adminAuth = useAdminAuthStore();
+
 
 onMounted(() => {
   const quickAnimation = () => {
@@ -108,16 +107,6 @@ onMounted(() => {
   
 });
 
-const memberAuthStore = useMemberAuthStore();
-
-const handleRegister = () => {
-  memberAuthStore.register();
-};
-
-// onMounted(() => {
-//   useMemberAuthStore.fetchFaculties;
-// });
-
 </script>
 
 <template>
@@ -139,7 +128,15 @@ const handleRegister = () => {
                     It's time to turn your hard-earned knowledge into a lasting digital legacy!
                 </p>
             </div>
-            <div class="hero-btn">
+            <div class="hero-btn" v-if="memberAuth.userProfile.role === 'member'">
+              <UIRoundedButton>
+                  <NuxtLink to="/member/home"><h6>Start Archive Now !</h6></NuxtLink>
+              </UIRoundedButton>
+            </div>
+            <div v-if="adminAuth.adminProfile.role === 'super_admin' || adminAuth.adminProfile.role === 'admin'">
+
+            </div>
+            <div class="hero-btn" v-if="!memberAuth.isLogin && !adminAuth.isLogin">
                 <UIRoundedButton data-bs-toggle="modal" data-bs-target="#loginAccountModal">
                   <h6>Start Archive Now !</h6>
                 </UIRoundedButton>
@@ -288,59 +285,6 @@ const handleRegister = () => {
         </div>
         <div class="d-flex justify-content-center mt-5">
          <button class="btn btn-primary see-more-btn"><h6>See more</h6></button>
-        </div>
-    </div>
-
-    <div class="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-2" id="createAccountModalLabel">Create an account</h1>
-              <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="d-flex justify-content-center modal-body">
-              <form @submit.prevent="handleRegister">
-                  <UIInput id="username" label="Username" placeholder="Enter your username" v-model="memberAuthStore.username" />
-                  <div v-if="memberAuthStore.error?.username" class="text-danger">
-                      {{ memberAuthStore.error.username[0] }}
-                   </div>
-                  <UIInput id="email" label="Email address" type="email" placeholder="Enter your email address" v-model="memberAuthStore.email" />
-                  <div v-if="memberAuthStore.error?.email" class="text-danger">
-                      {{ memberAuthStore.error.email[0] }}
-                   </div>  
-                  <UIInput id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
-                  <div v-if="memberAuthStore.error?.password" class="text-danger">
-                      {{ memberAuthStore.error.password[0] }}
-                   </div>  
-                  <UIInput id="confirmPassword" label="Confirm Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.confirmPassword" />
-                  <div v-if="memberAuthStore.error?.confirmPassword" class="text-danger">
-                      {{ memberAuthStore.error.confirmPassword[0] }}
-                  </div>
-                  <div v-if="memberAuthStore.isLoading" class="text-danger">
-                   <UIBlueRoundedButton disabled>
-                     Processing your request...
-                   </UIBlueRoundedButton>
-                 </div>
-                 <div v-else class="d-flex justify-content-center">
-                   <UIBlueRoundedButton type="submit">
-                     Create account
-                   </UIBlueRoundedButton>
-                 </div>
-                 <div
-                   v-if="
-                     !memberAuthStore.isLoading &&
-                     memberAuthStore.success &&
-                     !memberAuthStore.error
-                   "
-                   class="text-success mt-2">
-                Account created successfully!
-                </div>
-              </form>
-            </div>
-            <div class="d-flex justify-content-center">
-              <p>Already Have An Account? <a href="#"><span style="color: blue;">Log In</span></a></p>
-            </div>
-          </div>
         </div>
     </div>
 </template>

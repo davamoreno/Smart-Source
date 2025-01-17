@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { ref, computed } from "vue";
 import { useCookie } from "#app";
+import { useUrlStore } from "../BaseUrl/Url";
 
 export const usePaper = defineStore('paper', () => {
     const name = ref('');
@@ -13,14 +14,14 @@ export const usePaper = defineStore('paper', () => {
     const maxVisiblePages = 5;
     const totalItems = ref(0);
     const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
-    const url = "http://127.0.0.1:8000/api/";
+    const urlStore = useUrlStore();
     
     async function createPaper(){
         try{
             error.value = null;
             isLoading.value = true;
 
-            const response = await axios.post(`${url}papertype`, {
+            const response = await axios.post(`${urlStore.url}papertype`, {
                 name : name.value
             },
             {
@@ -44,7 +45,7 @@ export const usePaper = defineStore('paper', () => {
             error.value = null;
             isLoading.value = true;
 
-            const response = await axios.get(`${url}get/papertypes?page=${page}`,
+            const response = await axios.get(`${urlStore.url}get/papertypes?page=${page}`,
             {
                 headers : {
                     "Content-Type": "application/json", 
@@ -79,7 +80,7 @@ export const usePaper = defineStore('paper', () => {
         try{
             error.value = null;
 
-            const response = await axios.delete(`${url}delete/papertype/${id}`,
+            const response = await axios.delete(`${urlStore.url}delete/papertype/${id}`,
             {
                 headers : {
                     "Authorization": `Bearer ${useCookie('jwt').value}`

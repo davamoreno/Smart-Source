@@ -12,7 +12,7 @@ watchEffect(() => {
 })
 </script>
 
-<template>
+<template>  
     <LayoutWrapper>
         <slot />
     </LayoutWrapper>

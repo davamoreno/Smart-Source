@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { useCookie } from "#app";
 import axios from "axios";
+import { useUrlStore } from "../BaseUrl/Url";
 
 
 export const useCategoryStore = defineStore('Category', () => {
@@ -15,14 +16,14 @@ export const useCategoryStore = defineStore('Category', () => {
     const totalItems = ref(0);
     const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
     const maxVisiblePages = 5; 
-    const url = 'http://localhost:8000/api/';
+    const urlStore = useUrlStore();
 
     async function getCategories(page = 1) {
         try {
             isLoading.value = true;
             error.value = null;
 
-            const response = await axios.get(`${url}get/categories?page=${page}`, {
+            const response = await axios.get(`${urlStore.url}get/categories?page=${page}`, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -56,7 +57,7 @@ export const useCategoryStore = defineStore('Category', () => {
             isLoading.value = true;
             error.value = null;
 
-            const response = await axios.post(`${url}category`, {
+            const response = await axios.post(`${urlStore.url}category`, {
                 name : name.value
             },
             {

@@ -43,6 +43,9 @@ onMounted(() => {
           class="form-control"
           placeholder="Enter document title"
           v-model="post.title"
+          required
+          oninvalid="this.setCustomValidity('Title tidak boleh kosong.')"
+          oninput="this.setCustomValidity('')"
         />
       </div>
 

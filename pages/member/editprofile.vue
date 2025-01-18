@@ -81,7 +81,7 @@ const handleSave = async () => {
     <div class="container border border-black border-opacity-25 rounded-5">
       <div class="row justify-content-around">
         <div class="col-3 border border-black border-opacity-75 rounded-4">
-          <div class="row justify-content-center">
+          <div class="row  mt-2 justify-content-center">
             <img
               class="mt-3"
               :src="
@@ -95,23 +95,33 @@ const handleSave = async () => {
                 box-sizing: border-box;"
             />
           </div>
-          <div class="row text-center">
-            <h6>{{ member.userProfile.username }}</h6>
+          <div class="row text-center mt-2">
+            <h6 class="mt-2">{{ member.userProfile.username }}</h6>
           </div>
           <div class="row text-center">
             <small>{{ member.userProfile?.faculty?.university?.name || '-' }}</small>
             <small>{{ member.userProfile?.faculty?.name || '-' }}</small>
           </div>
-          <div class="row px-5 mt-4 justify-content-center">
-            <input type="file" @change="handleFileUpload" />
+          <div class="row px-5 mx-3 mb-2 mt-4 d-flex justify-content-between align-items-center">
+              <!-- Tombol Choose File -->
+              <div class="custom-file-upload">
+                <label for="fileInput" class="btn btn-dark">
+                  Choose File
+                </label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  @change="handleFileUpload"
+                  style="display: none"
+                />
+              </div>
           </div>
-          <div class=" row mt-2 justify-content-center">
-            <button type="submit" @click="handleImageSave" class="btn btn-dark" >
-                <h6>Save Image</h6>
-            </button>
+          <div class="row px-5 mb-3">
+              <button type="submit" @click="handleImageSave" class="btn btn-dark">
+                Save Image
+              </button>
           </div>
-        </div>
-
+</div>
         <div class="col-5 border border-black border-opacity-75 rounded-4">
           <form class="px-5 py-4" @submit.prevent="">
             <div class="form-group row">
@@ -172,7 +182,7 @@ const handleSave = async () => {
       <div class="row justify-content-evenly">
         <div class="col-5"></div>
         <div class="col-5 text-end pe-4 pt-4">
-          <NuxtLink to="/home" type="close" class="btn me-3 btn-outline-dark text-decoration-none">Cancel</NuxtLink>
+          <NuxtLink to="/member/home" type="close" class="btn me-3 btn-outline-dark text-decoration-none">Cancel</NuxtLink>
           <button type="submit" @click="handleSave" class="btn btn-dark me-3">
             Save Changes
           </button>

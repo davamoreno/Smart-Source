@@ -45,7 +45,7 @@ const uploadProfileImage = async () => {
     console.log('Upload berhasil:', response);
     if (response.data && response.data.file_path) {
       member.userProfile.user_profile.file_path = response.data.file_path;
-      imageSrc.value = 'http://localhost:8000/storage/' + response.data.file_path;
+      imageSrc.value = 'https://smartsource.nio.my.id/storage/' + response.data.file_path;
     }
 
     const updateResponse = await member.register(updatedData);
@@ -77,7 +77,7 @@ const handleSave = async () => {
 </script>
 
 <template>
-  <div style="height: 540px;">
+  <div style="height: 600px;">
     <div class="container border border-black border-opacity-25 rounded-5">
       <div class="row justify-content-around">
         <div class="col-3 border border-black border-opacity-75 rounded-4">
@@ -87,7 +87,7 @@ const handleSave = async () => {
               :src="
                 imageSrc ||
                 (member.userProfile?.user_profile?.file_path
-                  ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path
+                  ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path
                   : '/images/defaultprofile.svg')"
               alt="Profile Image"
               style=" width: 120px; height: auto; border-radius: 50%;  
@@ -102,20 +102,24 @@ const handleSave = async () => {
             <small>{{ member.userProfile?.faculty?.university?.name || '-' }}</small>
             <small>{{ member.userProfile?.faculty?.name || '-' }}</small>
           </div>
-          <div class="row px-5 mx-3 mb-2 mt-4 d-flex justify-content-between align-items-center">
+
+          <div class="row mb-2 mt-4 justify-content-center">
               <!-- Tombol Choose File -->
-              <div class="custom-file-upload">
-                <label for="fileInput" class="btn btn-dark">
-                  Choose File
-                </label>
-                <input
-                  id="fileInput"
-                  type="file"
-                  @change="handleFileUpload"
-                  style="display: none"
-                />
+              <div class="col-5">
+                <div class="custom-file-upload">
+                  <label for="fileInput" class="btn btn-dark">
+                    Choose File
+                  </label>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    @change="handleFileUpload"
+                    style="display: none"
+                  />
+                </div>
               </div>
           </div>
+
           <div class="row px-5 mb-3">
               <button type="submit" @click="handleImageSave" class="btn btn-dark">
                 Save Image

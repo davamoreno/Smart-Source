@@ -23,14 +23,14 @@ function logoutHandler() {
 <template>  
     <aside class="col-md-3 sidebar pt-5">
       <div class="text-center"> 
-          <img :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
+          <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
           <h4>{{ member.userProfile.username }}</h4>
           <p>{{ member.userProfile?.faculty?.university?.name ? 
                 member.userProfile.faculty.university.name : '-' }}</p>
           <p>{{ member.userProfile?.faculty?.name ?
                 member.userProfile.faculty.name : '-' }}</p>
           <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
-        </div>
+      </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">
           <div class="menu-item ms-4 pt-3">
@@ -96,7 +96,6 @@ function logoutHandler() {
   border-right: 2px solid #e5e5e5;
   border-left: 2px solid #e5e5e5;
   border-top: 2px solid #e5e5e5;
-  border-bottom: 2px solid #e5e5e5;
 }
 
 .profile-img {

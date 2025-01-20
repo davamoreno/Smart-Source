@@ -57,7 +57,7 @@ onMounted(() => {
                   <td>
                     <a
                       v-if="post.file"
-                      :href="`http://127.0.0.1:8000/storage/${post.file.file_path}`"
+                      :href="`https://smartsource.nio.my.id/storage/${post.file.file_path}`"
                       target="_blank"
                       class="btn btn-sm btn-primary text-white"
                     >

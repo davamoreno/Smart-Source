@@ -15,21 +15,6 @@ export const useBookmarkStore = defineStore('bookmarkStore', {
   },
   actions : 
   {
-    async get(){
-        try {
-            const response = await axios.get(`${this.urlStore.url}post/bookmark`, {
-                headers : {
-                    Authorization : `Bearer ${useCookie('jwt').value}`
-                }
-            }
-        )    
-        this.bookmarks = response?.data;
-
-        console.log('bookmark get :', response.data)
-    } catch (error) {
-            
-        }
-    },
     async create(id : Number)
     {
         try {

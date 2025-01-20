@@ -12,6 +12,11 @@ const router = useRouter();
 const showModal = ref(false);
 const comment = useCommentStore();
 const member = useMemberAuthStore();
+const slug = route.params.slug;
+
+function goToParentComment(slug, parentId) {
+  router.push(`/member/detailpost/${slug}/${parentId}`);
+}
 
 onMounted(async () => {
     member.getUserProfile();
@@ -19,8 +24,6 @@ onMounted(async () => {
 
 
 onMounted(async () => {
-    const slug = route.params.slug;
-
     if (!slug) {
         console.error('Slug is missing!');
         router.push('/member/home');
@@ -28,6 +31,16 @@ onMounted(async () => {
     }
 
     await post.showPostDetail(slug);
+});
+
+onMounted(async () => {
+    if (!slug) {
+        console.error('Slug is missing!');
+        router.push('/member/home');
+        return;
+    }
+
+    await comment.get(slug);
 });
 
 onActivated(async () => {
@@ -59,6 +72,8 @@ const reportHandle = async (postId) => {
 
 const commentHandle = async(postId) => {
     await comment.create(postId);
+    await comment.get(postId);
+    comment.content = ref('')
 }
 
 </script>
@@ -113,27 +128,36 @@ const commentHandle = async(postId) => {
             <p class="fs-4 pb-4">Comments</p>
             <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;   ">
             <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1115px; background-color: transparent;"
-            v-model="comment.content">
+            v-model="comment.content"
+            @keyup.enter="commentHandle(post.postDetail?.slug)">
         </div>
 
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
-            <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;" @click="commentHandle(post.postDetail?.slug)">Submit</button>
+            <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;"
+                    @click="commentHandle(post.postDetail?.slug)" 
+                    @keyup.enter="commentHandle(post.postDetail?.slug)">
+                    Submit
+            </button>
         </div>
     
-        <div class="row mt-5" style="padding-left: 88px; padding-right: 88px;">
-            <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
+        <div class="row mt-5" style="padding-left: 88px; padding-right: 88px;" v-for="commentars in comment.comments" :key="commentars.parent_id">
+            <img 
+              :src="commentars.user?.user_profile?.file_path 
+                ? 'https://smartsource.nio.my.id/storage/' + commentars.user?.user_profile?.file_path 
+                : '/public/images/defaultprofile.svg'"
+              alt="User Profile"
+              style="height: 70px; width: 70px; padding-bottom: 20px;"
+            >
             <div class="col">
                 <span class="d-flex">
-                    <h6 class="me-3">Mutia Azzahra</h6>
+                    <h6 class="me-3"></h6>
                     <img src="/public/images/dot.svg" alt="" class="pb-1">
-                    <small class="fw-lighter">29 November 2024</small>
+                    <small class="fw-lighter">{{ formatDate(commentars.created_at) }}</small>
                     <img src="/public/images/dot.svg" alt="" class="pb-1">
                 </span>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Explicabo obcaecati maxime voluptates veritatis blanditiis laborum magni nam nisi. Amet placeat quo natus minus blanditiis totam enim itaque iste non voluptate ut tempore ea consequatur, eveniet deleniti porro possimus repellat maiores ab! Incidunt, hic nobis facere sunt tempora at adipisci debitis!
-                </p>
+                <p>{{ commentars.content }}</p>
             </div>
-        </div>
-        <div class="row" style="padding-left: 140px; padding-right: 140px;">
+        <div class="row" style="">
             <span>
                 <button class="btn btn-link" style="width: 55px; height: 55px;">
                     <img src="/public/images/comment_light.svg" alt="" style="width: 40px; height: 40px;">
@@ -143,41 +167,10 @@ const commentHandle = async(postId) => {
                         <img src="/public/images/Thumbs up.svg" alt="" style="width: 30px; height: 30px; padding-bottom: 3px;">
                 </button>
                 <small class="fw-medium">Like</small>
-                <button class="btn btn-link ms-3" style="width: 50px; height: 50px;">
-                        <img src="/public/images/Reply.svg" alt="" style="width: 40px; height: 40px; padding-bottom: 3px;">
-                </button>
+                <button @click="goToParentComment(post.postDetail?.slug, commentars.parent_id)">Go to Parent</button>
                 <small class="fw-medium">Reply</small>
             </span>
         </div>
-   
-        <div class="row mt-5" style="padding-left: 155px; padding-right: 90px;">
-            <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
-            <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1050px; background-color: transparent;">
-        </div>
-
-        <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
-            <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
-        </div>
-     
-        <div class="row mt-5" style="padding-left: 205px; padding-right: 88px;">
-            <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
-            <div class="col">
-                <span class="d-flex">
-                    <h6 class="me-3">Yonathan Martin</h6>
-                    <img src="/public/images/dot.svg" alt="" class="pb-1">
-                    <small class="fw-lighter">29 November 2024</small>
-                    <img src="/public/images/dot.svg" alt="" class="pb-1">
-                </span>
-                <p>Hai, aku yonathan</p>
-            </div>
-        </div>
-        <div class="row" style="padding-left: 255px; padding-right: 140px;">
-            <span>
-                <button class="btn btn-link ms-1" style="width: 48px; height: 48px;">
-                        <img src="/public/images/Thumbs up.svg" alt="" style="width: 30px; height: 30px; padding-bottom: 3px;">
-                </button>
-                <small class="fw-medium">Like</small>
-            </span>
         </div>
     </div>
     <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
@@ -211,10 +204,11 @@ const commentHandle = async(postId) => {
   background-color: black;
   border: none;
 }
+
 .btn-dark:hover {
     border: 1px solid black;
     background-color:white;
-    color: black
+    color: black;
 }
 
 .btn-light:hover{

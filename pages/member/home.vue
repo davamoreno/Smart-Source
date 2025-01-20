@@ -13,17 +13,13 @@ const router = useRouter();
 const bookmarkStore = useBookmarkStore();
 const keyword = ref('');
 
-onMounted(() => {
-  postStore.getPost();
-  postStore.posts
-});
-
 onMounted(async () => { 
+ await postStore.getPost();
+  postStore.posts
   if (route.query.keyword) {
     postStore.keyword = route.query.keyword;  
     await postStore.getPost();
   } else {
-    console.error('Keyword Not Available'); 
     router.push('/member/home');
   } 
 });
@@ -36,52 +32,30 @@ const onKeywordChange = async () => {
   await postStore.getPost();
 };
 
-const createdBoomark = (postId) => {
-    bookmarkStore.create(postId);
+const createdBoomark = async (postId) => {
+    await bookmarkStore.create(postId);
     const post = postStore.posts.find(post => post.id === postId);
     post.bookmark = true;
 };
 
-const deletedBoomark = (postId) => {
-    bookmarkStore.delete(postId);
+const deletedBoomark = async (postId) => {
+    await bookmarkStore.delete(postId);
     const post = postStore.posts.find(post => post.id === postId);
     post.bookmark = false;
 };
 
-const createdLike = (slug) => {
-  try {
-    postStore.createLike(slug);
+const createdLike = async (slug) => {
+    await postStore.createLike(slug);
     const post = postStore.posts.find(post => post.slug === slug);
-    if (post) {
-      post.likes_count += 1;
-      post.like = true;
-    }
-  } catch (error) {
-    console.error('Error creating like:', error);
-    const post = postStore.posts.find(post => post.slug === slug);
-    if (post) {
-      post.likes_count -= 1;
-      post.like = false;
-    }
-  }
+    post.like = true;
+    post.likes_count = post.likes_count + 1;
 };
 
-const deletedLike = (slug) => {
-  try {
-    postStore.deleteLike(slug);
+const deletedLike = async (slug) => {
+    await postStore.deleteLike(slug);
     const post = postStore.posts.find(post => post.slug === slug);
-    if (post) {
-      post.likes_count -= 1;
-      post.like = false;
-    }
-  } catch (error) {
-    console.error('Error deleting like:', error);
-    const post = postStore.posts.find(post => post.slug === slug);
-    if (post) {
-      post.likes_count += 1;
-      post.like = true;
-    }
-  }
+    post.like = false;
+    post.likes_count = post.likes_count - 1;
 };
 
 const startIndex = ref(0);
@@ -132,7 +106,7 @@ const nextSlide = () => {
 
             <div class="row" style="gap: 30px; overflow: hidden;">
               <router-link
-                v-for="post in postStore.posts"
+                v-for="(post) in currentPosts"
                 :to="`/member/detailpost/${post.slug}`"
                 class="col-auto text-decoration-none">
                 <div class="col-auto">
@@ -159,21 +133,21 @@ const nextSlide = () => {
                                             opacity: 70%;
                                             position: relative;" 
                                             @click.prevent="deletedBoomark(post.id)" v-else>
-                        <img src="/public/images/Bookmark2.svg" alt="Bookmark" class="icon-bookmark" />
+                        <img src="/public/images/bookmark-fill.svg" alt="Bookmark" class="icon-bookmark" />
                       </a>
                       <img src="/public/images/File_light.svg" alt="Document" class="document-img my-4" />
                     </div>
                     <div class="container-fluid">
-                        <p class="document-category">{{ post.category?.name }}</p>
+                        <p class="document-category">{{ post.category.name }}</p>
                         <h1 class="document-title">{{ post.title }}</h1>
-                        <p class="document-publisher">Published by {{ post.user?.username }}</p>
+                        <p class="document-publisher">Published by {{ post.user.username }}</p>
                     </div>
                     <div class="card-footer">
                       <a class="" @click.prevent="createdLike(post.slug)" v-if="!post.like">
                         <img src="/public/images/heart.svg" alt="Love" class="icon-love" />
                       </a>
                       <a class="" @click.prevent="deletedLike(post.slug)" v-else>
-                        <img src="/public/images/heart-fill.svg" alt="Love" class="icon-love-filled" />
+                        <img src="/public/images/heart-fill.svg" alt="Love" class="icon-love-filled ms-2" />
                       </a>
                       <span class="likes-count">{{ post.likes_count }} Likes</span>
                     </div>

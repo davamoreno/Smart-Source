@@ -108,7 +108,6 @@ export const usePostStore = defineStore('postStore', {
     },
     async createLike(slug : any) {
       try {
-
         const response = await axios.post(`${this.urlStore.url}post/like/${slug}`, {}, {
           headers : {
             Authorization : `Bearer ${useCookie('jwt').value}`
@@ -121,6 +120,9 @@ export const usePostStore = defineStore('postStore', {
 
       } catch (error) {
         console.error('Error Message:', error.message);
+      }
+      finally{
+        this.isLiked = true;
       }
     },
 
@@ -136,7 +138,7 @@ export const usePostStore = defineStore('postStore', {
         });
 
         this.postDetail.like = false;
-        this.postDetail.likes_count = this.postDetail.likes_count - 1;
+        this.postDetail.likes_count -= 1;
       } catch (error) {
         console.error('Error Message:', error.message);
       } finally {

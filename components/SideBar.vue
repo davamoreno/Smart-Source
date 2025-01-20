@@ -23,7 +23,7 @@ function logoutHandler() {
 <template>  
     <aside class="col-md-3 sidebar pt-5">
       <div class="text-center"> 
-          <img :src="member.userProfile?.user_profile?.file_path ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
+          <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" class="profile-img mb-3">
           <h4>{{ member.userProfile.username }}</h4>
           <p>{{ member.userProfile?.faculty?.university?.name ? 
                 member.userProfile.faculty.university.name : '-' }}</p>

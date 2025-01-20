@@ -79,7 +79,7 @@ export const useCategoryStore = defineStore('Category', () => {
          try{
             error.value = null;
 
-            const response = await axios.delete(`http://127.0.0.1:8000/api/delete/category/${id}`,
+            const response = await axios.delete(`${urlStore.url}delete/category/${id}`,
             {
                 headers : {
                     "Authorization": `Bearer ${useCookie('jwt').value}`

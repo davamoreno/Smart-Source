@@ -99,6 +99,7 @@ export const usePostStore = defineStore('postStore', {
           }
         });
         this.postDetail = response.data;
+        console.log('data', response.data);
       } catch (error) {
         console.error('Error fetching post detail:', error);
       }
@@ -117,8 +118,6 @@ export const usePostStore = defineStore('postStore', {
       post.likes_count = this.postDetail.likes_count + 1;
 
       } catch (error) {
-        this.postDetail.like = false;
-        this.postDetail.likes_count = this.postDetail.likes_count - 1;
         console.error('Error Message:', error.message);
       }
     },
@@ -137,11 +136,6 @@ export const usePostStore = defineStore('postStore', {
         this.postDetail.like = false;
         this.postDetail.likes_count = this.postDetail.likes_count - 1;
       } catch (error) {
-        const post = this.postDetail?.find(post => post.slug === slug);
-        if (post) {
-          post.like = true;
-          post.likes_count += 1;
-        }
         console.error('Error Message:', error.message);
       } finally {
         this.isLiked = false;

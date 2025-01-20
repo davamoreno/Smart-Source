@@ -24,7 +24,7 @@ watch(
     if (newUniversityId) {
       filteredFaculties.value = facultyStore.faculty.filter(
         (f) => f.university_id === newUniversityId
-      );
+      )
     } else {
       filteredFaculties.value = [];
     }
@@ -44,12 +44,9 @@ const uploadProfileImage = async () => {
     const response = await profileStore.createImageProfile();
     console.log('Upload berhasil:', response);
     if (response.data && response.data.file_path) {
-      member.userProfile.user_profile.file_path = response.data.file_path;
-      imageSrc.value = 'http://localhost:8000/storage/' + response.data.file_path;
+      member.userProfile.user_profile.file_path = response.data?.file_path;
+      imageSrc.value = 'https://smartsource.nio.my.id/storage/' + response.data?.file_path;
     }
-
-    const updateResponse = await member.register(updatedData);
-    console.log('Profile updated successfully:', updateResponse);
 
   } catch (err) {
     console.error('Upload gagal:', err);
@@ -59,11 +56,6 @@ const uploadProfileImage = async () => {
 const saveProfileData = () => {
     member.register();
     console.log('Data profil disimpan');
-};
-
-const handleImageSave = async () => {
-  await uploadProfileImage();  
-  saveProfileData();
 };
 
 const handleSave = async () => {
@@ -85,10 +77,11 @@ const handleSave = async () => {
             <img
               class="mt-3"
               :src="
-                imageSrc ||
-                (member.userProfile?.user_profile?.file_path
-                  ? 'http://localhost:8000/storage/' + member.userProfile?.user_profile?.file_path
-                  : '/images/defaultprofile.svg')"
+                  imageSrc ||
+                  (member?.userProfile?.user_profile?.file_path 
+                    ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path
+                    : '/public/images/defaultprofile.svg')"
+
               alt="Profile Image"
               style=" width: 120px; height: auto; border-radius: 50%;  
                 object-fit: cover; 
@@ -106,7 +99,7 @@ const handleSave = async () => {
             <input type="file" @change="handleFileUpload" />
           </div>
           <div class=" row mt-2 justify-content-center">
-            <button type="submit" @click="handleImageSave" class="btn btn-dark" >
+            <button @click="uploadProfileImage" class="btn btn-dark" >
                 <h6>Save Image</h6>
             </button>
           </div>
@@ -133,14 +126,14 @@ const handleSave = async () => {
                   id="selectUniversity"
                   class="form-select"
                   v-model="member.selectedUniversity"
+                  :disabled="universityStore.universities.length === 0"
                 >
                   <option value="" disabled>Select University</option>
                   <option
                     v-for="uni in universityStore.universities"
                     :key="uni.id"
-                    :value="uni.id"
-                  >
-                    {{ uni.name }}
+                    :value="uni.id">
+                    {{ uni?.name }}
                   </option>
                 </select>
               </div>
@@ -173,7 +166,7 @@ const handleSave = async () => {
         <div class="col-5"></div>
         <div class="col-5 text-end pe-4 pt-4">
           <NuxtLink to="/home" type="close" class="btn me-3 btn-outline-dark text-decoration-none">Cancel</NuxtLink>
-          <button type="submit" @click="handleSave" class="btn btn-dark me-3">
+          <button @click="handleSave" class="btn btn-dark me-3">
             Save Changes
           </button>
         </div>

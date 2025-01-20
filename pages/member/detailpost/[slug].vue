@@ -3,11 +3,20 @@ import { ref, onMounted, computed} from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/MemberContent/post';
 import axios from 'axios';
+import { useCommentStore } from '~/stores/MemberContent/comment';
+import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 
 const post = usePostStore();
 const route = useRoute();
 const router = useRouter();
 const showModal = ref(false);
+const comment = useCommentStore();
+const member = useMemberAuthStore();
+
+onMounted(async () => {
+    member.getUserProfile();
+});
+
 
 onMounted(async () => {
     const slug = route.params.slug;
@@ -46,6 +55,10 @@ const deletedLike = (postId) => {
 
 const reportHandle = async (postId) => {
     await post.createReport(postId);
+}
+
+const commentHandle = async(postId) => {
+    await comment.create(postId);
 }
 
 </script>
@@ -93,17 +106,18 @@ const reportHandle = async (postId) => {
         </div>
 
         <div class="row mt-5 justify-content-center">
-            <embed :src="`http://127.0.0.1:8000/storage/${post.postDetail?.file.file_path}#toolbar=0`" type="application/pdf" style="width: 1200px; height: 800px;">
+            <embed :src="`https://smartsource.nio.my.id/storage/${post.postDetail?.file?.file_path}#toolbar=0`" type="application/pdf" style="width: 1200px; height: 800px;">
         </div>
 
         <div class="row mt-5" style="padding-left: 90px; padding-right: 90px;">
             <p class="fs-4 pb-4">Comments</p>
-            <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
-            <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1115px; background-color: transparent;">
+            <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;   ">
+            <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1115px; background-color: transparent;"
+            v-model="comment.content">
         </div>
 
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
-            <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
+            <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;" @click="commentHandle(post.postDetail?.slug)">Submit</button>
         </div>
     
         <div class="row mt-5" style="padding-left: 88px; padding-right: 88px;">
@@ -137,7 +151,7 @@ const reportHandle = async (postId) => {
         </div>
    
         <div class="row mt-5" style="padding-left: 155px; padding-right: 90px;">
-            <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
+            <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
             <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1050px; background-color: transparent;">
         </div>
 

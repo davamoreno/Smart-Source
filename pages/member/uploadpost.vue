@@ -97,11 +97,6 @@ onMounted(() => {
         <p v-if="post.file">Selected file: {{ post.file.name }}</p>
       </div>
 
-      <!-- Error Handling -->
-      <div v-if="post.error" class="alert alert-danger mt-3">
-        {{ post.error }}
-      </div>
-
       <!-- Submit Button -->
       <div class="d-flex justify-content-end gap-4 mt-3">
         <NuxtLink to="/home" type="button" class="btn border border-danger bg-transparant text-danger px-4  ">Cancel</NuxtLink>

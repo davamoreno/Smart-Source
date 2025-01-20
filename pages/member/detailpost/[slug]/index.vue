@@ -159,15 +159,17 @@ const commentHandle = async(postId) => {
             </div>
         <div class="row" style="">
             <span>
-                <button class="btn btn-link" style="width: 55px; height: 55px;">
+                <button class="btn btn-link" 
+                        style="width: 55px; height: 55px;"
+                        @click="goToParentComment(post.postDetail?.slug, commentars.id)">
                     <img src="/public/images/comment_light.svg" alt="" style="width: 40px; height: 40px;">
-                </button>    
+                </button>  
                 <small class="fw-medium">20 Comments</small>
                 <button class="btn btn-link ms-3" style="width: 48px; height: 48px;">
                         <img src="/public/images/Thumbs up.svg" alt="" style="width: 30px; height: 30px; padding-bottom: 3px;">
                 </button>
                 <small class="fw-medium">Like</small>
-                <button @click="goToParentComment(post.postDetail?.slug, commentars.parent_id)">Go to Parent</button>
+                
                 <small class="fw-medium">Reply</small>
             </span>
         </div>

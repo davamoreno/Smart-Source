@@ -12,6 +12,7 @@ export const useCommentStore = defineStore('commentPost', {
             isLoading: ref(false),
             comments: ref(<any>[]),
             userImage: ref({}),
+            repliesComment : ref([<any>[]])
         }
     },
     actions: {
@@ -19,7 +20,7 @@ export const useCommentStore = defineStore('commentPost', {
             try {
               this.isLoading = true;
               const response = await axios.post(
-                `${this.urlStore.url}member/detailpost/${slug}/${parentId}`,
+                `${this.urlStore.url}post/comment/${slug}/${parentId}`,
                 {
                   content: this.content
                 },
@@ -42,10 +43,10 @@ export const useCommentStore = defineStore('commentPost', {
             const response = await axios.get(`${this.urlStore.url}post/comment/${slug}`, {
                 headers : {
                     Authorization : `Bearer ${useCookie('jwt').value}`
-
                 }
             })
             this.comments = response.data.comments;
+            this.repliesComment =  this.comments.map(comment => comment.replies);
             this.userImage = this.comments.map(comment => comment.user);
             console.log('Comments', response.data.comments);
             console.log('user', this.userImage);

@@ -30,7 +30,7 @@ function logoutHandler() {
           <p>{{ member.userProfile?.faculty?.name ?
                 member.userProfile.faculty.name : '-' }}</p>
           <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
-        </div>
+      </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">
           <div class="menu-item ms-4 pt-3">
@@ -96,7 +96,6 @@ function logoutHandler() {
   border-right: 2px solid #e5e5e5;
   border-left: 2px solid #e5e5e5;
   border-top: 2px solid #e5e5e5;
-  border-bottom: 2px solid #e5e5e5;
 }
 
 .profile-img {

@@ -18,6 +18,7 @@ onMounted(async () => {
 });
 
 const filteredFaculties = ref([]);
+
 watch(
   () => member.selectedUniversity,
   (newUniversityId) => {
@@ -53,11 +54,6 @@ const uploadProfileImage = async () => {
   }
 };
 
-const saveProfileData = () => {
-    member.register();
-    console.log('Data profil disimpan');
-};
-
 const handleSave = async () => {
   try {
     await member.updateProfile();
@@ -69,27 +65,25 @@ const handleSave = async () => {
 </script>
 
 <template>
-  <div style="height: 540px;">
+  <div style="height: 600px;">
     <div class="container border border-black border-opacity-25 rounded-5">
       <div class="row justify-content-around">
         <div class="col-3 border border-black border-opacity-75 rounded-4">
-          <div class="row justify-content-center">
+          <div class="row  mt-2 justify-content-center">
             <img
               class="mt-3"
-              :src="
-                  imageSrc ||
+              :src="imageSrc ||
                   (member?.userProfile?.user_profile?.file_path 
                     ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path
                     : '/public/images/defaultprofile.svg')"
-
               alt="Profile Image"
               style=" width: 120px; height: auto; border-radius: 50%;  
                 object-fit: cover; 
                 box-sizing: border-box;"
             />
           </div>
-          <div class="row text-center">
-            <h6>{{ member.userProfile.username }}</h6>
+          <div class="row text-center mt-2">
+            <h6 class="mt-2">{{ member.userProfile.username }}</h6>
           </div>
           <div class="row text-center">
             <small>{{ member.userProfile?.faculty?.university?.name || '-' }}</small>
@@ -104,7 +98,29 @@ const handleSave = async () => {
             </button>
           </div>
         </div>
+          <div class="row mb-2 mt-4 justify-content-center">
+              <!-- Tombol Choose File -->
+              <div class="col-5">
+                <div class="custom-file-upload">
+                  <label for="fileInput" class="btn btn-dark">
+                    Choose File
+                  </label>
+                  <input
+                    id="fileInput"
+                    type="file"
+                    @change="handleFileUpload"
+                    style="display: none"
+                  />
+                </div>
+              </div>
+          </div>
 
+          <div class="row px-5 mb-3">
+              <button type="submit" @click="uploadProfileImage" class="btn btn-dark">
+                Save Image
+              </button>
+          </div>
+</div>
         <div class="col-5 border border-black border-opacity-75 rounded-4">
           <form class="px-5 py-4" @submit.prevent="">
             <div class="form-group row">
@@ -165,14 +181,13 @@ const handleSave = async () => {
       <div class="row justify-content-evenly">
         <div class="col-5"></div>
         <div class="col-5 text-end pe-4 pt-4">
-          <NuxtLink to="/home" type="close" class="btn me-3 btn-outline-dark text-decoration-none">Cancel</NuxtLink>
-          <button @click="handleSave" class="btn btn-dark me-3">
+          <NuxtLink to="/member/home" type="close" class="btn me-3 btn-outline-dark text-decoration-none">Cancel</NuxtLink>
+          <button type="submit" @click="handleSave" class="btn btn-dark me-3">
             Save Changes
           </button>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <style lang="scss" scoped>

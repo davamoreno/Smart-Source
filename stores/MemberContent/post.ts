@@ -23,7 +23,8 @@ export const usePostStore = defineStore('postStore', {
       reason: '',
       report: '',
       userPost: [],
-      status: ''
+      status: '',
+      keyword: ''
     };
   },
   
@@ -66,11 +67,12 @@ export const usePostStore = defineStore('postStore', {
       try {
         const response = await axios.get(`${this.urlStore.url}user/post`, {
           params : {
-            page: this.page
+            page: this.page,
+            keyword: this.keyword,
           },
           headers : {
             Authorization : `Bearer ${useCookie('jwt').value}`
-          }
+          } 
         });
 
         const newPosts = response.data.data;
@@ -176,6 +178,23 @@ export const usePostStore = defineStore('postStore', {
         console.error('Error fetching my posts:', error);
       }
     },
+
+    async deletePost(slug : any){
+      try{  
+          const response = await axios.delete(`${this.urlStore.url}user/post/delete/${slug}`,
+          {
+              headers : {
+                  "Authorization": `Bearer ${useCookie('jwt').value}`
+              },
+          }
+        )
+        this.posts = this.posts.filter(post => post.slug != slug);
+        console.log('delete', response.data);
+      }catch(err){
+        return console.log('err', err);
+      }
+    },
+
     resetForm() {
       this.title = '';
       this.description = '';

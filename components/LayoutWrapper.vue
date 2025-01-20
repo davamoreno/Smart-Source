@@ -139,7 +139,7 @@ onMounted(() => {
                   <div v-if="memberAuthStore.error?.identifier" class="text-danger">
                       {{ memberAuthStore.error.identifier[0] }}
                    </div>  
-                  <UIInput id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
+                  <UIInput required id="password" label="Password" type="password" placeholder="Enter your password" v-model="memberAuthStore.password" />
                    <div v-if="memberAuthStore.isLoading" class="text-danger">
                    <UIBlueRoundedButton disabled>
                      Processing your request...
@@ -162,7 +162,7 @@ onMounted(() => {
               </form>
             </div>
             <div class="d-flex justify-content-center">
-              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign In</span></a></p>
+              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign Up </span></a></p>
             </div>
           </div>
         </div>
@@ -214,7 +214,7 @@ onMounted(() => {
               </form>
             </div>
             <div class="d-flex justify-content-center">
-              <p>Already Have An Account? <a data-bs-toggle="modal" data-bs-target="#loginAccountModal"><span style="color: blue;">Log In</span></a></p>
+              <p>Already Have An Account? <a data-bs-toggle="modal" data-bs-target="#loginAccountModal"><span style="color: blue;">Sign In</span></a></p>
             </div>
           </div>
         </div>

@@ -24,9 +24,9 @@
 }
 
 async function handleDeleteUniversity(id) {
-   if (!id) return;
   await universityStore.deleteUniversity(id);
   await universityStore.getUniversity();
+  universityStore.name = '';
 }
    
   
@@ -73,7 +73,7 @@ async function handleDeleteUniversity(id) {
 
     <div class="modal fade" id="universityModal" tabindex="-1" aria-labelledby="universityModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <form class="modal-content" @submit.prevent="handleCreateUniversity">
+      <form class="modal-content" @submit.prevent="handleCreateUniversity(universityStore.id)">
         <div class="modal-header">
           <h5 class="modal-title" id="universityModalLabel">Add university</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

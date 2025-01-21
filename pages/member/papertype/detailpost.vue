@@ -49,6 +49,7 @@ function closeModal() {
   reportReason.value = '';
   reportErrorMessage.value = false; 
 }
+
 </script>
 
 <template>

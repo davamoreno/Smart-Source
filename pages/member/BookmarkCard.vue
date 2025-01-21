@@ -30,7 +30,10 @@ const deletedBoomark = async (postId) => {
       <div class="col my-4 px-5 ms-4">
         <h2 class="my-3">Bookmarks</h2>    
         <div class="row">
-          <router-link v-for="bookmark in bookmarkStore.bookmarks" :key="bookmark.id" class="col-4 pt-3 pb-5 text-decoration-none" :to="`/member/detailpost/${bookmark.post.slug}`">
+          <router-link 
+          v-for="bookmark in bookmarkStore.bookmarks" :key="bookmark.id" class="col-4 pt-3 pb-5 text-decoration-none" :to="`/member/detailpost/${bookmark.post.slug}`"
+          v-if="bookmarkStore.bookmarks.length"
+          >
             <div>
               <div class="card col" style="width: 250px; height: 360px;">
                 <div class="col position-relative pt-3 me-3">
@@ -53,6 +56,13 @@ const deletedBoomark = async (postId) => {
               </div>
             </div>
           </router-link>
+          <div v-else>
+            <div class="row text-center">
+              <h3>
+                No Post Saved
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>

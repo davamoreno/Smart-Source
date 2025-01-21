@@ -108,7 +108,8 @@ const nextSlide = () => {
               <router-link
                 v-for="(post) in currentPosts"
                 :to="`/member/detailpost/${post.slug}`"
-                class="col-auto text-decoration-none">
+                class="col-auto text-decoration-none"
+                >
                 <div class="col-auto">
                   <div class="document-card">
                     <div class="card-header text-center">

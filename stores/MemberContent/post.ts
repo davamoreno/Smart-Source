@@ -26,8 +26,8 @@ export const usePostStore = defineStore('postStore', {
       status: ''
     };
   },
-  
-  
+
+
   actions: {
     clearError() {
       setTimeout(() => {
@@ -47,7 +47,7 @@ export const usePostStore = defineStore('postStore', {
 
         const response = await axios.post(`${this.urlStore.url}create/post`, formData, {
           headers: {
-            "Content-Type": "multipart/form-data", 
+            "Content-Type": "multipart/form-data",
             "Authorization": `Bearer ${useCookie('jwt').value}`,
           }
         });
@@ -65,11 +65,11 @@ export const usePostStore = defineStore('postStore', {
     async getPost() {
       try {
         const response = await axios.get(`${this.urlStore.url}user/post`, {
-          params : {
+          params: {
             page: this.page
           },
-          headers : {
-            Authorization : `Bearer ${useCookie('jwt').value}`
+          headers: {
+            Authorization: `Bearer ${useCookie('jwt').value}`
           }
         });
 
@@ -91,11 +91,11 @@ export const usePostStore = defineStore('postStore', {
       }
     },
 
-    async showPostDetail(slug : any) {
+    async showPostDetail(slug: any) {
       try {
-        const response = await axios.get(`${this.urlStore.url}user/post/${slug}`,{
-          headers : {
-            Authorization : `Bearer ${useCookie('jwt').value}`
+        const response = await axios.get(`${this.urlStore.url}user/post/${slug}`, {
+          headers: {
+            Authorization: `Bearer ${useCookie('jwt').value}`
           }
         });
         this.postDetail = response.data;
@@ -103,18 +103,18 @@ export const usePostStore = defineStore('postStore', {
         console.error('Error fetching post detail:', error);
       }
     },
-    async createLike(slug : any) {
+    async createLike(slug: any) {
       try {
 
         const response = await axios.post(`${this.urlStore.url}post/like/${slug}`, {}, {
-          headers : {
-            Authorization : `Bearer ${useCookie('jwt').value}`
+          headers: {
+            Authorization: `Bearer ${useCookie('jwt').value}`
           }
         }
-      );
-      const post = this.postDetail;
-      post.like = true;
-      post.likes_count = this.postDetail.likes_count + 1;
+        );
+        const post = this.postDetail;
+        post.like = true;
+        post.likes_count = this.postDetail.likes_count + 1;
 
       } catch (error) {
         this.postDetail.like = false;
@@ -123,14 +123,14 @@ export const usePostStore = defineStore('postStore', {
       }
     },
 
-    async deleteLike(slug : any) {
+    async deleteLike(slug: any) {
       try {
         const response = await axios.post(`${this.urlStore.url}post/like/${slug}`, {}, {
-          params : {
-            '_method' : 'delete'
+          params: {
+            '_method': 'delete'
           },
-          headers : {
-            Authorization : `Bearer ${useCookie('jwt').value}`
+          headers: {
+            Authorization: `Bearer ${useCookie('jwt').value}`
           }
         });
 
@@ -148,14 +148,14 @@ export const usePostStore = defineStore('postStore', {
       }
     },
 
-    async createReport(id : any) {
+    async createReport(id: any) {
       try {
         const formData = new FormData();
         formData.append('reason', this.reason);
-        
+
         const response = await axios.post(`${this.urlStore.url}post/report/${id}`, formData, {
           headers: {
-            "Content-Type": "multipart/form-data", 
+            "Content-Type": "multipart/form-data",
             "Authorization": `Bearer ${useCookie('jwt').value}`,
           }
         });
@@ -172,7 +172,7 @@ export const usePostStore = defineStore('postStore', {
             "Authorization": `Bearer ${useCookie('jwt').value}`
           }
         });
-        
+
         if (response.data.posts) {
           this.userPost = response.data.posts;
         } else {

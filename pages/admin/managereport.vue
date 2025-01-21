@@ -47,7 +47,9 @@ onMounted(() => {
                     <td style="justify-items: center;">
                         <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">{{ reports.report_status }}</p>
                     </td>
-                    <td><a href="/">1</a></td>  
+                    <td><a href="/"  class="btn btn-sm btn-primary text-white" >
+                      <i class="fa-solid fa-envelope"></i>
+                      1</a></td>  
                     <td>
                       <button
                         class="btn btn-sm text-white g-3 ms-2 btn-success"

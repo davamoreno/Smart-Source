@@ -1,44 +1,47 @@
 <template>
   <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row">
-      <div class="col-md-4 mb-4" v-for="folder in folders" :key="folder.name">
-        <div class="folder-card">
-          <div class="folder-name">{{ folder.name }}</div>
-          <div class="folder-icon"></div>
-        </div>
+    <div class="cards-container">
+      <div class="folder-card" v-for="category in categoryStore.categories" :key="category.id">
+        <div class="folder-icon"></div>
+        <div class="folder-name">{{ category.name }}</div>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      folders: [
-        { name: 'Sains & Math' },
-        { name: 'Sains & Math' },
-        { name: 'Sains & Math ' },
-        { name: 'Sains & Math' },
-        { name: 'Sains & Math' },
-        { name: 'Sains & Math' }
-      ]
-    };
-  }
-};
+
+<script setup>
+  import { useCategoryStore } from '~/stores/AdminManagement/category';
+  import { usePaper } from '~/stores/AdminManagement/papertype';
+  import { onMounted } from 'vue';
+
+  const categoryStore = useCategoryStore();
+  const paperStore = usePaper();
+
+  onMounted(() => {
+    categoryStore.getCategories();
+    paperStore.getPaper();
+  });
 </script>
 
-<style lang="scss" scoped>
 
+<style lang="scss" scoped>
 .container-fluid {
   background-color: #f8e9e9;
   font-family: 'Poppins', sans-serif;
+  padding: 200px;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px; /* Menggunakan gap untuk mengatur jarak antar kartu */
 }
 
 .folder-card {
-  width: 100%;
-  max-width: 300px;
-  height: 200px;
+  width: 275px; /* Tetapkan lebar tetap untuk kartu */
+  height: 200px; /* Tetapkan tinggi tetap */
   background-color: #292929;
   border-radius: 20px;
   display: flex;
@@ -47,29 +50,27 @@ export default {
   align-items: center;
   padding: 20px;
   text-align: center;
-  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 0;
 }
-.folder-card:hover{
+
+.folder-card:hover {
   transition: transform 0.1s ease-in-out;
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .folder-icon {
-  width: 100px;
-  height: 120px;
+  width: 67px;
+  height: 49px;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url('/public/images/categorypage.svg');
-  margin-top: 10px; 
+  background-image: url('/public/images/paperpage.svg');
+  margin-bottom: 10px;
 }
+
 .folder-name {
   color: #fff;
   font-size: 20px;
-  font-weight: 600;
-  position: absolute;
-  top: 15px; 
-  left: 20px; 
 }
-
 </style>

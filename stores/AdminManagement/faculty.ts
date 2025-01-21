@@ -16,47 +16,47 @@ export const usefacultyStore = defineStore('faculty', () => {
     const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
     const urlStore = useUrlStore();
 
-    async function createFaculty(){
-        try{
+    async function createFaculty() {
+        try {
             error.value = null;
 
             const response = await axios.post(`${urlStore.url}faculty`, {
-                name : name.value,
+                name: name.value,
                 university_id: selectedUniversity.value,
             },
-            {
-                headers : {
-                    "Content-Type": "application/json", 
-                    "Authorization": `Bearer ${useCookie('jwt').value}`
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${useCookie('jwt').value}`
+                    }
                 }
-            }
-        )
+            )
 
-        const data = response.data;
-        console.log("Hello", data);
-        }catch(err){
+            const data = response.data;
+            console.log("Hello", data);
+        } catch (err) {
 
             return error.value = err.response?.data;
         }
     }
 
-    async function getFaculty(page = 1){
-        try{
+    async function getFaculty(page = 1) {
+        try {
             error.value = null;
-    
+
             const response = await axios.get(`${urlStore.url}get/faculties?page=${page}`,
-            {
-                headers : {
-                    "Content-Type": "application/json", 
-                    "Authorization": `Bearer ${useCookie('jwt').value}`
-                },
-            }
-        )
-        faculty.value = response.data.data;
-        totalItems.value = response.data.total;
-        currentPage.value = page;
-        }catch(err){
-    
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${useCookie('jwt').value}`
+                    },
+                }
+            )
+            faculty.value = response.data.data;
+            totalItems.value = response.data.total;
+            currentPage.value = page;
+        } catch (err) {
+
         }
     }
 

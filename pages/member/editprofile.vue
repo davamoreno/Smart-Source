@@ -10,6 +10,7 @@ const member = useMemberAuthStore();
 const facultyStore = usefacultyStore();
 const universityStore = useUniversityStore();
 const profileStore = useProfileStore();
+const usernameError = ref(false);
 
 onMounted(async () => {
   await universityStore.getUniversity();
@@ -67,13 +68,22 @@ const handleImageSave = async () => {
 };
 
 const handleSave = async () => {
-  try {
-    await member.updateProfile();
-    console.log('Profile updated successfully');
-  } catch (err) {
-    console.error('Failed to update profile:', err);
+  if (member.username.trim() === '') {
+    usernameError.value = true;
+  } else {
+    usernameError.value = false;
+    try {
+      await member.updateProfile();
+      console.log('Profile updated successfully');
+    } catch (err) {
+      console.error('Failed to update profile:', err);
+    }
   }
 };
+
+function hideErrorMessage() {
+  usernameError.value = false;
+}
 </script>
 
 <template>
@@ -120,10 +130,12 @@ const handleSave = async () => {
                 <input
                   type="text"
                   class="form-control"
+                  @input="hideErrorMessage"
                   id="username"
                   name="username"
                   v-model="member.username"
                 />
+                <span v-if="usernameError" class="text-danger">Username tidak boleh kosong!</span>
               </div>
             </div>
             <div class="form-group row pt-5">

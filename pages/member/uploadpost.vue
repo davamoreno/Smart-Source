@@ -7,6 +7,7 @@ import { usePostStore } from '~/stores/MemberContent/post';
 const category = useCategoryStore();
 const paper = usePaper();
 const post = usePostStore();
+const showModal = ref(false);
 
 async function handleCreatePost() {
   await post.createPost();
@@ -104,7 +105,7 @@ onMounted(() => {
 
       <!-- Submit Button -->
       <div class="d-flex justify-content-end gap-4 mt-3">
-        <NuxtLink to="/home" type="button" class="btn border border-danger bg-transparant text-danger px-4  ">Cancel</NuxtLink>
+        <NuxtLink to="/member/home" type="button" class="btn border border-danger bg-transparant text-danger px-4">Cancel</NuxtLink>
         <button type="submit" class="btn btn-primary px-4" :disabled="post.loading">
           <span v-if="post.loading">Uploading...</span>
           <span v-else>Publish</span>
@@ -112,6 +113,21 @@ onMounted(() => {
       </div>
     </form>
   </div>
+
+
+  <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center " style="padding: 50px;">
+        <h3 class="mb-4">Post Created</h3>
+        <p class="mb-5" style="color: #6c757d;">Your document has successfully uploaded and will be able to access by public user.</p>
+        <div class="">
+          <NuxtLink to="/member/mypost" type="button" class="btn btn-primary rounded-3 py-2 w-75" >Go to My Post</NuxtLink>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <style scoped>

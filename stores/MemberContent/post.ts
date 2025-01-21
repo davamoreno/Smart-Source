@@ -196,6 +196,30 @@ export const usePostStore = defineStore('postStore', {
         return console.log('err', err);
       }
     },
+    async download(file: any, filename: any) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}public/${file}`,
+          {
+            headers: {
+              "Authorization": `Bearer ${useCookie('jwt').value}`
+            },
+            responseType: 'blob'
+          });
+
+        const objectURL = URL.createObjectURL(response.data); // 2
+
+        const link = document.createElement('a'); // 3
+        link.href = objectURL; // 4
+        link.download = filename; // 5
+        document.body.appendChild(link); // 6
+        link.click(); // 7
+        document.body.removeChild(link); // 8
+
+        URL.revokeObjectURL(objectURL); // 9
+      } catch (err) {
+        console.error('Error downloading file:', err);
+      }
+    },
 
     resetForm() {
       this.title = '';

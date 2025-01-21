@@ -5,6 +5,7 @@ import { usePostStore } from '~/stores/MemberContent/post';
 import axios from 'axios';
 import { useCommentStore } from '~/stores/MemberContent/comment';
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
 
 const post = usePostStore();
 const route = useRoute();
@@ -16,17 +17,10 @@ const slug = route.params.slug;
 const showSuccessModal = ref(false);
 const commentErrorMessage = ref(false);
 const reportErrorMessage = ref(false);
+const bookmarkStore = useBookmarkStore();
 
-function validateForm() {
-  if (comment.content.trim() === '') {
-    commentErrorMessage.value = true;
-  } else {
-    commentErrorMessage.value = false;
-    comment.content = '';  
-  }
-}
-
-function validateReportForm() {
+async function validateReportForm(PostId) {
+  await reportHandle(PostId);
   if (post.reason.trim() === '') {
     reportErrorMessage.value = true;
     
@@ -36,6 +30,10 @@ function validateReportForm() {
     showModal.value = false;
     showSuccessModal.value = true;
   }
+}
+
+const reportHandle = async (postId) => {
+    await post.createReport(postId);
 }
 
 function hideCommentErrorMessage() {
@@ -104,15 +102,22 @@ const deletedLike = (postId) => {
     post.deleteLike(postId);
 };
 
-const reportHandle = async (postId) => {
-    await post.createReport(postId);
-}
-
 const commentHandle = async(postId) => {
     await comment.create(postId);
     await comment.get(postId);
     comment.content = ref('')
 }
+const downloadFile = (file, filename) => {
+    post.download(file, filename);
+};
+
+const createdBoomark = async (postId) => {
+    await bookmarkStore.create(postId);
+};
+
+const deletedBoomark = async (postId) => {
+    await bookmarkStore.delete(postId);
+};
 
 </script>
 
@@ -140,14 +145,17 @@ const commentHandle = async(postId) => {
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedLike(post.postDetail?.slug)" v-if="post.postDetail?.like === true">
                     <img src='/public/images/heart-fill.svg' alt="" style="height: 50px; width: 26px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>   
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="downloadFile(post.postDetail?.file?.file_path, post.postDetail?.file?.file_name)">
                     <img src="/public/images/Download.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
                 <button  style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="showModal = true">
                      <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
                </button>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="createdBoomark(post.postDetail?.id)" v-if="post.postDetail?.bookmark === false">
                     <img src="/public/images/bookmark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
+                </button>
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedBoomark(post.postDetail?.id)" v-else>
+                    <img src="/public/images/bookmark_dark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
                 <button style="height: 50px; width: 240px;" class="position-relative btn btn-dark me-4 rounded-5">
                     <span>

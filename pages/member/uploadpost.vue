@@ -12,6 +12,7 @@ const showModal = ref(false);
 async function handleCreatePost() {
   await post.createPost();
   if (!post.error) {
+    showModal.value = true; // Tampilkan modal
     resetForm();
   }
 }
@@ -103,7 +104,7 @@ onMounted(() => {
 
       <!-- Submit Button -->
       <div class="d-flex justify-content-end gap-4 mt-3">
-        <NuxtLink to="/member/home" type="button" class="btn border border-danger bg-transparant text-danger px-4">Cancel</NuxtLink>
+        <NuxtLink to="/member/home" type="button" class="btn border border-danger bg-transparant text-danger px-4" @click="resetForm">Cancel</NuxtLink>
         <button  data-bs-toggle="modal" data-bs-target="#showModal" type="submit" class="btn btn-primary px-4" :disabled="post.loading">
           <span v-if="post.loading">Uploading...</span>
           <span v-else>Publish</span>
@@ -116,16 +117,17 @@ onMounted(() => {
   <div v-if="showModal" id="showModal" class="modal fade show d-block" aria-labelledby="showModal" aria-hidden="true" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-body text-center " style="padding: 50px;">
+      <div class="modal-body text-center" style="padding: 50px;">
         <h3 class="mb-4">Post Created</h3>
         <p class="mb-5" style="color: #6c757d;">Your document has successfully uploaded and will be able to access by public user.</p>
         <div class="">
-          <NuxtLink to="/member/mypost" type="button" class="btn btn-primary rounded-3 py-2 w-75" >Go to My Post</NuxtLink>
+          <NuxtLink to="/member/mypost" type="button" class="btn btn-primary rounded-3 py-2 w-75">Go to My Post</NuxtLink>
         </div>
       </div>
     </div>
   </div>
 </div>
+
 </template>
 
 <style scoped>

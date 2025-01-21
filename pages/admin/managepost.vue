@@ -7,9 +7,19 @@ import { onMounted } from 'vue';
 import { postAdminStore } from '~/stores/AdminManagement/post';
 
 const post = postAdminStore();
+const postValidate = async (id, status) => {
+  try {
+    // Ubah status post
+    await post.postValidation(id, status);
+    
+    // Ambil data post yang baru setelah status diubah
+    await post.getPendingPost();
 
-const postValidate = (id, status) => {
-  post.postValidation(id, status);
+    
+    
+  } catch (err) {
+    console.error('Error validating post:', err);
+  }
 }
 
 onMounted(() => {

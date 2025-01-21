@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import { ref } from 'vue';
 import { useCookie } from '#app';
+import { useUrlStore } from '~/stores/BaseUrl/Url';
 
 
 export const useMemberAuthStore = defineStore('memberAuth', () => {
@@ -16,6 +17,10 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const isLogin = ref(false);
   const userProfile = ref({});
   const success = ref(false);
+  const role = ref(null);
+  const urlStore = useUrlStore();
+  const selectedUniversity = ref('');
+  const selectedFaculty = ref('');
 
   function setLoginStatus(status: boolean) {
     isLogin.value = status;
@@ -26,8 +31,8 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
       isLoading.value = true;
       error.value = null;
       success.value = false;
-
-      const response = await axios.post('http://localhost:8000/api/member/register', {
+      
+      const response = await axios.post(`${urlStore.url}member/register`, {
         username: username.value,
         email: email.value,
         password: password.value,
@@ -40,7 +45,6 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
       }
 
       console.log('Registration successful:', response.data);
-      success.value = true;
       username.value = '';
       email.value = '';
       password.value = '';
@@ -48,14 +52,15 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
     } catch (err) {
       if (err.response && err.response.status === 422) {
         error.value = err.response.data.errors;
+        success.value = false;
       }
       else {
         error.value = 'An unexpected error occurred. Please try again.';
       }
-    } finally {
-      success.value = true;
-      isLoading.value = false;
-    }
+      } finally {
+        success.value = true;
+        isLoading.value = false;
+      }
   }
 
 async function login() {
@@ -67,7 +72,7 @@ async function login() {
       throw new Error('Identifier and password are required');
     }
 
-    const response = await axios.post('http://localhost:8000/api/member/login', {
+    const response = await axios.post(`${urlStore.url}member/login`, {
       identifier: identifier.value,
       password: password.value,
     },
@@ -79,12 +84,20 @@ async function login() {
   );
 
     token.value = response.data.access_token;
-    isLogin.value = true;
+    role.value = response.data.role;
+    setLoginStatus(true);   
     const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
     cookieToken.value = token.value;
+    identifier.value = '';
+    password.value = '';
   }
   catch(err){
-    console.error('err', err.response ? err.response.data : err);
+    if (err.response && err.response.status === 422) {
+      error.value = err.response.data.errors;
+    }
+    else {
+      error.value = 'An unexpected error occurred. Please try again.';
+    }
   }finally{
     isLoading.value = false;
   }
@@ -92,7 +105,7 @@ async function login() {
 
 async function getUserProfile(){
   try{
-    const response = await axios.get('http://localhost:8000/api/user/profile', {
+    const response = await axios.get(`${urlStore.url}user/profile`, {
       headers : { 
         'Authorization' : `Bearer ${useCookie('jwt').value}`
       }
@@ -107,10 +120,7 @@ async function getUserProfile(){
 
 async function logout() {
   try{
-    const response = await axios.post('http://localhost:8000/api/member/logout', 
-    {
-
-    },
+    const response = await axios.post(`${urlStore.url}member/logout`, {},
     {
       headers : {
         Authorization : `Bearer ${useCookie('jwt').value}`
@@ -119,7 +129,6 @@ async function logout() {
   );
   const cookieToken = useCookie('jwt');
   cookieToken.value = null;
-
   token.value = null;
   isLogin.value = false;
   userProfile.value = {};
@@ -129,6 +138,40 @@ async function logout() {
     console.log('err', err);
   }
 }
+async function updateProfile() {
+  try {
+    isLoading.value = true;
+    error.value = null;
+    const response = await axios.post(`${urlStore.url}user/edit/profile`,
+      {
+        username: username.value,
+        faculty_id: selectedFaculty.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${useCookie('jwt').value}`,
+        },
+      }
+    );
+
+    userProfile.value = response.data.user;
+    console.log('Profile updated successfully:', response.data);
+
+    success.value = true;
+  } catch (err) {
+    if (err.response && err.response.status === 422) {
+      error.value = err.response.data.errors;
+    } else if (err.response && err.response.status === 401) {
+      error.value = 'User not authenticated.';
+    } else {
+      error.value = 'An unexpected error occurred. Please try again.';
+    }
+    success.value = false;
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 
 return {
   setLoginStatus,
@@ -143,8 +186,12 @@ return {
   isLogin,
   isLoading,
   error,
+  success,
   userProfile,
   getUserProfile,
-  logout
+  logout,
+  updateProfile,
+  selectedFaculty,
+  selectedUniversity
 }
 });

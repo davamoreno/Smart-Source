@@ -6,7 +6,8 @@ const university = useUniversityStore();
 const faculty = usefacultyStore();
 
 async function handleCreateFaculty () {
-  await faculty.createFaculty ();
+  await faculty.createFaculty();
+  await faculty.getFaculty();
 }
 
 onMounted(() => {
@@ -27,7 +28,7 @@ onMounted(() => {
               <tr>
                 <th>No.</th>
                 <th>Faculty</th>
-                <th>Faculty Count</th>
+                <th>University</th>
                 <th>Users Count</th>
                 <th>Action</th>
               </tr>
@@ -92,7 +93,7 @@ onMounted(() => {
             </div>
           </div>
           <div class="modal-footer">
-            <UIBlueRoundedButton type="submit">Submit</UIBlueRoundedButton>
+            <UIBlueRoundedButton type="submit" data-bs-dismiss="modal">Submit</UIBlueRoundedButton>
           </div>
         </form>
       </div>

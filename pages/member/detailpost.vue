@@ -1,3 +1,56 @@
+<script setup>
+import { ref } from 'vue';
+
+// Menggunakan `ref` untuk mendeklarasikan data reaktif
+const showModal = ref(false);
+const comment = ref('');
+const reportReason = ref('');
+const showSuccessModal = ref(false);
+const commentErrorMessage = ref(false);  // Error message untuk komentar
+const reportErrorMessage = ref(false);  // Error message untuk laporan
+
+// Fungsi validasi form komentar
+function validateForm() {
+  if (comment.value.trim() === '') {
+    commentErrorMessage.value = true;
+  } else {
+    commentErrorMessage.value = false;
+    // Lakukan submit atau operasi lain di sini
+    comment.value = '';  
+  }
+}
+
+// Fungsi validasi form laporan
+function validateReportForm() {
+  if (reportReason.value.trim() === '') {
+    reportErrorMessage.value = true;
+    
+  } else {
+    reportErrorMessage.value = false;
+    reportReason.value = ''; 
+    // Lakukan submit laporan atau operasi lain di sini
+    showModal.value = false;
+    showSuccessModal.value = true;
+  }
+}
+
+// Fungsi untuk menyembunyikan pesan error komentar
+function hideCommentErrorMessage() {
+  commentErrorMessage.value = false;
+}
+
+
+// Fungsi untuk menyembunyikan pesan error laporan
+function hideReportErrorMessage() {
+  reportErrorMessage.value = false;
+}
+function closeModal() {
+  showModal.value = false;
+  reportReason.value = '';
+  reportErrorMessage.value = false; 
+}
+</script>
+
 <template>
     <div class="container-fluid py-3 my-5 overflow-x-hidden" style="padding-left: 80px; padding-right: 80px;">
         <h4 class="fw-bolder">Review dan Analisis Terhadap IoT:  Fungsi, Spesifikasi, Implementasi, 
@@ -25,7 +78,6 @@
                 <button  style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="showModal = true">
                      <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
                </button>
-
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/bookmark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
@@ -48,12 +100,19 @@
         <div class="row mt-5" style="padding-left: 90px; padding-right: 90px;">
             <p class="fs-4 pb-4">Comments</p>
             <img src="/public/images/commentprofile.svg" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;">
-            <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1115px; background-color: transparent;">
-        </div>
+            <input 
+        v-model="comment" 
+        @input="hideCommentErrorMessage"
+        type="text" 
+        class="form-control border border-dark" 
+        :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
+        :class="{ 'error-placeholder': commentErrorMessage }"
+        style="height: 48px; width: 1115px; background-color: transparent;">
+    </div>
 
-        <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
-            <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
-        </div>
+  <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
+    <button @click="validateForm" class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;">Submit</button>
+  </div>
         <!--  -->
 
 
@@ -130,34 +189,44 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header border-0">     
-        <button type="button" class="btn-close" @click="showModal = false" aria-label="Close"></button>  
+        <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>  
       </div>
       <h5 class="modal-title text-center w-100 mb-2">Report Post</h5>
       <div class="modal-body text-center mb-4 ">
         <p class="mb-4">Please make sure you are only reporting posts that violate our community guidelines.</p>
-        <textarea class="form-control mb-4 " rows="5" placeholder="Enter your report"></textarea>
-        <button type="button" class="btn btn-dark rounded-3 w-100 py-2" @click="">Submit Report</button>
+        <textarea 
+              v-model="reportReason" 
+              @input="hideReportErrorMessage"
+              class="form-control mb-4" 
+              rows="5" 
+              :placeholder="reportErrorMessage ? 'Alasan laporan tidak boleh kosong!' : 'Enter your report'" 
+              :class="{ 'error-placeholder': reportErrorMessage }">
+            </textarea>
+            <button type="button" class="btn btn-dark rounded-3 w-100 py-2" @click="validateReportForm" >Submit Report</button>
+          </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Modal Success -->
+  <div v-if="showSuccessModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body text-center py-5">
+        <div class="mb-4">
+          <img src="/public/images/Icon.svg" alt="Success Icon"  style="width: 100px; height: auto;">
+        </div>
+        <h3 class="mb-3">Report Received</h3>
+        <p class="mb-4">We have received your report and will review it as soon as possible.</p>
+        <button type="button" class="btn btn-dark rounded-3 w-50 py-2" @click="showSuccessModal = false">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-  
-
-
 
 
 </template>
-<script>
-export default {
-  data() {
-    return {
-      showModal: false
-    };
-  }
-
-}
-</script>
 
 <style scoped>
 .modal-header {
@@ -177,4 +246,18 @@ export default {
   color: black
 }
 
+input.error-placeholder::placeholder {
+  color: red; 
+}
+textarea.error-placeholder::placeholder {
+  color: red;
+}
+.btn-light:hover img {
+  filter: brightness(0) invert(1); 
+  transition: filter 0.3s ease;
+}
+.btn-dark:hover img {
+  filter: brightness(0);
+  transition: filter 0.3s ease;
+}
 </style>

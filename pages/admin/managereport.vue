@@ -2,6 +2,18 @@
 definePageMeta({
     layout : 'blank'
 })
+import { onMounted } from 'vue';
+import { postAdminStore } from '~/stores/AdminManagement/post';
+
+const report = postAdminStore();
+
+const postValidate = (id, status) => {
+  report.reportValidation(id, status);
+}
+
+onMounted(() => {
+  report.getPendingReport();
+});
 </script>
 
 <template>
@@ -24,39 +36,35 @@ definePageMeta({
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Politeknik Negeri Bali</td>
-                    <td>20/20/2024</td>
+                  <tr
+                  v-for="(reports, index) in report.reports"
+                  :key="reports.id"
+                  v-if="report.reports.length"
+                  >
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ reports.title }}</td>
+                    <td>{{ reports.created_at }}</td>
                     <td style="justify-items: center;">
-                        <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">Pending</p>
+                        <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">{{ reports.report_status }}</p>
                     </td>
-                    <td>20</td>  
+                    <td><a href="/"  class="btn btn-sm btn-primary text-white" >
+                      <i class="fa-solid fa-envelope"></i>
+                      1</a></td>  
                     <td>
-                        <a class="btn btn-sm text btn-success text-white ms-2" style="width: auto;">
-                            Accept
-                        </a>
-                        <a class="btn btn-danger btn-sm text-white ms-2" style="width: 60px;">
-                            Reject
-                        </a>
+                      <button
+                        class="btn btn-sm text-white g-3 ms-2 btn-success"
+                        @click="postValidate(reports.id, 'accept')"> 
+                      Accept
+                      </button>
+                      <button
+                        class="btn btn-danger btn-sm text-white ms-2"
+                        @click="postValidate(reports.id, 'reject')">
+                      Reject
+                    </button>
                     </td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Universitas Jember</td>
-                    <td>21/20/2024</td>
-                    <td class="col-3" style="justify-items: center;">
-                        <p class="rounded-5 bg-warning text-center text-white text-sm" style="height: 100%; width: 100px; margin-top: 10px;">Pending</p>
-                    </td>
-                    <td>21</td>
-                    <td>
-                        <a class="btn btn-sm text btn-success text-white ms-2">
-                            Accept
-                        </a>
-                        <a class="btn btn-danger btn-sm text-white ms-2" style="width: 60px;">
-                            Reject
-                        </a>
-                    </td>
+                  <tr v-else>
+                   <td colspan="6" class="text-center">No Report To Handle</td>
                   </tr>
                 </tbody>
               </table>

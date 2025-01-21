@@ -1,62 +1,90 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import { useCookie } from "#app";
-import axios from "axios";
+import { useCookie } from '#app';
+import { defineStore } from 'pinia';
+import axios from 'axios';
+import { useUrlStore } from '../BaseUrl/Url';
 
-export const postAdminStore = defineStore('postAdminStore', () => {
-    const file = ref([]);
-    const posts = ref([]);
-    const currentPage = ref(1);
-    const perPage = ref(10);
-    const maxVisiblePages = 10;
-    const totalItems = ref(0);
-    const totalPages = computed(() => Math.ceil(totalItems.value / perPage.value));
-    const url = "http://127.0.0.1:8000/api/";
-
-
-    async function getPendingPost(page = 1){
-        try {
-            const response = await axios.get(`${url}post/pending?page=${page}`, {
-                headers : {
-                    "Accept" : "application/json",
-                    "Authorization" : `Bearer ${useCookie('jwt').value}`
-                }
-            });
-            posts.value = response.data.data;
-            totalItems.value = response.data.total;
-            currentPage.value = page;
-        } catch (error) {
-            return console.log('error', error);
-        } finally{
-            
-        }
+export const postAdminStore = defineStore('postAdmin', {
+  state: () => ({
+    posts: [],
+    reports : [],
+    totalItems : [],
+    urlStore: useUrlStore(),
+  }),
+  actions: {
+    async getPendingPost(page = 1) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}post/pending?page=${page}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.posts = response.data.data;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },
+    async getPendingReport(page = 1) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}post/report/pending?page=${page}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.reports = response.data.post.data;
+        this.totalItems = response.data;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },updateReportStatus(id : number, report_status : any) {
+      const report = this.reports.find(p => p.id === id);
+      if (report) {
+        report.report_status = report_status;
+      }
+    },
+    async reportValidation(id : number, report_status : any) {
+      try {
+        const response = await axios.post(`${this.urlStore.url}post/report/handle/${id}`,
+          { report_status },
+          { params : {
+              _method : 'put'
+            },
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${useCookie('jwt').value}`
+            }
+          }
+        );
+        this.updateReportStatus(id, response.data.post.report_status);
+        console.log(`Post ${id} status updated to ${report_status}`);
+      } catch (error) {
+        console.error('Failed to update post status:', error.response?.data || error);
+      }
+    },updatePostStatus(id : number, status : any) {
+      const post = this.posts.find(p => p.id === id);
+      if (post) {
+        post.status = status;
+      }
+    },
+    async postValidation(id : number, status : any) {
+      try {
+        const response = await axios.post(
+          `${this.urlStore.url}post/validation/${id}`,
+          { status },
+          {
+            params : {
+              _method : 'put'
+            },
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${useCookie('jwt').value}`
+            }
+          }
+        );
+        this.updatePostStatus(id, response.data.post.status);
+        console.log(`Post ${id} status updated to ${status}`);
+      } catch (error) {
+        console.error('Failed to update post status:', error.response?.data || error);
+      }
     }
-    
-    async function getFile() {
-        
-    }
-
-    const visiblePages = computed(() => {
-        const startPage = Math.max(1, currentPage.value - Math.floor(maxVisiblePages / 2));
-        const endPage = Math.min(startPage + maxVisiblePages - 1, totalPages.value);
-
-        return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-    });
-
-    function changePage(page : any) {
-        if (page >= 1 && page <= totalPages.value) {
-            getPendingPost(page);
-        }
-    }
-
-    return{
-        posts,
-        getPendingPost,
-        currentPage,
-        totalPages,
-        visiblePages,
-        changePage,
-        perPage,
-        totalItems,
-    }
+  }
 });

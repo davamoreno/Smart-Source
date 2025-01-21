@@ -2,12 +2,17 @@
     import { useCategoryStore } from '~/stores/AdminManagement/category';
     import { usePaper } from '~/stores/AdminManagement/papertype';
     import { useRoute} from 'vue-router';
+    
 
     const categoryStore = useCategoryStore();
     const { $bootstrap } = useNuxtApp();
     const paperStore = usePaper();
     const route = useRoute(); 
+    const selectedPaper = ref(null);
     
+
+const entityType = ref('');
+const selectedEntity = ref(null);
   
     onMounted(() => {
         categoryStore.getCategories();
@@ -28,7 +33,6 @@
 
     async function handleDeleteCategory(id) {
       await categoryStore.deleteCategory(id);
-
       await categoryStore.getCategories();
       categoryStore.name = '';
     }
@@ -49,17 +53,38 @@
         }
     } 
 
-    async function handleDeletePaper(id) {
-      await paperStore.deletePaper(id);
+    function setPaperForDeletion(paper) {
+  selectedPaper.value = paper;
+}
 
-      await paperStore.getPaper();
-      paperStore.name = '';
-    }
+async function handleDeletePaper(id) {
+  if (!id) return;
+  await paperStore.deletePaper(id);
+  await paperStore.getPaper();
+  selectedPaper.value = null;
+  
+}
 
     function changePaperPage(page) {
         paperStore.getPaper(page);
     }
   
+    function setEntityForDeletion(entity, type) {
+  selectedEntity.value = entity;
+  entityType.value = type;
+}
+
+async function handleDeleteEntity() {
+  if (entityType.value === 'category') {
+    await categoryStore.deleteCategory(selectedEntity.value.id);
+    await categoryStore.getCategories();
+  } else if (entityType.value === 'paper') {
+    await paperStore.deletePaper(selectedEntity.value.id);
+    await paperStore.getPaper();
+  }
+  selectedEntity.value = null;
+  entityType.value = '';
+}
 </script>
 
 <template>
@@ -92,7 +117,7 @@
                             <td>{{ index + 1 + (categoryStore.currentPage - 1) * categoryStore.perPage }}</td>
                             <td>{{ category.name }}</td>
                             <td>
-                                <button class="btn btn-danger btn-sm" @click="handleDeleteCategory(category.id)">Delete</button>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal "  @click="setEntityForDeletion(category, 'category')">Delete</button>
                             </td>
                         </tr>
                     </tbody>
@@ -150,7 +175,7 @@
                     <td>{{ index + 1 + (paperStore.currentPage - 1) * paperStore.perPage}}</td>
                     <td>{{ paper.name }}</td>
                     <td class="justify-content-center">
-                        <button class="btn btn-danger btn-sm" @click="handleDeletePaper(paper.id)">Delete</button>
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal "  @click="setEntityForDeletion(paper, 'paper')"  >Delete</button>
                     </td>
                   </tr>
                 </tbody>
@@ -196,13 +221,6 @@
             <label for="categoryName" class="form-label">Category</label>
             <input type="text" class="form-control" id="categoryName" placeholder="Nama Kategori" v-model="categoryStore.name">
           </div>
-          <div class="mb-3 border-dashed">
-            <div class="p-3 text-center" style="height: 150px;">
-                <label class="form-label" style="width: 400px;">Add Thumbnail for Category</label>
-                <input type="file" name="selectedFile" id="selectedFile" style="display: none;"/>
-                <label class="btn btn-outline-primary fw-bold" for="selectedFile" style="margin-top: 30px;">Broswe Files</label>
-            </div>
-          </div>
         </div>
         <div class="modal-footer">
           <UIBlueRoundedButton type="submit">Submit</UIBlueRoundedButton>
@@ -230,6 +248,33 @@
         </form>
     </div>
   </div>
+
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <span class="d-flex">
+              <img src="/public/images/trash.svg" alt="">
+              <p style="color: #FF5E5E;" class="ps-2 pt-3 fs-4 fw-medium">
+                Delete {{ entityType === 'category' ? 'Category' : 'Paper' }}
+              </p>
+            </span>
+            <div class="d-flex justify-content-center">
+              <h4 class="mt-4 mb-5 fw-light">Confirm to delete {{ selectedEntity?.name }} ?</h4>
+            </div>
+            <div class="row py-3">
+              <div class="col">
+                <button type="button" class="btn btn-danger btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal">No</button>
+              </div>
+              <div class="col">
+                <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteEntity">Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
 </template>
 
 <style scoped lang="scss">

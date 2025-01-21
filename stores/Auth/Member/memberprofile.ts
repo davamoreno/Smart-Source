@@ -2,13 +2,14 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import { ref } from 'vue';
 import { useCookie } from '#app';
+import { useUrlStore } from '~/stores/BaseUrl/Url';
 
 
 export const useProfileStore = defineStore('profileStore', {
     state: () => {
         return{
             user_profile: null,
-            url: 'http://127.0.0.1:8000/api/'
+            urlStore: useUrlStore(),
         }
     },
 
@@ -19,7 +20,7 @@ export const useProfileStore = defineStore('profileStore', {
                
                 formData.append('user_profile', this.user_profile);
 
-                const response = await axios.post(`${this.url}member/image`, formData, {
+                const response = await axios.post(`${this.urlStore.url}member/image`, formData, {
                     headers: {
                         'Content-Type' : 'multipart/form-data',
                         'Authorization' : `Bearer ${useCookie('jwt').value}`
@@ -40,7 +41,7 @@ export const useProfileStore = defineStore('profileStore', {
         , async getImageProfile(file : string){
             try{
                
-                const response = await axios.get(`${this.url}public/storage/${file}`, {
+                const response = await axios.get(`${this.urlStore.url}public/storage/${file}`, {
                     headers: {
                         'Authorization' : `Bearer ${useCookie('jwt').value}`
                     }

@@ -3,12 +3,6 @@ import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
 import { usePostStore } from '~/stores/MemberContent/post';
 import { onMounted } from 'vue';
 
-const bookmark = useBookmarkStore();
-
-onMounted(() => {
-  bookmark.get()
-});
-
 const bookmarkStore = useBookmarkStore();
 const postStore = usePostStore();
 

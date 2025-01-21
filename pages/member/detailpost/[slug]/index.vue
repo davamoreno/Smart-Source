@@ -13,6 +13,44 @@ const showModal = ref(false);
 const comment = useCommentStore();
 const member = useMemberAuthStore();
 const slug = route.params.slug;
+const showSuccessModal = ref(false);
+const commentErrorMessage = ref(false);
+const reportErrorMessage = ref(false);
+
+function validateForm() {
+  if (comment.content.trim() === '') {
+    commentErrorMessage.value = true;
+  } else {
+    commentErrorMessage.value = false;
+    comment.content = '';  
+  }
+}
+
+function validateReportForm() {
+  if (post.reason.trim() === '') {
+    reportErrorMessage.value = true;
+    
+  } else {
+    reportErrorMessage.value = false;
+    post.reason = ''; 
+    showModal.value = false;
+    showSuccessModal.value = true;
+  }
+}
+
+function hideCommentErrorMessage() {
+  commentErrorMessage.value = false;
+}
+
+function hideReportErrorMessage() {
+  reportErrorMessage.value = false;
+}
+
+function closeModal() {
+  showModal.value = false;
+  post.reason = '';
+  reportErrorMessage.value = false; 
+}
 
 function goToParentComment(slug, parentId) {
   router.push(`/member/detailpost/${slug}/${parentId}`);
@@ -105,9 +143,9 @@ const commentHandle = async(postId) => {
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/Download.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
-                    <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle" @click="showModal = true">
-                </button>
+                <button  style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="showModal = true">
+                     <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
+               </button>
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
                     <img src="/public/images/bookmark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
@@ -134,7 +172,7 @@ const commentHandle = async(postId) => {
 
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
             <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;"
-                    @click="commentHandle(post.postDetail?.slug)" 
+                    @click="commentHandle(post.postDetail?.slug)"
                     @keyup.enter="commentHandle(post.postDetail?.slug)">
                     Submit
             </button>
@@ -159,9 +197,14 @@ const commentHandle = async(postId) => {
             </div>
         <div class="row" style="">
             <span>
-                <button class="btn btn-link" 
+                <button class="btn btn-link form-control border border-dark" 
                         style="width: 55px; height: 55px;"
-                        @click="goToParentComment(post.postDetail?.slug, commentars.id)">
+                        @click="goToParentComment(post.postDetail?.slug, commentars.id)"
+                        @input="hideCommentErrorMessage"
+                        type="text" 
+                        :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
+                        :class="{ 'error-placeholder': commentErrorMessage }"
+                    >
                     <img src="/public/images/comment_light.svg" alt="" style="width: 40px; height: 40px;">
                 </button>  
                 <small class="fw-medium">20 Comments</small>
@@ -179,17 +222,36 @@ const commentHandle = async(postId) => {
         <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header border-0">     
-                <button type="button" class="btn-close" @click="showModal = false" aria-label="Close"></button>  
+                <button type="button" class="btn-close" @click="closeModal" aria-label="Close"></button>  
               </div>
               <h5 class="modal-title text-center w-100 mb-2">Report Post</h5>
               <div class="modal-body text-center mb-4 ">
                 <p class="mb-4">Please make sure you are only reporting posts that violate our community guidelines.</p>
                 <form @submit.prevent="reportHandle(post.postDetail?.id)">
-                    <textarea class="form-control mb-4 " rows="5" placeholder="Enter your report" v-model="post.reason"></textarea>
-                    <button class="btn btn-dark rounded-3 w-100 py-2" type="submit">Submit Report</button>
+                    <textarea class="form-control mb-4 " rows="5"
+                        v-model="post.reason"
+                        @input="hideReportErrorMessage"
+                        :placeholder="reportErrorMessage ? 'Alasan laporan tidak boleh kosong!' : 'Enter your report'" 
+                        :class="{ 'error-placeholder': reportErrorMessage }">
+                    </textarea>
+                    <button class="btn btn-dark rounded-3 w-100 py-2" type="submit" @click="validateReportForm">Submit Report</button>
                 </form>
               </div>
             </div>
+        </div>
+    </div>
+    <div v-if="showSuccessModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body text-center py-5">
+              <div class="mb-4">
+                <img src="/public/images/Icon.svg" alt="Success Icon"  style="width: 100px; height: auto;">
+              </div>
+              <h3 class="mb-3">Report Received</h3>
+              <p class="mb-4">We have received your report and will review it as soon as possible.</p>
+              <button type="button" class="btn btn-dark rounded-3 w-50 py-2" @click="showSuccessModal = false">Close</button>
+            </div>
+          </div>
         </div>
     </div>
 </template>
@@ -206,16 +268,24 @@ const commentHandle = async(postId) => {
   background-color: black;
   border: none;
 }
-
 .btn-dark:hover {
     border: 1px solid black;
-    background-color:white;
-    color: black;
+  background-color:white;
+  color: black
 }
 
-.btn-light:hover{
-    background-color:white;
-    color: black
+input.error-placeholder::placeholder {
+  color: red; 
 }
-
+textarea.error-placeholder::placeholder {
+  color: red;
+}
+.btn-light:hover img {
+  filter: brightness(0) invert(1); 
+  transition: filter 0.3s ease;
+}
+.btn-dark:hover img {
+  filter: brightness(0);
+  transition: filter 0.3s ease;
+}
 </style>

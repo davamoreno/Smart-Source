@@ -25,8 +25,8 @@
 
 async function handleDeleteUniversity(id) {
    if (!id) return;
-  await paperStore.deletePaper(id);
-  await paperStore.getPaper();
+  await universityStore.deleteUniversity(id);
+  await universityStore.getUniversity();
 }
    
   

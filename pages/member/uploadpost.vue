@@ -104,7 +104,7 @@ onMounted(() => {
       <!-- Submit Button -->
       <div class="d-flex justify-content-end gap-4 mt-3">
         <NuxtLink to="/member/home" type="button" class="btn border border-danger bg-transparant text-danger px-4">Cancel</NuxtLink>
-        <button type="submit" class="btn btn-primary px-4" :disabled="post.loading">
+        <button  data-bs-toggle="modal" data-bs-target="#showModal" type="submit" class="btn btn-primary px-4" :disabled="post.loading">
           <span v-if="post.loading">Uploading...</span>
           <span v-else>Publish</span>
         </button>
@@ -113,7 +113,7 @@ onMounted(() => {
   </div>
 
 
-  <div v-if="showModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div v-if="showModal" id="showModal" class="modal fade show d-block" aria-labelledby="showModal" aria-hidden="true" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body text-center " style="padding: 50px;">

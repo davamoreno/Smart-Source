@@ -20,7 +20,7 @@ export const usePostStore = defineStore('postStore', {
       pageCount: 1,
       postDetail: null,
       isLiked: false,
-      reason: '',
+      reason: ref(''),
       report: '',
       userPost: [],
       status: '',

@@ -25,7 +25,11 @@ export const usePostStore = defineStore('postStore', {
       userPost: [],
       status: '',
       keyword: '',
-      deniedPost : <any>[]
+      deniedPost : <any>[],
+      histories: <any>[],
+      paper_type: '',
+      papers: <any>[],
+      categories: <any>[]
     };
   },
 
@@ -70,6 +74,7 @@ export const usePostStore = defineStore('postStore', {
           params: {
             page: this.page,
             keyword: this.keyword,
+            paper_type: this.paper_type
           },
           headers: {
             Authorization: `Bearer ${useCookie('jwt').value}`
@@ -237,6 +242,59 @@ export const usePostStore = defineStore('postStore', {
         URL.revokeObjectURL(objectURL); // 9
       } catch (err) {
         console.error('Error downloading file:', err);
+      }
+    },
+
+    async createHistory(slug: any) {
+      try {
+        const response = await axios.post(`${this.urlStore.url}user/history/${slug}`, {}, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`,
+          }
+        });
+      } catch (error) {
+        console.error('Error creating report:', error);
+      }
+    },
+
+    async getHistory() {
+      try {
+        const response = await axios.get(`${this.urlStore.url}post/history`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.histories = response.data;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },
+
+    async getPaper(paperTypeName: any) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}user/post/papertype/${paperTypeName}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.papers = response.data;
+        console.log('paper', response.data)
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },
+
+    async getCategory(categoryTypeName: any) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}user/post/category/${categoryTypeName}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.categories = response.data;
+        console.log('paper', response.data)
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
       }
     },
 

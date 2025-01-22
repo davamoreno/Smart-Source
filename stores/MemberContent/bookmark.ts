@@ -10,7 +10,7 @@ export const useBookmarkStore = defineStore('bookmarkStore', {
         return {
             postStore: usePostStore(),
             urlStore: useUrlStore(),
-            bookmarks : ref(<any>[])    
+            bookmarks: ref(<any>[])
         }
     },
     actions:
@@ -47,15 +47,15 @@ export const useBookmarkStore = defineStore('bookmarkStore', {
             }
         }, async getBookmarks() {
             try {
-              const response = await axios.get(`${this.urlStore.url}post/bookmark`, {
-                headers: {
-                  Authorization: `Bearer ${useCookie('jwt').value}`,
-                }
-              });
-              console.log(response.data)
-              this.bookmarks = response?.data;
+                const response = await axios.get(`${this.urlStore.url}post/bookmark`, {
+                    headers: {
+                        Authorization: `Bearer ${useCookie('jwt').value}`,
+                    }
+                });
+                console.log(response.data)
+                this.bookmarks = response?.data;
             } catch (error) {
-              console.error('Error fetching bookmarks:', error);
+                console.error('Error fetching bookmarks:', error);
             }
         },
     }

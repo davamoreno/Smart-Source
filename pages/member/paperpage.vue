@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
     <div class="cards-container">
-      <router-link class="folder-card" v-for="paper in paperStore.papers" :key="paper.id" :to="`/member/papertype/${paper.name}`">
+      <router-link class="folder-card  text-decoration-none" v-for="paper in paperStore.papers" :key="paper.name" :to="`/member/papertype/${paper.name}`">
         <div class="folder-icon"></div>
-        <div class="folder-name">{{ paper.name }}</div>
+        <div class="folder-name text-decoration-none">{{ paper.name }}</div>
       </router-link>
     </div>
   </div>

@@ -8,6 +8,8 @@ const postStore = usePostStore();
 
 onMounted(() => {
   bookmarkStore.getBookmarks();
+  postStore.showPostDetail();
+  postStore.getPost();
 });
 
 const deletedBoomark = async (postId) => {
@@ -20,6 +22,20 @@ const deletedBoomark = async (postId) => {
       if (post) { 
         post.bookmark = false; 
       }
+};
+
+const createdLike = async (slug) => {
+    await postStore.createLike(slug);
+    const post = postStore.posts.find(post => post.slug === slug);
+    post.like = true;
+    post.likes_count = post.likes_count + 1;
+};
+
+const deletedLike = async (slug) => {
+    await postStore.deleteLike(slug);
+    const post = postStore.posts.find(post => post.slug === slug);
+    post.like = false;
+    post.likes_count = post.likes_count - 1;
 };
 </script>
 
@@ -48,9 +64,10 @@ const deletedBoomark = async (postId) => {
                 </div>
                 <div class="card-body position-relative" style="height: 100px;">
                   <ul class="list-unstyled pt-3">
-                    <li><small></small></li>
+                    <li><small>{{ bookmark.post?.paper_type?.name }}</small></li>
                     <li class="pt-2"><h5>{{ bookmark.post.title }}</h5></li>
                     <li><small>Published by {{ bookmark.user.username }}</small></li>
+                    
                   </ul>
                 </div>
               </div>
@@ -69,7 +86,7 @@ const deletedBoomark = async (postId) => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container-fluid {
   padding: 0;
 }
@@ -123,4 +140,39 @@ const deletedBoomark = async (postId) => {
     }
   }
 }
+
+.card-foote {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    
+    .icon-love {
+      width: 40px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .icon-love-filled {
+      width: 20px;
+      margin-right: 10px;
+      margin-left: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .likes-count {
+      font-size: 18px;
+      color: #333;
+    }
+  }
 </style>

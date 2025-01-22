@@ -1,10 +1,10 @@
 <template>
   <div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
     <div class="cards-container">
-      <div class="folder-card" v-for="category in categoryStore.categories" :key="category.id">
+      <router-link class="folder-card text-decoration-none" v-for="category in categoryStore.categories" :key="category.name" :to="`/member/categorytype/${category.name}`">
         <div class="folder-icon"></div>
         <div class="folder-name">{{ category.name }}</div>
-      </div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -14,13 +14,16 @@
   import { useCategoryStore } from '~/stores/AdminManagement/category';
   import { usePaper } from '~/stores/AdminManagement/papertype';
   import { onMounted } from 'vue';
+  import { usePostStore } from '~/stores/MemberContent/post';
 
   const categoryStore = useCategoryStore();
   const paperStore = usePaper();
+  const postStore = usePostStore();
 
   onMounted(() => {
-    categoryStore.getCategories();
+    postStore.getCategory();
     paperStore.getPaper();
+    categoryStore.getCategories();
   });
 </script>
 

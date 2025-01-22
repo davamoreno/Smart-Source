@@ -73,6 +73,21 @@ export const usefacultyStore = defineStore('faculty', () => {
 
         }
     }
+    async function deleteFaculty(id: number) {
+        try {
+            error.value = null;
+
+            const response = await axios.delete(`${urlStore.url}delete/faculty/${id}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${useCookie('jwt').value}`
+                    },
+                }
+            )
+        } catch (err) {
+
+        }
+    }
 
     return {
         createFaculty,
@@ -84,6 +99,7 @@ export const usefacultyStore = defineStore('faculty', () => {
         currentPage,
         visiblePages,
         changePage,
-        totalPages
+        totalPages,
+        deleteFaculty
     }
 });

@@ -6,6 +6,7 @@
 
     async function handleCreateUniversity(){
        await universityStore.createUniversity();
+       await universityStore.getUniversity();
         if (!universityStore.isLoading) {
             const modal = document.getElementById('universityModal');
             const bootstrapModal = $bootstrap.Modal.getInstance(modal);
@@ -111,26 +112,26 @@ function changePage(page) {
 
   <div class="modal fade" id="deleteModalUniv" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <span class="d-flex">
-                    <img src="/public/images/trash.svg" alt="">
-                    <p style="color: #FF5E5E;" class="ps-2 pt-3 fs-4 fw-medium">Delete University</p>
-                </span>
-                <div class=" justify-content-center text-center">
-                    <H4 class="mt-4 mb-1 fw-light">Confirm to delete </H4>
-                    <h2  class=" mb-5 fw-light">{{ selectedUniv?.name }} ?</h2>
-                </div>
-                <div class="row py-3">
-                    <div class="col">
-                        <button type="button" class="btn btn-danger btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal">No</button>
-                    </div>
-                    <div class="col">
-                        <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteUniversity(selectedUniv.id)">Yes</button> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+         <div class="modal-content">
+             <div class="modal-body">
+                 <span class="d-flex">
+                     <img src="/public/images/trash.svg" alt="">
+                     <p style="color: #FF5E5E;" class="ps-2 pt-3 fs-4 fw-medium">Delete University</p>
+                 </span>
+                 <div class=" justify-content-center text-center">
+                     <H4 class="mt-4 mb-1 fw-light">Confirm to delete </H4>
+                     <h2  class=" mb-5 fw-light">{{ selectedUniv?.name }} ?</h2>
+                 </div>
+                 <div class="row py-3">
+                     <div class="col">
+                         <button type="button" class="btn btn-danger btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal">No</button>
+                     </div>
+                     <div class="col">
+                         <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteUniversity(selectedUniv.id) ">Yes</button> 
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
   </div>
 </template>

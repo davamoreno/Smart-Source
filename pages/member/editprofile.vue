@@ -125,7 +125,111 @@ function hideErrorMessage() {
       :class="`alert alert-${notificationType} position-fixed top-0 start-50 translate-middle-x mt-3`"
       style="z-index: 1050; width: 80%; max-width: 400px; text-align: center;"
     >
-      {{ notificationMessage }}
+     {{ notificationMessage }}
+    </div>
+  </div>
+  <div style="height: 540px;">
+    <div class="container border border-black border-opacity-25 rounded-5">
+      <div class="row justify-content-around">
+        <div class="col-3 border border-black border-opacity-75 rounded-4">
+          <div class="row  mt-2 justify-content-center">
+            <img
+              class="mt-3"
+              :src="
+                imageSrc ||
+                (member.userProfile?.user_profile?.file_path
+                  ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path
+                  : '/images/defaultprofile.svg')"
+              alt="Profile Image"
+              style=" width: 120px; height: auto; border-radius: 50%;  
+                object-fit: cover; 
+                box-sizing: border-box;"
+            />
+          </div>
+          <div class="row text-center mt-2">
+            <h6 class="mt-2">{{ member.userProfile.username }}</h6>
+          </div>
+          <div class="row text-center">
+            <small>{{ member.userProfile?.faculty?.university?.name || '-' }}</small>
+            <small>{{ member.userProfile?.faculty?.name || '-' }}</small>
+          </div>
+          <div class="row px-5 mx-3 mb-2 mt-4 d-flex justify-content-between align-items-center">
+              <!-- Tombol Choose File -->
+              <div class="custom-file-upload text-center">
+                <label for="fileInput" class="btn btn-dark">
+                  Choose File
+                </label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  @change="handleFileUpload"
+                  style="display: none"
+                />
+              </div>
+          </div>
+          <div class="row px-5 mb-3">
+              <button type="submit" @click="handleImageSave" class="btn btn-dark">
+                Save Image
+              </button>
+          </div>
+        </div>
+        <div class="col-5 border border-black border-opacity-75 rounded-4">
+          <form class="px-5 py-4" @submit.prevent="">
+            <div class="form-group row">
+              <label for="username" class="col-sm-3 col-form-label">Username</label>
+              <div class="col-sm-9">
+                <input
+                  type="text"
+                  class="form-control"
+                  @input="hideErrorMessage"
+                  id="username"
+                  name="username"
+                  v-model="member.username"
+                />
+                <span v-if="usernameError" class="text-danger">Username tidak boleh kosong!</span>
+              </div>
+            </div>
+            <div class="form-group row pt-5">
+              <label for="selectUniversity" class="col-sm-3 col-form-label">University</label>
+              <div class="col-sm-9">
+                <select
+                  id="selectUniversity"
+                  class="form-select"
+                  v-model="member.selectedUniversity"
+                >
+                  <option value="" disabled>Select University</option>
+                  <option
+                    v-for="uni in universityStore.universities"
+                    :key="uni.id"
+                    :value="uni.id"
+                  >
+                    {{ uni.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row pt-5">
+              <label for="facultyName" class="col-sm-3 col-form-label">Faculty</label>
+              <div class="col-sm-9">
+                <select
+                  id="facultyName"
+                  class="form-select"
+                  v-model="member.selectedFaculty"
+                  :disabled="!filteredFaculties.length"
+                >
+                  <option value="" disabled>Select Faculty</option>
+                  <option
+                    v-for="fac in filteredFaculties"
+                    :key="fac.id"
+                    :value="fac.id"
+                  >
+                    {{ fac.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </form>
+        </div>
     </div>
 
     <!-- Konten Utama -->
@@ -242,6 +346,7 @@ function hideErrorMessage() {
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <style lang="scss" scoped>

@@ -191,7 +191,7 @@ function hideErrorMessage() {
             </div>
           </form>
         </div>
-      </div>
+    </div>
 
       <div class="row justify-content-evenly ">
         <div class="col-5"></div>

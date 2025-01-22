@@ -150,7 +150,7 @@ const createdHistory = async (slug) => {
                                             @click.prevent="deletedBoomark(post.id)" v-else>
                         <img src="/public/images/bookmark-fill.svg" alt="Bookmark" class="icon-bookmark" />
                       </a>
-                      <img src="/public/images/File_light.svg" alt="Document" class="document-img my-4" />
+                      <img src="/public/images/dokumen1.svg" alt="Document" class="document-img my-4" />
                     </div>
                     <div class="container-fluid">
                         <p class="document-category">{{ post.category.name }}</p>

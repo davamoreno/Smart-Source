@@ -8,7 +8,7 @@ import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
 const postStore = usePostStore();
 const route = useRoute();
 const router = useRouter();
-const name = route.params.paperTypeName;
+const name = route.params.categoryTypeName
 const memberAuthStore = useMemberAuthStore();
 const bookmarkStore = useBookmarkStore(); 
 const guestModal = ref(false);
@@ -23,7 +23,7 @@ const closeModal = () => {
 };
 
 onMounted(() => {
-  postStore.getPaper(name);
+  postStore.getCategory(name);
   memberAuthStore.getUserProfile();
   postStore.showPostDetail();
   postStore.getPost();
@@ -32,7 +32,7 @@ onMounted(() => {
 });
 const createdLike = async (slug) => {
     await postStore.createLike(slug);
-    const post = postStore.papers.find(post => post.slug === slug);
+    const post = postStore.categories.find(post => post.slug === slug);
     if (post) {
         post.like = true; // Update bookmark status
         post.likes_count = post.likes_count + 1
@@ -42,7 +42,7 @@ const createdLike = async (slug) => {
 
 const deletedLike = async (slug) => {
     await postStore.deleteLike(slug);
-    const post = postStore.papers.find(post => post.slug === slug);
+    const post = postStore.categories.find(post => post.slug === slug);
     if (post) {
         post.like = false; // Update bookmark status
         post.likes_count = post.likes_count - 1;
@@ -52,7 +52,7 @@ const deletedLike = async (slug) => {
 
 const createdBoomark = async (postId) => {
     await bookmarkStore.create(postId);
-    const post = postStore.papers.find((post) => post.id === postId);
+    const post = postStore.categories.find((post) => post.id === postId);
     if (post) {
         post.bookmark = true; // Update bookmark status
     }
@@ -60,7 +60,7 @@ const createdBoomark = async (postId) => {
 
 const deletedBoomark = async (postId) => {
     await bookmarkStore.delete(postId);
-    const post = postStore.papers.find((post) => post.id === postId);
+    const post = postStore.categories.find((post) => post.id === postId);
     if (post) {
         post.bookmark = false; // Update bookmark status
     }
@@ -75,18 +75,16 @@ const deletedBoomark = async (postId) => {
         
       </div>
       
-        <div class="d-flex row row-cols-5 gap-5 pt-5 pb-5" v-if="postStore.papers.length">
-
-
-          <router-link :to="`/member/detailpost/${paper.slug}`" class="text-decoration-none text-black" v-for="paper in postStore.papers" :key="paper.name" v-if="memberAuthStore.userProfile?.role ==='member'">
+        <div class="d-flex row row-cols-5 gap-5 pt-5 pb-5" v-if="postStore.categories.length" >
+          <router-link :to="`/member/detailpost/${category.slug}`" class="text-decoration-none text-black" v-for="category in postStore.categories" :key="category.name" v-if="memberAuthStore.userProfile?.role ==='member'">
           <div class="card col "  style="width: 250px; height: 400px;" >
            
                 <div class="col position-relative pb-4 pt-2" >
                   <span class="position-absolute end-0 border-0 pe-3">
-                    <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;" @click.prevent="createdBoomark(paper?.id)" v-if="!paper.bookmark">
+                    <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;" @click.prevent="createdBoomark(category?.id)" v-if="!category.bookmark">
                       <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                     </button>
-                    <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;" @click.prevent="deletedBoomark(paper?.id)" v-else>
+                    <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;" @click.prevent="deletedBoomark(category?.id)" v-else>
                       <img src="/public/images/Bookmark2.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                     </button>
                   </span>
@@ -96,17 +94,17 @@ const deletedBoomark = async (postId) => {
                 </div>
                 <div class="card-body position-relative">
                     <ul class="list-unstyled pt-3">
-                        <li><small>{{ paper.papertype.name }}</small></li>  
-                        <li class="pt-2"><h5>{{ paper.title }}</h5></li>
-                        <li><small>Published by {{ paper.user?.username }}</small></li>  
+                        <li><small>{{ category.category.name}}</small></li>  
+                        <li class="pt-2"><h5>{{ category.title }}</h5></li>
+                        <li><small>Published by {{ category.user?.username }}</small></li>  
                         <li class="card-foote">
-                          <span class="position-absolute bottom-0 start-0 ps-2 pb-2" v-if="!paper?.like">
-                              <small @click.prevent="createdLike(paper.slug)"><img src="/public/images/heart.svg" alt="" class="icon-love"></small>
-                              <small class="pt-1">{{ paper.likes_count }} Likes</small>
+                          <span class="position-absolute bottom-0 start-0 ps-2 pb-2" v-if="!category?.like">
+                              <small @click.prevent="createdLike(category.slug)"><img src="/public/images/heart.svg" alt="" class="icon-love"></small>
+                              <small class="pt-1">{{ category.likes_count }} Likes</small>
                           </span>
                           <span class="position-absolute bottom-0 start-0 ps-2 pb-2" v-else>
-                              <small @click.prevent="deletedLike(paper.slug)"><img src="/public/images/heart-fill.svg" class="icon-love-filled ms-2"></small>
-                              <small class="pt-1">{{ paper.likes_count }} Likes</small>
+                              <small @click.prevent="deletedLike(category.slug)"><img src="/public/images/heart-fill.svg" class="icon-love-filled ms-2"></small>
+                              <small class="pt-1">{{ category.likes_count }} Likes</small>
                           </span>
                         </li>
                     </ul>
@@ -116,7 +114,7 @@ const deletedBoomark = async (postId) => {
           </div>
         </router-link>
 
-        <router-link v-for="papers in postStore.papers" :key="papers.name" style="width: 250px; height: 400px;" v-else class="text-decoration-none text-dark">
+        <router-link v-for="categories in postStore.categories" :key="categories.name" style="width: 250px; height: 400px;" v-else class="text-decoration-none text-dark">
           
           <div class="card col"  @click="modal" data-bs-toggle="guestModal" data-bs-target="#guestModal" style="outline: transparent;">
                 
@@ -132,13 +130,13 @@ const deletedBoomark = async (postId) => {
                 </div>
                 <div class="card-body position-relative">
                     <ul class="list-unstyled pt-3">
-                        <li><small>{{ papers.papertype.name }}</small></li>  
-                        <li class="pt-2"><h5>{{ papers.title }}</h5></li>
-                        <li><small>Published by {{ papers.user?.username }}</small></li>  
+                        <li><small>{{ categories.category?.name }}</small></li>  
+                        <li class="pt-2"><h5>{{ categories.title }}</h5></li>
+                        <li><small>Published by {{ categories.user?.username }}</small></li>  
                         <li class="card-foote">
                             <span class="position-absolute bottom-0 start-0 ps-2 pb-2">
                                 <small><img src="/public/images/heart.svg" alt=""></small>
-                                <small class="pt-1">{{ papers.likes_count }} Likes</small>
+                                <small class="pt-1">{{ categories.likes_count }} Likes</small>
                             </span>
                         </li>
                     </ul>
@@ -150,6 +148,7 @@ const deletedBoomark = async (postId) => {
           </div>
         </router-link>
       </div>
+
       <div class="d-flex row pt-5 pb-5 text-center" v-else>
           <h2>No Post Found</h2>
       </div>

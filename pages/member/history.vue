@@ -19,28 +19,28 @@ onMounted(() => {
             <div class="row">
               <div v-for="history in postStore.histories" :key="history.id" class="col-4 pt-3 pb-5">
                 <div>
-                  <router-link :to="`/member/detailpost/${history.posts.slug}`" class="card col text-decoration-none" style="width: 250px; height: 400px;">
-                          <div class="col position-relative pb-4 pt-3 me-3">
-                              <span class="position-absolute end-0 border-0">
+                  <router-link :to="`/member/detailpost/${history.posts.slug}`" class="card col text-decoration-none" style="width: 250px; height: 350px;">
+                          <div class="col position-relative pb-2 pt-3 me-3">
+                              <!-- <span class="position-absolute end-0 border-0">
                               <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
                                   <img src="/public/images/bookmark.svg" alt="" class="pe-1" style="width: 30px; height: 30px;">
                               </button>
-                              </span>
+                              </span> -->
                           </div>
                           <div class="col mx-auto pt-2">
                               <img src="/assets/images/kewun.svg" class="card-img-top" style="width: 108px; height: 142px;" alt="/assets/images/kewun.svg">
                           </div>
                           <div class="card-body position-relative">
-                              <ul class="list-unstyled pt-3">
-                                  <li><small>Paper type</small></li>  
+                              <ul class="list-unstyled pt-4">
+                                  <li><small>{{ history.posts?.papertype?.name }}</small></li>  
                                   <li class="pt-2"><h5>{{ history.posts?.title }}</h5></li>
-                                  <li><small>Published by {{ history.posts?.user_id }}</small></li>  
-                                  <li>
+                                  <li><small>Published by {{ history.posts?.user?.username }}</small></li>  
+                                  <!-- <li>
                                       <span class="position-absolute bottom-0 start-0 ps-2 pb-2">
                                           <small><img src="/public/images/heart.svg" alt=""></small>
                                           <small class="pt-1">{{ history.posts?.likes_count }} Likes</small>
                                       </span>
-                                  </li>
+                                  </li> -->
                               </ul>
                           </div>
                   </router-link>

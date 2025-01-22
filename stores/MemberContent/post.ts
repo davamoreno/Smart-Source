@@ -28,7 +28,8 @@ export const usePostStore = defineStore('postStore', {
       keyword: '',
       histories: <any>[],
       paper_type: '',
-      papers: <any>[]
+      papers: <any>[],
+      categories: <any>[]
     };
   },
 
@@ -270,6 +271,20 @@ export const usePostStore = defineStore('postStore', {
           }
         });
         this.papers = response.data;
+        console.log('paper', response.data)
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },
+
+    async getCategory(categoryTypeName: any) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}user/post/category/${categoryTypeName}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.categories = response.data;
         console.log('paper', response.data)
       } catch (error) {
         console.error('Failed to fetch posts:', error);

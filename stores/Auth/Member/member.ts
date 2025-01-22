@@ -14,7 +14,7 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const isLoading = ref(false);
   const error = ref(null);
   const token = ref(null);
-  const isLogin = ref(false);
+  const isLogin = ref();
   const userProfile = ref({});
   const success = ref(false);
   const role = ref(null);
@@ -65,6 +65,7 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
 
 async function login() {
   try{
+    isLogin.value = false;
     isLoading.value = true;
     error.value = null;
 
@@ -105,12 +106,12 @@ async function login() {
 
 async function getUserProfile(){
   try{
+    isLogin.value = true;
     const response = await axios.get(`${urlStore.url}user/profile`, {
       headers : { 
         'Authorization' : `Bearer ${useCookie('jwt').value}`
       }
     })
-    console.log('image', response.data.user_profile)
     userProfile.value = response.data;
   }
   catch(err){
@@ -120,6 +121,7 @@ async function getUserProfile(){
 
 async function logout() {
   try{
+    isLogin.value = false;
     const response = await axios.post(`${urlStore.url}member/logout`, {},
     {
       headers : {
@@ -130,9 +132,9 @@ async function logout() {
   const cookieToken = useCookie('jwt');
   cookieToken.value = null;
   token.value = null;
-  isLogin.value = false;
+  setLoginStatus(false);
   userProfile.value = {};
-
+  isLogin.value = false;
   console.log('logout success');
   }catch(err){
     console.log('err', err);

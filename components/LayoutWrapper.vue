@@ -7,6 +7,7 @@ const { $bootstrap } = useNuxtApp();
 
 const memberAuthStore = useMemberAuthStore();
 const router = useRouter();
+const isLogin = ref(false);
 
 const isNavOpen = ref(false);
 
@@ -57,17 +58,13 @@ async function handleLogin() {
 
 
 onMounted(() => {
-  const cookieToken = useCookie('jwt');
-  if (cookieToken.value && !memberAuthStore.isLogin) {
-    console.log('Token ditemukan:', cookieToken.value);
-    memberAuthStore.isLogin = true;
+  const cookieToken = useCookie('jwt').value;
+  if (cookieToken) {
+    memberAuthStore.isLogin = ref(true);
     memberAuthStore.getUserProfile();
-  } else if (!cookieToken.value) {
+  } else if (!cookieToken) {
     console.log('Token tidak ditemukan, user belum login');
   }
-  setTimeout(() => {
-    memberAuthStore.isLoading = false;
-  }, 500);
 });
 
 
@@ -105,17 +102,20 @@ onMounted(() => {
             <NuxtLink to="/member/about-us" class="nav-link">About Us</NuxtLink>
           </li>
         </ul>
+        <div v-if="memberAuthStore.isLogin === true">
+          <div class="navbar-container container-fluid"></div>
+        </div>
         <div
           class="d-flex navbar-btn"
           style="margin-left: 100px;"
-          v-if="!isLoading && !memberAuthStore.isLogin ">
+          v-if="!memberAuthStore.isLogin">
           <a
-            class="btn me-auto btn-primary"
+            class="btn me-auto btn-dark"
             data-bs-toggle="modal"
             data-bs-target="#loginAccountModal">Sign In
           </a>
           <a
-            class="btn ms-4 btn-outline-primary"
+            class="btn ms-4 btn-outline-dark"
             style="margin-right: 100px;"
             data-bs-toggle="modal"
             data-bs-target="#createAccountModal">Sign Up</a>
@@ -123,9 +123,6 @@ onMounted(() => {
       </div>
     </div>
   </nav>
-    <div v-if="!isLoading && memberAuthStore.isLogin">
-          <div class="navbar-container container-fluid"></div>
-     </div>
     <div class="modal fade" id="loginAccountModal" tabindex="-1" aria-labelledby="loginAccountModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -162,7 +159,7 @@ onMounted(() => {
               </form>
             </div>
             <div class="d-flex justify-content-center">
-              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign Up </span></a></p>
+              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign Up</span></a></p>
             </div>
           </div>
         </div>

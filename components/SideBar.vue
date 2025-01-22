@@ -13,6 +13,7 @@ onMounted(async () => {
 });
 
 function logoutHandler() {
+    member.isLogin = ref(false);
     member.logout().then(() => {
         return navigateTo('/');
     });

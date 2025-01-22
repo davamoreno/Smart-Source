@@ -284,7 +284,7 @@ onMounted(() => {
             </div>
         </div>
         <div class="d-flex justify-content-center mt-5">
-         <button class="btn btn-primary see-more-btn"><h6>See more</h6></button>
+         <button class="btn btn-dark see-more-btn"><h6>See more</h6></button>
         </div>
     </div>
 </template>
@@ -364,7 +364,7 @@ onMounted(() => {
 .why-us {
     background-color: #1E1E1E;
     width: 100%;
-    height: 480px;
+    height: 500px;
     margin-bottom: 20px;
 
     h1{
@@ -539,6 +539,7 @@ onMounted(() => {
   margin: 20px 10px 20px 30px;
 
   a {
+    color: #000000;
     text-decoration: none;
   }
 

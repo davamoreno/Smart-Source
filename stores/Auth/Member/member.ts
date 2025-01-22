@@ -65,7 +65,6 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
 
 async function login() {
   try{
-    isLogin.value = false;
     isLoading.value = true;
     error.value = null;
 
@@ -86,6 +85,7 @@ async function login() {
 
     token.value = response.data.access_token;
     role.value = response.data.role;
+    isLogin.value = ref(true);
     setLoginStatus(true);   
     const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
     cookieToken.value = token.value;
@@ -140,6 +140,7 @@ async function logout() {
     console.log('err', err);
   }
 }
+
 async function updateProfile() {
   try {
     isLoading.value = true;

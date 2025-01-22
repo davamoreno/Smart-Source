@@ -90,7 +90,7 @@ const nextSlide = () => {
         <div class="row">
             <div class="col-6 ms-5"><h5 class="pink-header">Latest Documents</h5></div>
             <div class="col-md-2 ms-auto">
-              <a href="#" class="view-more">View More</a>
+              <a href="#" class="view-more text-decoration-none">View More</a>
             </div>
         </div>
 
@@ -174,17 +174,10 @@ const nextSlide = () => {
         <div class="row">
             <div class="col-6 ms-5"><h5 class="pink-header">Most Liked Documents</h5></div>
             <div class="col-md-2 ms-auto">
-              <a href="#" class="view-more">View More</a>
+              <a href="#" class="view-more text-decoration-none">View More</a>
             </div>
         </div>
         <section class="mt-5 px-5 pb-5">
-          
-          <!-- <div class="row">
-            <div class="col-10"><h5 class="pink-header">Most Liked Documents</h5></div>
-            <div class="col-md-2 ms-auto">
-              <a href="#" class="view-more">View More</a>
-            </div>
-          </div> -->
           <div class="row g-5">
             <DocumentCard
               v-for="(doc, index) in likedDocuments"

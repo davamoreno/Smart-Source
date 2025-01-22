@@ -43,6 +43,7 @@ async function handleRegister() {
 async function handleLogin() { 
   try {
     await memberAuthStore.login();
+    memberAuthStore.isLogin = ref(true);
     if (memberAuthStore.isLogin) {
       const modal = document.getElementById('loginAccountModal');
       const bootstrapModal = $bootstrap.Modal.getInstance(modal);
@@ -66,7 +67,6 @@ onMounted(() => {
     console.log('Token tidak ditemukan, user belum login');
   }
 });
-
 
 </script>
 

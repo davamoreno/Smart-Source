@@ -128,13 +128,13 @@ onMounted(() => {
                     It's time to turn your hard-earned knowledge into a lasting digital legacy!
                 </p>
             </div>
-            <div class="hero-btn" v-if="memberAuth.userProfile.role === 'member'">
+            <div class="hero-btn" v-if="memberAuth.userProfile?.role === 'member'">
               <UIRoundedButton>
                   <NuxtLink to="/member/home"><h6>Start Archive Now !</h6></NuxtLink>
               </UIRoundedButton>
             </div>
             <div v-if="adminAuth.adminProfile.role === 'super_admin' || adminAuth.adminProfile.role === 'admin'">
-
+              
             </div>
             <div class="hero-btn" v-if="!memberAuth.isLogin && !adminAuth.isLogin">
                 <UIRoundedButton data-bs-toggle="modal" data-bs-target="#loginAccountModal">

@@ -15,7 +15,7 @@ onMounted(async () => {
 function logoutHandler() {
     member.isLogin = ref(false);
     member.logout().then(() => {
-        return navigateTo('/');
+        return router.push('/');
     });
 }
 
@@ -30,7 +30,7 @@ function logoutHandler() {
                 member.userProfile.faculty.university.name : '-' }}</p>
           <p>{{ member.userProfile?.faculty?.name ?
                 member.userProfile.faculty.name : '-' }}</p>
-          <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
+          <NuxtLink to="/member/editprofile" class="btn btn-dark btn-sm px-4">Edit Profile</NuxtLink>
       </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">

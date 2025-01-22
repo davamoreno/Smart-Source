@@ -16,7 +16,9 @@ const usernameError = ref(false);
 onMounted(async () => {
   await universityStore.getUniversity();
   await facultyStore.getFaculty();
-  member.userProfile;
+  await member.userProfile;
+
+  member.username = member.userProfile?.username || '';
 });
 
 const filteredFaculties = ref([]);
@@ -131,7 +133,7 @@ function hideErrorMessage() {
                 Save Image
               </button>
           </div>
-</div>
+        </div>
         <div class="col-5 border border-black border-opacity-75 rounded-4">
           <form class="px-5 py-4" @submit.prevent="">
             <div class="form-group row">
@@ -144,7 +146,6 @@ function hideErrorMessage() {
                   id="username"
                   name="username"
                   v-model="member.username"
-          
                 />
                 <span v-if="usernameError" class="text-danger">Username tidak boleh kosong!</span>
               </div>

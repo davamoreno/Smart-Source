@@ -14,6 +14,26 @@ const postValidate = (id, status) => {
 onMounted(() => {
   report.getPendingReport();
 });
+
+const formatRelativeDate = (dateStr) => {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds ago`;
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  }
+};
+
 </script>
 
 <template>
@@ -43,14 +63,15 @@ onMounted(() => {
                   >
                     <td class="center-content">{{ index + 1 }}</td>
                     <td class="center-content">{{ reports.title }}</td>
-                    <td class="center-content">{{ reports.created_at }}</td>
+                    <td class="center-content">{{ formatRelativeDate(reports.created_at) }}</td>
                     <td style="justify-items: center;">
                         <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">{{ reports.report_status }}</p>
                     </td>
                     <td class="center-content"> 
-                      <a href="/" class="btn btn-sm btn-primary text-white px-3 text-center"> 
+                      <router-link :to="`/admin/reportreason/${reports.id}`" class="btn btn-sm btn-primary text-white px-3 text-center"> 
                         <i class="fa-solid fa-envelope">
-                        </i> 1 </a> 
+                        </i> {{ reports.reports?.length || 0 }} 
+                      </router-link> 
                     </td> 
                     <td class="center-content">
                       <button
@@ -72,16 +93,6 @@ onMounted(() => {
               </table>
             </div>
           </div>
-  
-          <nav class="mt-4 mb-5">
-            <ul class="pagination justify-content-center">
-              <li class="page-item"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">4</a></li>
-              <li class="page-item"><a class="page-link" href="#">5</a></li>
-            </ul>
-          </nav>
             </div>
         </div>
     </div>

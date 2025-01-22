@@ -57,8 +57,9 @@ async function handleCreatePost() {
   if (isValid) {
     await post.createPost();
     if (!post.error) {
-      resetForm();
-      showModal.value = true;
+        resetForm();
+        showModal.value = true;
+      }
     }
   }
 }
@@ -75,6 +76,7 @@ onMounted(() => {
   category.getCategories();
   paper.getPaper();
 });
+
 </script>
 
 <template>
@@ -169,7 +171,6 @@ onMounted(() => {
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <style scoped>

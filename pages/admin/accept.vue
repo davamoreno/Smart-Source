@@ -3,15 +3,6 @@ definePageMeta({
   layout: 'blank'
 });
 
-import { onMounted } from 'vue';
-import { usePostStore } from '~/stores/MemberContent/post';
-
-const post = usePostStore();
-
-onMounted(() => {
-  post.getPost();
-});
-
 </script>
 
 <template>
@@ -19,7 +10,7 @@ onMounted(() => {
     <AdminSideBar />
     <div class="flex-grow-1 p-4 bg-light adminpost">
       <div class="container-fluid">
-        <h2 class="fw-bold mb-4">Published Post</h2>
+        <h2 class="fw-bold mb-4">Accepted Reports</h2>
         <div class="card shadow-sm">
           <div class="card-body p-0">
             <table class="table table-bordered mb-0">
@@ -33,14 +24,10 @@ onMounted(() => {
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(post, index) in post.posts"
-                  :key="post.id"
-                  v-if="post.posts.length"
-                >
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ post.title }}</td>
-                  <td>{{ post.created_at }}</td>
+                <tr>
+                  <td>A</td>
+                  <td>B</td>
+                  <td>C</td>
                   <td>
                     <p
                       class="rounded-5 bg-primary text-center text-white"
@@ -51,18 +38,14 @@ onMounted(() => {
                   </td>
                   <td>
                     <a
-                      v-if="post.file"
-                      :href="`https://smartsource.nio.my.id/storage/${post.file.file_path}`"
+                     
                       target="_blank"
                       class="btn btn-sm btn-primary text-white"
                     >
                       <i class="fa-solid fa-eye"></i> View File
                     </a>
-                    <span v-else>File not available</span>
+                  
                   </td>
-                </tr>
-                <tr v-else>
-                  <td colspan="6" class="text-center">No posts available</td>
                 </tr>
               </tbody>
             </table>

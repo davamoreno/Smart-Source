@@ -1,59 +1,56 @@
 <script setup>
-    import { useCategoryStore } from '~/stores/AdminManagement/category';
-    import { usePaper } from '~/stores/AdminManagement/papertype';
-    import { useRoute} from 'vue-router';
-    
+import { useCategoryStore } from '~/stores/AdminManagement/category';
+import { usePaper } from '~/stores/AdminManagement/papertype';
+import { useRoute} from 'vue-router';
 
-    const categoryStore = useCategoryStore();
-    const { $bootstrap } = useNuxtApp();
-    const paperStore = usePaper();
-    const route = useRoute(); 
-    const selectedPaper = ref(null);
+const categoryStore = useCategoryStore();
+const { $bootstrap } = useNuxtApp();
+const paperStore = usePaper();
+const route = useRoute(); 
+const selectedPaper = ref(null);
     
 
 const entityType = ref('');
 const selectedEntity = ref(null);
   
-    onMounted(() => {
-        categoryStore.getCategories();
-        paperStore.getPaper();
-    });
+onMounted(() => {
+    categoryStore.getCategories();
+    paperStore.getPaper();
+});
+async function handleCreateCategory(){
+   await categoryStore.createCategory();
+    if (!categoryStore.isLoading) {
+        const modal = document.getElementById('categoryModal');
+        const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+        bootstrapModal.hide();
+          await categoryStore.getCategories();
+          categoryStore.name = '';
+  }
+}
 
-    async function handleCreateCategory(){
-       await categoryStore.createCategory();
-        if (!categoryStore.isLoading) {
-            const modal = document.getElementById('categoryModal');
-            const bootstrapModal = $bootstrap.Modal.getInstance(modal);
-            bootstrapModal.hide();
+async function handleDeleteCategory(id) {
+  await categoryStore.deleteCategory(id);
+  await categoryStore.getCategories();
+  categoryStore.name = '';
+}
 
-            await categoryStore.getCategories();
-            categoryStore.name = '';
-        }
+function changePage(page) {
+    categoryStore.getCategories(page);
+}
+
+async function handleCreatePaper(){
+ await paperStore.createPaper();
+ if (!paperStore.isLoading) {
+        const modal = document.getElementById('paperModal');
+        const bootstrapModal = $bootstrap.Modal.getInstance(modal);
+        bootstrapModal.hide();
+        
+        await paperStore.getPaper();
+        paperStore.name = '';
     }
+} 
 
-    async function handleDeleteCategory(id) {
-      await categoryStore.deleteCategory(id);
-      await categoryStore.getCategories();
-      categoryStore.name = '';
-    }
-
-    function changePage(page) {
-        categoryStore.getCategories(page);
-    }
-
-    async function handleCreatePaper(){
-     await paperStore.createPaper();
-     if (!paperStore.isLoading) {
-            const modal = document.getElementById('paperModal');
-            const bootstrapModal = $bootstrap.Modal.getInstance(modal);
-            bootstrapModal.hide();
-
-            await paperStore.getPaper();
-            paperStore.name = '';
-        }
-    } 
-
-    function setPaperForDeletion(paper) {
+function setPaperForDeletion(paper) {
   selectedPaper.value = paper;
 }
 
@@ -65,11 +62,11 @@ async function handleDeletePaper(id) {
   
 }
 
-    function changePaperPage(page) {
-        paperStore.getPaper(page);
-    }
-  
-    function setEntityForDeletion(entity, type) {
+function changePaperPage(page) {
+    paperStore.getPaper(page);
+}
+
+function setEntityForDeletion(entity, type) {
   selectedEntity.value = entity;
   entityType.value = type;
 }

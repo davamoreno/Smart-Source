@@ -14,6 +14,10 @@ onMounted(() => {
     university.getUniversity();
     faculty.getFaculty();
 });
+
+function changePage(page) {
+    faculty.getFaculty(page);
+}
 </script>
 
 <template>
@@ -45,15 +49,30 @@ onMounted(() => {
           </table>
         </div>
     </div>
-  <nav class="mt-4">
-    <ul class="pagination justify-content-center">
-      <li class="page-item"><a class="page-link" href="#">1</a></li>
-      <li class="page-item"><a class="page-link" href="#">2</a></li>
-      <li class="page-item"><a class="page-link" href="#">3</a></li>
-      <li class="page-item"><a class="page-link" href="#">4</a></li>
-      <li class="page-item"><a class="page-link" href="#">5</a></li>
-    </ul>
-  </nav>    
+    <div class="card-footer">
+      <nav aria-label="Pagination">
+          <ul class="pagination justify-content-center mt-3">
+              <li class="page-item" :class="{ disabled: faculty.currentPage === 1 }">
+                  <button class="page-link" @click="changePage(faculty.currentPage - 1)" :disabled="faculty.currentPage === 1">
+                      &laquo; Previous
+                  </button>
+              </li>
+              <li v-for="page in faculty.visiblePages"
+                  :key="page"
+                  :class="{ 'btn-primary' : faculty.currentPage === page }"
+                  class="page-item">               
+                  <button class="page-link" @click="changePage(page)">
+                      {{ page }}
+                  </button>
+              </li>
+              <li class="page-item" :class="{ disabled: faculty.currentPage === faculty.totalPages }">
+                  <button class="page-link" @click="changePage(faculty.currentPage + 1)" :disabled="faculty.currentPage === faculty.totalPages">
+                      Next &raquo;
+                  </button>
+              </li>
+          </ul>
+      </nav>
+    </div>
 
   <div class="modal fade" id="facultyModal" tabindex="-1" aria-labelledby="facultyModalLabel" aria-hidden="true">
       <div class="modal-dialog">

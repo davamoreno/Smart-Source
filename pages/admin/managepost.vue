@@ -9,18 +9,31 @@ import { postAdminStore } from '~/stores/AdminManagement/post';
 const post = postAdminStore();
 const postValidate = async (id, status) => {
   try {
-    // Ubah status post
     await post.postValidation(id, status);
-    
-    // Ambil data post yang baru setelah status diubah
     await post.getPendingPost();
-
-    
-    
   } catch (err) {
     console.error('Error validating post:', err);
   }
 }
+
+const formatRelativeDate = (dateStr) => {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} seconds ago`;
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  } else {
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  }
+};
 
 onMounted(() => {
   post.getPendingPost();
@@ -55,7 +68,7 @@ onMounted(() => {
                 >
                   <td class="center-content">{{ index + 1 }}</td>
                   <td class="center-content">{{ post.title }}</td>
-                  <td class="center-content">{{ post.created_at }}</td>
+                  <td class="center-content">{{ formatRelativeDate(post.created_at) }}</td>
                   <td class="center-content">
                     <p
                       class="rounded-5 bg-warning text-center text-white"

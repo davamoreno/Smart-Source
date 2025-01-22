@@ -25,6 +25,7 @@ export const usePostStore = defineStore('postStore', {
       userPost: [],
       status: '',
       keyword: '',
+      deniedPost : <any>[]
     };
   },
 
@@ -88,6 +89,24 @@ export const usePostStore = defineStore('postStore', {
         this.page = response.data.current_page;
         this.pageCount = response.data.last_page;
 
+      } catch (err) {
+        this.error = err.response?.data?.message || 'An error occurred while showing post';
+      }
+    },
+    
+    async getDeniedPost() {
+      try {
+        const response = await axios.get(`${this.urlStore.url}user/post/deny`, {
+            params: {
+              page: this.page,
+            },
+            headers: {
+              Authorization: `Bearer ${useCookie('jwt').value}`
+            }
+        });
+
+        this.deniedPost = response.data;
+        console.log('denied', response.data.data)
       } catch (err) {
         this.error = err.response?.data?.message || 'An error occurred while showing post';
       }

@@ -7,7 +7,9 @@ export const postAdminStore = defineStore('postAdmin', {
   state: () => ({
     posts: [],
     reports: [],
-    totalItems: [],
+    totalItems: ref(0),
+    totalReportItems: ref(0),
+    reportReason: [],
     urlStore: useUrlStore(),
   }),
   actions: {
@@ -19,6 +21,7 @@ export const postAdminStore = defineStore('postAdmin', {
           }
         });
         this.posts = response.data.data;
+        this.totalItems = response.data.total;
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       }
@@ -31,7 +34,20 @@ export const postAdminStore = defineStore('postAdmin', {
           }
         });
         this.reports = response.data.post.data;
-        this.totalItems = response.data;
+        this.totalReportItems = response.data.post.total;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    }, 
+    async getReportReason(id : any) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}post/report/${id}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.reportReason = response.data.reports;
+        console.log('report : ', response.data);
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       }

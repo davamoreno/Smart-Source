@@ -83,7 +83,6 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
     try {
       isLoading.value = true;
       error.value = null;
-      setLoginStatus(true);
 
       if (!identifier.value || !password.value) {
         throw new Error('Identifier and password are required');
@@ -99,6 +98,7 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
       token.value = response.data.access_token;
       role.value = response.data.role;
       const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
+      setLoginStatus(true);
       cookieToken.value = token.value;
 
       clearFields();

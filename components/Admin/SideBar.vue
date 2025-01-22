@@ -28,8 +28,14 @@ onMounted(() => {
     <aside class="col-md-3" style="background-color: #152259; width: 250px; height: auto;" >
         <div class="col pt-4" style="justify-content: center; text-align: center; border-bottom: 1px solid white;">
             <img src="/assets/images/AdminProfile.jpg" alt="" style="width: 98px; height: 100px; border-radius: 50%;">
-            <h6 class="pt-2" style="color: white; font-weight: bold; font-family: Kumbh Sans; font-size: 18px;">
-                {{ adminStore.adminProfile.role }}
+            <h6 class="pt-2" style="color: white; font-weight: bold; font-family: Kumbh Sans; font-size: 18px;" v-if="adminStore.adminProfile.role === 'super_admin'">
+                Super Admin
+            </h6>
+            <h6 class="pt-2" style="color: white; font-weight: bold; font-family: Kumbh Sans; font-size: 18px;" v-else-if="adminStore.adminProfile.role === 'admin'">
+                Admin
+            </h6>
+            <h6 class="pt-2" style="color: white; font-weight: bold; font-family: Kumbh Sans; font-size: 18px;" v-else>
+                Not Found
             </h6>
             <p class="text-white fw-light" style="font-family: unset; font-size: 14px">
                 {{ adminStore.adminProfile.username }}
@@ -62,7 +68,7 @@ onMounted(() => {
                             <div id="dataPostMenu" class="accordion-collapse collapse" data-bs-parent="#accordionSidebar">
                                 <div class="accordion-body py-0">
                                     <a href="/admin/publishedpost" class="text-white text-decoration-none d-block py-2">Published</a>
-                                    <a href="#" class="text-white text-decoration-none d-block py-2">Denied</a>
+                                    <a href="/admin/deniedpost" class="text-white text-decoration-none d-block py-2">Denied</a>
                                 </div>
                             </div>
                         </div>

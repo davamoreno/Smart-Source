@@ -9,7 +9,7 @@ import { usePostStore } from '~/stores/MemberContent/post';
 const post = usePostStore();
 
 onMounted(() => {
-  post.getPost();
+  post.getDeniedPost();
 });
 
 </script>
@@ -19,7 +19,7 @@ onMounted(() => {
     <AdminSideBar />
     <div class="flex-grow-1 p-4 bg-light adminpost">
       <div class="container-fluid">
-        <h2 class="fw-bold mb-4">Published Post</h2>
+        <h2 class="fw-bold mb-4">Denied Post</h2>
         <div class="card shadow-sm">
           <div class="card-body p-0">
             <table class="table table-bordered mb-0">
@@ -30,13 +30,14 @@ onMounted(() => {
                   <th class="col table-secondary">Date</th>
                   <th class="col table-secondary">Status</th>
                   <th class="col table-secondary">Details</th>
+                  <th class="col table-secondary" style="width: 180px">Action</th>
                 </tr>
               </thead>
               <tbody>
                 <tr
-                  v-for="(post, index) in post.posts"
+                  v-for="(post, index) in post.deniedPost"
                   :key="post.id"
-                  v-if="post.posts.length"
+                  v-if="post.deniedPost.length"
                 >
                   <td>{{ index + 1 }}</td>
                   <td>{{ post.title }}</td>
@@ -62,7 +63,7 @@ onMounted(() => {
                   </td>
                 </tr>
                 <tr v-else>
-                  <td colspan="6" class="text-center">No posts available</td>
+                  <td colspan="6" class="text-center">No Denied Post available</td>
                 </tr>
               </tbody>
             </table>

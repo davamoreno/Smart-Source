@@ -61,9 +61,11 @@ async function handleLogin() {
 onMounted(() => {
   const cookieToken = useCookie('jwt').value;
   if (cookieToken) {
-    memberAuthStore.isLogin = ref(true);
+    console.log('Token', cookieToken)
     memberAuthStore.getUserProfile();
+    memberAuthStore.isLogin = ref(true);
   } else if (!cookieToken) {
+    router.push('/');
     console.log('Token tidak ditemukan, user belum login');
   }
 });

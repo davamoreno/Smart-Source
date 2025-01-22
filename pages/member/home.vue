@@ -1,7 +1,9 @@
 <script setup>
 import { onMounted, onActivated, onBeforeUnmount } from 'vue';
+import { definePageMeta } from '#build/imports';
 import { usePostStore } from '~/stores/MemberContent/post';
 import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
+import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 
 definePageMeta({
   middleware : 'member-auth',
@@ -12,16 +14,22 @@ const route = useRoute();
 const router = useRouter();
 const bookmarkStore = useBookmarkStore();
 const keyword = ref('');
+const member = useMemberAuthStore();
 
 onMounted(async () => { 
- await postStore.getPost();
-  postStore.posts
-  if (route.query.keyword) {
-    postStore.keyword = route.query.keyword;  
+  if (!member.isLogin) {
+    router.push('/');
+  }
+  else{
     await postStore.getPost();
-  } else {
-    router.push('/member/home');
-  } 
+    postStore.posts
+    if (route.query.keyword) {
+      postStore.keyword = route.query.keyword;  
+      await postStore.getPost();
+    } else {
+      router.push('/member/home');
+    } 
+  }
 });
 
 const onKeywordChange = async () => { 

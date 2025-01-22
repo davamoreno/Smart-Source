@@ -6,10 +6,9 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
   if (!useCookie('jwt').value) {
     memberAuthStore.setLoginStatus(false);
-    return navigateTo('/');
   }
 
-  if (!memberAuthStore.isLogin) {
+  if (memberAuthStore.isLogin) {
     try {
       await memberAuthStore.getUserProfile();
     } catch (error) {

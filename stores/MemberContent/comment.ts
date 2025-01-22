@@ -12,7 +12,7 @@ export const useCommentStore = defineStore('commentPost', {
             isLoading: ref(false),
             comments: ref(<any>[]),
             userImage: ref({}),
-            repliesComment : ref([<any>[]])
+            repliesComment : ref(<any>[])
         }
     },
     actions: {
@@ -32,7 +32,7 @@ export const useCommentStore = defineStore('commentPost', {
                 }
               );
               console.log('Reply Comment Success:', response.data);
-              this.comments.push(response.data.comments);
+              this.comments.push(response.data.comment);
             } catch (error) {
               console.error('Error Replying Comment:', error);
             } finally {
@@ -45,16 +45,32 @@ export const useCommentStore = defineStore('commentPost', {
                     Authorization : `Bearer ${useCookie('jwt').value}`
                 }
             })
-            this.comments = response.data.comments;
-            this.repliesComment =  this.comments.map(comment => comment.replies);
-            this.userImage = this.comments.map(comment => comment.user);
-            console.log('Comments', response.data.comments);
+            this.comments = response.data.mainComments;
+            console.log('Comments', response.data.mainComments);
             console.log('user', this.userImage);
         },
-        async create(id : number){
+        async getReply(slug: any, parentId: number) {
+          try {
+            const response = await axios.get(`${this.urlStore.url}post/comment/${slug}/${parentId}`, {
+              headers: {
+                Authorization: `Bearer ${useCookie('jwt').value}`
+              }
+            });
+
+            const mainComment = response.data?.mainComment;
+            if (mainComment && mainComment.replies) {
+              this.repliesComment = mainComment;
+            } else {
+              console.error('Replies tidak ditemukan di mainComment');
+            }
+          } catch (error) {
+            console.error('Error fetching replies:', error);
+          }
+        },
+        async create(slug : any){
             try {
                 this.isLoading = true;
-                const response = await axios.post(`${this.urlStore.url}post/comment/${id}`, {
+                const response = await axios.post(`${this.urlStore.url}post/comment/${slug}`, {
                     content : this.content
                 },
                 {
@@ -64,7 +80,7 @@ export const useCommentStore = defineStore('commentPost', {
                     }
                 }
             )
-            this.comments.push(response.data.comments);
+            this.comments.push(response.data.comment);
             console.log('comment success', response.data)
             } catch (error) {
                 

@@ -7,14 +7,12 @@ const member = useMemberAuthStore();
 const router = useRouter();
 
 onMounted(async () => {
-  if (!member.userProfile) {
     await member.getUserProfile();
-  }
 });
 
 function logoutHandler() {
-    member.isLogin = ref(false);
     member.logout().then(() => {
+        member.isLogin = ref(false);
         return router.push('/');
     });
 }

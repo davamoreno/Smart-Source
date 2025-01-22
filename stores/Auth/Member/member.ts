@@ -106,12 +106,11 @@ async function login() {
 
 async function getUserProfile(){
   try{
-    isLogin.value = true;
     const response = await axios.get(`${urlStore.url}user/profile`, {
       headers : { 
         'Authorization' : `Bearer ${useCookie('jwt').value}`
       }
-    })
+    });
     userProfile.value = response.data;
   }
   catch(err){
@@ -121,7 +120,6 @@ async function getUserProfile(){
 
 async function logout() {
   try{
-    isLogin.value = false;
     const response = await axios.post(`${urlStore.url}member/logout`, {},
     {
       headers : {

@@ -2,7 +2,6 @@
 import { ref, onMounted, computed} from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/MemberContent/post';
-import axios from 'axios';
 import { useCommentStore } from '~/stores/MemberContent/comment';
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
@@ -79,6 +78,18 @@ onMounted(async () => {
     await comment.get(slug);
 });
 
+const commentHandle = async (slug) => {
+    if (comment.content.trim() === '') {
+      commentErrorMessage.value = true;
+    } else {
+      commentErrorMessage.value = false;
+      comment.content = '';  
+    }
+    await comment.create(slug);
+    await comment.get(slug);
+    comment.content = ref('')
+}
+
 onActivated(async () => {
     post.showPostDetail()
     post.like;
@@ -102,11 +113,6 @@ const deletedLike = (postId) => {
     post.deleteLike(postId);
 };
 
-const commentHandle = async(postId) => {
-    await comment.create(postId);
-    await comment.get(postId);
-    comment.content = ref('')
-}
 const downloadFile = (file, filename) => {
     post.download(file, filename);
 };
@@ -173,15 +179,19 @@ const deletedBoomark = async (postId) => {
         <div class="row mt-5" style="padding-left: 90px; padding-right: 90px;">
             <p class="fs-4 pb-4">Comments</p>
             <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;   ">
-            <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1115px; background-color: transparent;"
+            <input type="text" class="form-control border border-dark" id="comment" name="comment" style="height: 48px; width: 1115px; background-color: transparent;"
             v-model="comment.content"
+            @input="hideCommentErrorMessage"
+            :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
+            :class="{ 'error-placeholder': commentErrorMessage }"
             @keyup.enter="commentHandle(post.postDetail?.slug)">
         </div>
 
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
             <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;"
                     @click="commentHandle(post.postDetail?.slug)"
-                    @keyup.enter="commentHandle(post.postDetail?.slug)">
+                    @keyup.enter="commentHandle(post.postDetail?.slug)"
+                    >
                     Submit
             </button>
         </div>
@@ -205,23 +215,13 @@ const deletedBoomark = async (postId) => {
             </div>
         <div class="row" style="">
             <span>
-                <button class="btn btn-link form-control border border-dark" 
+                <button class="btn btn-link form-control" 
                         style="width: 55px; height: 55px;"
                         @click="goToParentComment(post.postDetail?.slug, commentars.id)"
-                        @input="hideCommentErrorMessage"
-                        type="text" 
-                        :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
-                        :class="{ 'error-placeholder': commentErrorMessage }"
                     >
                     <img src="/public/images/comment_light.svg" alt="" style="width: 40px; height: 40px;">
                 </button>  
                 <small class="fw-medium">20 Comments</small>
-                <button class="btn btn-link ms-3" style="width: 48px; height: 48px;">
-                        <img src="/public/images/Thumbs up.svg" alt="" style="width: 30px; height: 30px; padding-bottom: 3px;">
-                </button>
-                <small class="fw-medium">Like</small>
-                
-                <small class="fw-medium">Reply</small>
             </span>
         </div>
         </div>

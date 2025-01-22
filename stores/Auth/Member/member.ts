@@ -14,7 +14,7 @@ export const useMemberAuthStore = defineStore('memberAuth', () => {
   const isLoading = ref(false);
   const error = ref(null);
   const token = ref(null);
-  const isLogin = ref(false);
+  const isLogin = ref();
   const userProfile = ref({});
   const success = ref(false);
   const role = ref(null);
@@ -85,6 +85,7 @@ async function login() {
 
     token.value = response.data.access_token;
     role.value = response.data.role;
+    isLogin.value = ref(true);
     setLoginStatus(true);   
     const cookieToken = useCookie('jwt', { maxAge: 60 * 60 * 24 });
     cookieToken.value = token.value;
@@ -109,8 +110,7 @@ async function getUserProfile(){
       headers : { 
         'Authorization' : `Bearer ${useCookie('jwt').value}`
       }
-    })
-    console.log('image', response.data.user_profile)
+    });
     userProfile.value = response.data;
   }
   catch(err){
@@ -130,14 +130,15 @@ async function logout() {
   const cookieToken = useCookie('jwt');
   cookieToken.value = null;
   token.value = null;
-  isLogin.value = false;
+  setLoginStatus(false);
   userProfile.value = {};
-
+  isLogin.value = false;
   console.log('logout success');
   }catch(err){
     console.log('err', err);
   }
 }
+
 async function updateProfile() {
   try {
     isLoading.value = true;

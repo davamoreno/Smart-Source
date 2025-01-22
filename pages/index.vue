@@ -128,13 +128,13 @@ onMounted(() => {
                     It's time to turn your hard-earned knowledge into a lasting digital legacy!
                 </p>
             </div>
-            <div class="hero-btn" v-if="memberAuth.userProfile.role === 'member'">
+            <div class="hero-btn" v-if="memberAuth.userProfile?.role === 'member'">
               <UIRoundedButton>
                   <NuxtLink to="/member/home"><h6>Start Archive Now !</h6></NuxtLink>
               </UIRoundedButton>
             </div>
             <div v-if="adminAuth.adminProfile.role === 'super_admin' || adminAuth.adminProfile.role === 'admin'">
-
+              
             </div>
             <div class="hero-btn" v-if="!memberAuth.isLogin && !adminAuth.isLogin">
                 <UIRoundedButton data-bs-toggle="modal" data-bs-target="#loginAccountModal">
@@ -284,7 +284,7 @@ onMounted(() => {
             </div>
         </div>
         <div class="d-flex justify-content-center mt-5">
-         <button class="btn btn-primary see-more-btn"><h6>See more</h6></button>
+         <button class="btn btn-dark see-more-btn"><h6>See more</h6></button>
         </div>
     </div>
 </template>
@@ -364,7 +364,7 @@ onMounted(() => {
 .why-us {
     background-color: #1E1E1E;
     width: 100%;
-    height: 480px;
+    height: 500px;
     margin-bottom: 20px;
 
     h1{
@@ -539,6 +539,7 @@ onMounted(() => {
   margin: 20px 10px 20px 30px;
 
   a {
+    color: #000000;
     text-decoration: none;
   }
 

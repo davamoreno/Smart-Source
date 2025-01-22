@@ -53,10 +53,10 @@ onMounted(() => {
                   :key="post.id"
                   v-if="post.posts.length"
                 >
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ post.title }}</td>
-                  <td>{{ post.created_at }}</td>
-                  <td>
+                  <td class="center-content">{{ index + 1 }}</td>
+                  <td class="center-content">{{ post.title }}</td>
+                  <td class="center-content">{{ post.created_at }}</td>
+                  <td class="center-content">
                     <p
                       class="rounded-5 bg-warning text-center text-white"
                       style="height: 100%; width: 100px; margin-top: 10px;"
@@ -64,7 +64,7 @@ onMounted(() => {
                       {{ post.status }}
                     </p>
                   </td>
-                  <td>
+                  <td class="center-content">
                     <a
                       v-if="post.file"
                       :href="`https://smartsource.nio.my.id/storage/${post.file.file_path}`"
@@ -75,7 +75,7 @@ onMounted(() => {
                     </a>
                     <span v-else>File not available</span>
                   </td>
-                  <td>
+                  <td class="center-content">
                     <button
                       class="btn btn-sm text-white g-3 ms-2"
                       style="background-color: #1D4ED8;"
@@ -112,5 +112,10 @@ onMounted(() => {
       height: 800px;
     }
   }
+
+  .center-content { 
+  text-align: center; 
+  vertical-align: middle; 
+  } 
 
 </style>

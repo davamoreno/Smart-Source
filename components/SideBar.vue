@@ -7,14 +7,13 @@ const member = useMemberAuthStore();
 const router = useRouter();
 
 onMounted(async () => {
-  if (!member.userProfile) {
     await member.getUserProfile();
-  }
 });
 
 function logoutHandler() {
     member.logout().then(() => {
-        return navigateTo('/');
+        member.isLogin = ref(false);
+        return router.push('/');
     });
 }
 
@@ -29,7 +28,7 @@ function logoutHandler() {
                 member.userProfile.faculty.university.name : '-' }}</p>
           <p>{{ member.userProfile?.faculty?.name ?
                 member.userProfile.faculty.name : '-' }}</p>
-          <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
+          <NuxtLink to="/member/editprofile" class="btn btn-dark btn-sm px-4">Edit Profile</NuxtLink>
       </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">

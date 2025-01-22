@@ -32,7 +32,7 @@ const deletedBoomark = async (postId) => {
         <div class="row">
           <router-link 
           v-for="bookmark in bookmarkStore.bookmarks" :key="bookmark.id" class="col-4 pt-3 pb-5 text-decoration-none" :to="`/member/detailpost/${bookmark.post.slug}`"
-          v-if="bookmarkStore.bookmarks.length"
+          v-if="bookmarkStore.bookmarks?.length"
           >
             <div>
               <div class="card col" style="width: 250px; height: 360px;">

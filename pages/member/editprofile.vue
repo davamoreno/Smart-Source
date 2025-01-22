@@ -11,6 +11,7 @@ const member = useMemberAuthStore();
 const facultyStore = usefacultyStore();
 const universityStore = useUniversityStore();
 const profileStore = useProfileStore();
+
 const usernameError = ref(false);
 const showNotification = ref(false);
 const notificationMessage = ref('');
@@ -20,11 +21,12 @@ const router = useRouter();
 onMounted(async () => {
   await universityStore.getUniversity();
   await facultyStore.getFaculty();
-  member.userProfile;
+  await member.userProfile;
+
+  member.username = member.userProfile?.username || '';
 });
 
 const filteredFaculties = ref([]);
-
 watch(
   () => member.selectedUniversity,
   (newUniversityId) => {
@@ -51,6 +53,7 @@ const uploadProfileImage = async () => {
     const response = await profileStore.createImageProfile();
     console.log('Server Response:', response); // Cek response dari server
     if (response.data && response.data.file_path) {
+    
       member.userProfile.user_profile.file_path = response.data?.file_path;
       imageSrc.value =
         'https://smartsource.nio.my.id/storage/' + response.data?.file_path;
@@ -63,6 +66,16 @@ const uploadProfileImage = async () => {
     // Menampilkan notifikasi jika terjadi error
     showAlert('Failed to upload profile image!', 'danger');
   }
+};
+
+const saveProfileData = () => {
+    member.register();
+    console.log('Data profil disimpan');
+};
+
+const handleImageSave = async () => {
+  await uploadProfileImage();  
+  saveProfileData();
 };
 
 const handleSave = async () => {
@@ -211,7 +224,6 @@ function hideErrorMessage() {
             </form>
           </div>
         </div>
-
         <div class="row justify-content-evenly">
           <div class="col-5"></div>
           <div class="col-5 text-end pe-4 pt-4">
@@ -234,6 +246,7 @@ function hideErrorMessage() {
 
 <style lang="scss" scoped>
 .container {
+  
   height: 480px;
   background-color: white;
   margin-top: 60px;

@@ -1,23 +1,35 @@
 <script setup>
-import { computed,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 
 const member = useMemberAuthStore();
 const router = useRouter();
 
+// State
+const isLogin = ref(false);
+
+// On mounted, get user profile
 onMounted(async () => {
-  if (!member.userProfile) {
+  try {
     await member.getUserProfile();
+    isLogin.value = true;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    isLogin.value = false;
   }
 });
 
-function logoutHandler() {
-    member.logout().then(() => {
-        return navigateTo('/');
-    });
-}
-
+// Logout handler
+const logoutHandler = async () => {
+  try {
+    await member.logout();
+    isLogin.value = false;
+    await router.push('/');
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+};
 </script>
 
 <template>  
@@ -29,7 +41,7 @@ function logoutHandler() {
                 member.userProfile.faculty.university.name : '-' }}</p>
           <p>{{ member.userProfile?.faculty?.name ?
                 member.userProfile.faculty.name : '-' }}</p>
-          <NuxtLink to="/member/editprofile" class="btn btn-primary btn-sm px-4">Edit Profile</NuxtLink>
+          <NuxtLink to="/member/editprofile" class="btn btn-dark btn-sm px-4">Edit Profile</NuxtLink>
       </div>
         <hr />
         <nav class="nav flex-column px-5 pt-3">

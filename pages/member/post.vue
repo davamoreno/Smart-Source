@@ -9,11 +9,10 @@ const router = useRouter();
 
 onMounted(async () => { 
   if (route.query.keyword) {
-    postStore.keyword = route.query.keyword;  
+    postStore.keyword = route.query.keyword; 
     await postStore.getPost();
   } else {
-    console.error('Keyword Not Available'); 
-    router.push('/member/home');
+    route.query.keyword = null;
   } 
 });
 
@@ -49,7 +48,6 @@ watch(() => postStore.keyword , async (newKeyword) => {
       </div>
 
       <div class="d-flex row row-cols-4 gap-5 pt-5 pb-5">
-        
         <div class="card col" style="width: 250px; height: 400px;" v-for="(post, index) in postStore.posts" :key="index">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
@@ -74,7 +72,6 @@ watch(() => postStore.keyword , async (newKeyword) => {
                       </li>
                   </ul>
               </div>
-             
         </div>
       </div>
     </div>

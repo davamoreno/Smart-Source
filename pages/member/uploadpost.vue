@@ -48,6 +48,10 @@ async function handleCreatePost() {
     isValid = false;
   } else {
     paperTypeError.value = '';
+    await post.createPost();
+    if (!post.error) {
+    showModal.value = true; // Tampilkan modal
+    resetForm();
   }
 
   if (isValid) {
@@ -165,6 +169,7 @@ onMounted(() => {
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <style scoped>

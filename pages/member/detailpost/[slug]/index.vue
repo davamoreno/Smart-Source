@@ -2,9 +2,9 @@
 import { ref, onMounted, computed} from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/MemberContent/post';
-import axios from 'axios';
 import { useCommentStore } from '~/stores/MemberContent/comment';
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
+import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
 
 const post = usePostStore();
 const route = useRoute();
@@ -16,17 +16,10 @@ const slug = route.params.slug;
 const showSuccessModal = ref(false);
 const commentErrorMessage = ref(false);
 const reportErrorMessage = ref(false);
+const bookmarkStore = useBookmarkStore();
 
-function validateForm() {
-  if (comment.content.trim() === '') {
-    commentErrorMessage.value = true;
-  } else {
-    commentErrorMessage.value = false;
-    comment.content = '';  
-  }
-}
-
-function validateReportForm() {
+async function validateReportForm(PostId) {
+  await reportHandle(PostId);
   if (post.reason.trim() === '') {
     reportErrorMessage.value = true;
     
@@ -36,6 +29,14 @@ function validateReportForm() {
     showModal.value = false;
     showSuccessModal.value = true;
   }
+}
+
+const countReplies = (replies) => {
+  return replies ? replies.length : 0;
+};
+
+const reportHandle = async (postId) => {
+    await post.createReport(postId);
 }
 
 function hideCommentErrorMessage() {
@@ -81,6 +82,18 @@ onMounted(async () => {
     await comment.get(slug);
 });
 
+const commentHandle = async (slug) => {
+    if (comment.mainContent.trim() === '') {
+      comment.mainContent = ref('')
+      commentErrorMessage.value = true;
+    } else {
+      await comment.create(slug);
+      await comment.get(slug);
+      commentErrorMessage.value = false;
+      comment.mainContent = '';  
+    }
+}
+
 onActivated(async () => {
     post.showPostDetail()
     post.like;
@@ -104,15 +117,17 @@ const deletedLike = (postId) => {
     post.deleteLike(postId);
 };
 
-const reportHandle = async (postId) => {
-    await post.createReport(postId);
-}
+const downloadFile = (file, filename) => {
+    post.download(file, filename);
+};
 
-const commentHandle = async(postId) => {
-    await comment.create(postId);
-    await comment.get(postId);
-    comment.content = ref('')
-}
+const createdBoomark = async (postId) => {
+    await bookmarkStore.create(postId);
+};
+
+const deletedBoomark = async (postId) => {
+    await bookmarkStore.delete(postId);
+};
 
 </script>
 
@@ -140,14 +155,17 @@ const commentHandle = async(postId) => {
                 <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedLike(post.postDetail?.slug)" v-if="post.postDetail?.like === true">
                     <img src='/public/images/heart-fill.svg' alt="" style="height: 50px; width: 26px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>   
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="downloadFile(post.postDetail?.file?.file_path, post.postDetail?.file?.file_name)">
                     <img src="/public/images/Download.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
                 <button  style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="showModal = true">
                      <img src="/public/images/report.svg" alt="" style="height: 25px; width: 30px;" class="position-absolute top-50 start-50 translate-middle">
                </button>
-                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle">
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="createdBoomark(post.postDetail?.id)" v-if="post.postDetail?.bookmark === false">
                     <img src="/public/images/bookmark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
+                </button>
+                <button style="height: 50px; width: 50px;" class="position-relative btn btn-light btn-outline-dark me-4 rounded-circle" @click="deletedBoomark(post.postDetail?.id)" v-else>
+                    <img src="/public/images/bookmark_dark.svg" alt="" style="height: 35px; width: 40px;" class="position-absolute top-50 start-50 translate-middle">
                 </button>
                 <button style="height: 50px; width: 240px;" class="position-relative btn btn-dark me-4 rounded-5">
                     <span>
@@ -165,15 +183,19 @@ const commentHandle = async(postId) => {
         <div class="row mt-5" style="padding-left: 90px; padding-right: 90px;">
             <p class="fs-4 pb-4">Comments</p>
             <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;   ">
-            <input type="text" class="form-control border border-dark" id="university" name="university" placeholder="Comment.." style="height: 48px; width: 1115px; background-color: transparent;"
-            v-model="comment.content"
+            <input type="text" class="form-control border border-dark" id="comment" name="comment" style="height: 48px; width: 1115px; background-color: transparent;"
+            v-model="comment.mainContent"
+            @input="hideCommentErrorMessage"
+            :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
+            :class="{ 'error-placeholder': commentErrorMessage }"
             @keyup.enter="commentHandle(post.postDetail?.slug)">
         </div>
 
         <div class="row justify-content-end" style="padding-left: 90px; padding-right: 90px;">
             <button class="btn btn-dark" style="width: 105px; height: 36px; margin-right: 19px;"
                     @click="commentHandle(post.postDetail?.slug)"
-                    @keyup.enter="commentHandle(post.postDetail?.slug)">
+                    @keyup.enter="commentHandle(post.postDetail?.slug)"
+                    >
                     Submit
             </button>
         </div>
@@ -188,32 +210,20 @@ const commentHandle = async(postId) => {
             >
             <div class="col">
                 <span class="d-flex">
-                    <h6 class="me-3"></h6>
-                    <img src="/public/images/dot.svg" alt="" class="pb-1">
-                    <small class="fw-lighter">{{ formatDate(commentars.created_at) }}</small>
-                    <img src="/public/images/dot.svg" alt="" class="pb-1">
+                    <h6 class="me-3">{{  commentars.user?.username }}</h6>
+                      <small class="fw-lighter">{{ formatDate(commentars.created_at) }}</small>
                 </span>
                 <p>{{ commentars.content }}</p>
             </div>
         <div class="row" style="">
             <span>
-                <button class="btn btn-link form-control border border-dark" 
+                <button class="btn btn-link form-control" 
                         style="width: 55px; height: 55px;"
                         @click="goToParentComment(post.postDetail?.slug, commentars.id)"
-                        @input="hideCommentErrorMessage"
-                        type="text" 
-                        :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
-                        :class="{ 'error-placeholder': commentErrorMessage }"
                     >
                     <img src="/public/images/comment_light.svg" alt="" style="width: 40px; height: 40px;">
                 </button>  
-                <small class="fw-medium">20 Comments</small>
-                <button class="btn btn-link ms-3" style="width: 48px; height: 48px;">
-                        <img src="/public/images/Thumbs up.svg" alt="" style="width: 30px; height: 30px; padding-bottom: 3px;">
-                </button>
-                <small class="fw-medium">Like</small>
-                
-                <small class="fw-medium">Reply</small>
+                <small class="fw-medium">{{ countReplies(commentars.replies) }} Comments</small>
             </span>
         </div>
         </div>

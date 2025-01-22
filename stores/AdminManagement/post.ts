@@ -6,8 +6,8 @@ import { useUrlStore } from '../BaseUrl/Url';
 export const postAdminStore = defineStore('postAdmin', {
   state: () => ({
     posts: [],
-    reports : [],
-    totalItems : [],
+    reports: [],
+    totalItems: [],
     urlStore: useUrlStore(),
   }),
   actions: {
@@ -35,18 +35,19 @@ export const postAdminStore = defineStore('postAdmin', {
       } catch (error) {
         console.error('Failed to fetch posts:', error);
       }
-    },updateReportStatus(id : number, report_status : any) {
+    }, updateReportStatus(id: number, report_status: any) {
       const report = this.reports.find(p => p.id === id);
       if (report) {
         report.report_status = report_status;
       }
     },
-    async reportValidation(id : number, report_status : any) {
+    async reportValidation(id: number, report_status: any) {
       try {
         const response = await axios.post(`${this.urlStore.url}post/report/handle/${id}`,
           { report_status },
-          { params : {
-              _method : 'put'
+          {
+            params: {
+              _method: 'put'
             },
             headers: {
               "Content-Type": "application/json",
@@ -59,20 +60,20 @@ export const postAdminStore = defineStore('postAdmin', {
       } catch (error) {
         console.error('Failed to update post status:', error.response?.data || error);
       }
-    },updatePostStatus(id : number, status : any) {
+    }, updatePostStatus(id: number, status: any) {
       const post = this.posts.find(p => p.id === id);
       if (post) {
         post.status = status;
       }
     },
-    async postValidation(id : number, status : any) {
+    async postValidation(id: number, status: any) {
       try {
         const response = await axios.post(
           `${this.urlStore.url}post/validation/${id}`,
           { status },
           {
-            params : {
-              _method : 'put'
+            params: {
+              _method: 'put'
             },
             headers: {
               "Content-Type": "application/json",

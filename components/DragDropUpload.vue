@@ -56,7 +56,7 @@
           hidden
         />
       </div>
-      <p class="file-support-info">Only support .docx, .pdf, and .doc files</p>
+      <p class="file-support-info">Only support .pdf files</p>
     </div>
   </template>
   

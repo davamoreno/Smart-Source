@@ -8,6 +8,7 @@ const postStore = usePostStore();
 
 onMounted(() => {
   bookmarkStore.getBookmarks();
+  postStore.showPostDetail();
 });
 
 const deletedBoomark = async (postId) => {
@@ -20,6 +21,20 @@ const deletedBoomark = async (postId) => {
       if (post) { 
         post.bookmark = false; 
       }
+};
+
+const createdLike = async (slug) => {
+    await postStore.createLike(slug);
+    const post = postStore.posts.find(post => post.slug === slug);
+    post.like = true;
+    post.likes_count = post.likes_count + 1;
+};
+
+const deletedLike = async (slug) => {
+    await postStore.deleteLike(slug);
+    const post = postStore.posts.find(post => post.slug === slug);
+    post.like = false;
+    post.likes_count = post.likes_count - 1;
 };
 </script>
 
@@ -48,6 +63,16 @@ const deletedBoomark = async (postId) => {
                     <li><small></small></li>
                     <li class="pt-2"><h5>{{ bookmark.post.title }}</h5></li>
                     <li><small>Published by {{ bookmark.user.username }}</small></li>
+                    <li class="card-foote">
+                        <span class="position-absolute bottom-0 start-0 ps-2 pb-2" v-if="!postStore.postDetail?.like">
+                            <small @click.prevent="createdLike(bookmark.post.slug)"><img src="/public/images/heart.svg" alt="" class="icon-love"></small>
+                            <small class="pt-1">10 Likes</small>
+                        </span>
+                        <span class="position-absolute bottom-0 start-0 ps-2 pb-2" v-else>
+                            <small @click.prevent="deletedLike(bookmark.post.slug)"><img src="/public/images/heart-fill.svg" class="icon-love-filled ms-2"></small>
+                            <small class="pt-1">10 Likes</small>
+                        </span>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -113,4 +138,39 @@ const deletedBoomark = async (postId) => {
     }
   }
 }
+
+.card-foote {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    
+    .icon-love {
+      width: 40px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .icon-love-filled {
+      width: 20px;
+      margin-right: 10px;
+      margin-left: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    .likes-count {
+      font-size: 18px;
+      color: #333;
+    }
+  }
 </style>

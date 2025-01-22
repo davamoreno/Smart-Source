@@ -69,9 +69,6 @@ export const usePostStore = defineStore('postStore', {
           params: {
             page: this.page,
             keyword: this.keyword,
-          },
-          headers: {
-            Authorization: `Bearer ${useCookie('jwt').value}`
           }
         });
 

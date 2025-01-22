@@ -3,12 +3,39 @@ import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 import { useAdminAuthStore } from '~/stores/Auth/Admin/admin';
 import { onMounted, ref } from 'vue';
 import anime from 'animejs';
+import { usePostStore } from '~/stores/MemberContent/post';
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const memberAuth = useMemberAuthStore();
 const adminAuth = useAdminAuthStore();
+const postStore = usePostStore();
+const router = useRouter();
+const route = useRoute();
+
+onMounted(async () => { 
+ await postStore.getPost();
+  postStore.posts
+  if (route.query.keyword) {
+    postStore.keyword = route.query.keyword;  
+    await postStore.getPost();
+  } else {
+    router.push('/');
+  } 
+});
+
+const onKeywordChange = async () => { 
+  router.push({ 
+    path: '/member/post', 
+    query: { keyword: postStore.keyword } 
+  }); 
+  await postStore.getPost();
+};
+
 
 
 onMounted(() => {
+
   const quickAnimation = () => {
     anime({
       targets: '.quick-icon',
@@ -88,6 +115,8 @@ onMounted(() => {
       turnOnScreen();
       setTimeout(turnOffScreen, 3000);
     }
+
+    
   });
 
   const secureIcon = document.querySelector('.secure-icon');
@@ -104,6 +133,8 @@ onMounted(() => {
     easing: 'easeInOutQuad',
     duration: 500
   });
+
+  
   
 });
 
@@ -206,15 +237,20 @@ onMounted(() => {
     </div>
     <div class="main container mb-5">
         <div class="d-flex justify-content-center">
-            <form class="d-flex align-items-center" role="search">
-                <svg width="30px" height="30px" viewBox="0 0 1024 1024" class="main-icon" version="1.1"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M448 768A320 320 0 1 0 448 128a320 320 0 0 0 0 640z m297.344-76.992l214.592 214.592-54.336 54.336-214.592-214.592a384 384 0 1 1 54.336-54.336z"
-                        fill="#000000" />
-                </svg>
-                <input class="form-control main-search" placeholder="Search For Documents..." aria-label="Search">
-            </form>
+                <span>
+                  <svg width="30px" height="30px" viewBox="0 0 1024 1024" class="main-icon" version="1.1"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path
+                          d="M448 768A320 320 0 1 0 448 128a320 320 0 0 0 0 640z m297.344-76.992l214.592 214.592-54.336 54.336-214.592-214.592a384 384 0 1 1 54.336-54.336z"
+                          fill="#000000" />
+                  </svg>
+                  <input type="text" class="form-control main-search" 
+                  placeholder="Search For Documents..."
+                  aria-label="Search" 
+                  v-model="postStore.keyword" 
+                  @keyup.enter="onKeywordChange"
+                  >
+                </span>
         </div>
         <div class="d-flex mt-3 justify-items-center justify-content-center">
             <h2 class="main-category">

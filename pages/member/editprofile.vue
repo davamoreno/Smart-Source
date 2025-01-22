@@ -188,7 +188,7 @@ function hideErrorMessage() {
             </div>
           </form>
         </div>
-      </div>
+    </div>
 
       <div class="row justify-content-evenly">
         <div class="col-5"></div>
@@ -199,7 +199,7 @@ function hideErrorMessage() {
           </button>
         </div>
       </div>
-    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>

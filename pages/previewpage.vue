@@ -7,7 +7,6 @@ const { $bootstrap } = useNuxtApp();
 
 const memberAuthStore = useMemberAuthStore();
 const router = useRouter();
-const isLogin = ref(false);
 
 const isNavOpen = ref(false);
 
@@ -55,74 +54,57 @@ async function handleLogin() {
     console.error('Login failed:', error);
   }
 }
-
-
-onMounted(() => {
-  const cookieToken = useCookie('jwt').value;
-  if (cookieToken) {
-    memberAuthStore.isLogin = ref(true);
-    memberAuthStore.getUserProfile();
-  } else if (!cookieToken) {
-    console.log('Token tidak ditemukan, user belum login');
-  }
-});
-
-
 </script>
-
 <template>
-  <nav class="navbar navbar-expand-lg">
-    <div class="navbar-container container-fluid">
-      <a class="navbar-brand">
-        <img src="/assets/images/logo.svg" alt="" class="navbar-icon" />
-      </a>
-      <div
-        class="hamburger"
-        :class="{ active: isNavOpen }"
-        @click="toggleNav">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <div
-        class="navbar-list collapse navbar-collapse"
-        :class="{ show: isNavOpen }"
-        id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item me-4">
-            <NuxtLink to="/member/home" class="nav-link" aria-current="page">Home</NuxtLink>
-          </li>
-          <li class="nav-item me-4">
-            <NuxtLink to="/member/categorypage" class="nav-link">Categories</NuxtLink>
-          </li>
-          <li class="nav-item me-4">
-            <NuxtLink to="/member/paperpage" class="nav-link">Papers</NuxtLink>
-          </li>
-          <li class="nav-item me-4">
-            <NuxtLink to="/member/about-us" class="nav-link">About Us</NuxtLink>
-          </li>
-        </ul>
-        <div v-if="memberAuthStore.isLogin === true">
-          <div class="navbar-container container-fluid"></div>
+    <div class="preview-page d-flex justify-content-center align-items-center vh-100">
+      <div class="container p-5 rounded shadow-lg bg-light">
+        <!-- Title -->
+        <h1 class="fw-bold mb-3 text-center">This just a preview</h1>
+        <p class="text-muted fs-5 text-center mb-4">
+          Sign In now and get access to many posts as you want
+        </p>
+  
+        <!-- Features -->
+        <div class="features d-flex justify-content-center gap-4 mb-5">
+          <p class="d-flex align-items-center gap-2">
+            <span class="check-icon"><img src="public/images/centang.svg" alt="" class=""/></span> Read to all Posts
+          </p>
+          <p class="d-flex align-items-center gap-2">
+            <span class="check-icon"><img src="public/images/centang.svg" alt="" class=""/></span> Get unlimited Downloads
+          </p>
+          <p class="d-flex align-items-center gap-2">
+            <span class="check-icon"><img src="public/images/centang.svg" alt="" class=""/></span> Keep your Documents
+          </p>
         </div>
-        <div
-          class="d-flex navbar-btn"
-          style="margin-left: 100px;"
-          v-if="!memberAuthStore.isLogin">
-          <a
-            class="btn me-auto btn-dark"
+  
+        <!-- Illustration and Buttons -->
+        <div class="illustration-and-buttons d-flex justify-content-center align-items-center gap-5">
+          <!-- Illustration -->
+          <div class="illustration-container">
+            <img
+              src="public/images/reader.svg"
+              alt="Reader Illustration"
+              class="illustration-image"
+            />
+          </div>
+  
+          <!-- Buttons Section -->
+          <div class="buttons-container d-flex flex-column align-items-start gap-3">
+            <button class="btn btn-dark w-100"
             data-bs-toggle="modal"
-            data-bs-target="#loginAccountModal">Sign In
-          </a>
-          <a
-            class="btn ms-4 btn-outline-dark"
-            style="margin-right: 100px;"
-            data-bs-toggle="modal"
-            data-bs-target="#createAccountModal">Sign Up</a>
+            data-bs-target="#loginAccountModal">Sign In Now</button>
+            <button class="btn btn-outline-dark w-100">
+              Back to previous page
+            </button>
+            <p class="mt-3">
+              Don’t Have An Account?
+              <a href="3" class="text-primary"  data-bs-toggle="modal"
+              data-bs-target="#createAccountModal">Sign Up</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
-  </nav>
     <div class="modal fade" id="loginAccountModal" tabindex="-1" aria-labelledby="loginAccountModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -159,11 +141,12 @@ onMounted(() => {
               </form>
             </div>
             <div class="d-flex justify-content-center">
-              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign Up</span></a></p>
+              <p>Don't Have An Account?<a  data-bs-toggle="modal" data-bs-target="#createAccountModal"><span style="color: blue;">Sign Up </span></a></p>
             </div>
           </div>
         </div>
     </div>
+
     <div class="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
@@ -216,197 +199,88 @@ onMounted(() => {
           </div>
         </div>
     </div>
-    <main>
-      <slot />
-    </main>
-    <footer class="d-flex justify-content-center bg-dark py-3">
-      <p class="text-white mb-0">&copy; 2023 Smart Source</p>
-    </footer>
   </template>
   
-<style scoped lang="scss">
-  .navbar {
-    background-color: #ffefef;
-    border-bottom: 1px solid black;
+  <script>
+  export default {
+    name: "PreviewPage",
+  };
+  </script>
   
-    &-btn {
-      a:hover {
-        background-color: red;
-      }
-      a:active {
-        background-color: red;
-      }
+  <style scoped lang="scss">
+  .preview-page {
+    background-color: #f5f5f5;
+  
+    .container {
+      max-width: 800px; 
+      max-height: 550px;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 10px;
     }
   
-    &-container {
-      margin-left: 98px;
-  
-      @media (max-width: 768px) {
-        margin-left: 0;
-        padding: 0 16px;
-      }
+    h1 {
+      font-size: 28px;
+      color: #333;
     }
   
-    &-list {
-      ul {
-        li {
-          a {
-            font-family: "Poppins";
-            font-weight: bold;
-            font-size: 14px;
-            text-decoration: none;
-          }
-          a:hover {
-            color: red;
-            cursor: pointer;
-          }
-        }
-      }
+    p {
+      font-size: 16px;
+      color: #666;
+    }
   
-      // Responsiveness for navbar
-      @media (max-width: 768px) {
-        position: absolute;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background-color: #ffefef;
-        z-index: 999;
+    .features {
+      p {
+        font-size: 16px;
+        color: #444;
         display: flex;
-        flex-direction: column;
-        align-items: start;
-        padding: 10px 0;
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
-        transition: transform 0.3s ease, opacity 0.3s ease;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
   
-        &.show {
-          transform: translateY(0);
-          opacity: 1;
-          pointer-events: all;
+        .check-icon {
+          font-size: 18px;
+          color: #27ae60; /* Green color for checkmark */
         }
+      }
+    }
   
-        ul {
-          flex-direction: column;
+    .illustration-and-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      .illustration-container {
+        .illustration-image {
+          width: 250px;
+          height: 250px;
+        }
+      }
+  
+      .buttons-container {
+        min-width: 250px;
+  
+        button {
+          font-size: 16px;
+          border-radius: 8px;
+          padding: 10px;
           width: 100%;
         }
   
-        li {
-          padding: 10px 20px;
+        p {
+          font-size: 14px;
+          margin: 0;
+  
+          a {
+            color: #007bff;
+            text-decoration: none;
+  
+            &:hover {
+              text-decoration: underline;
+            }
+          }
         }
       }
     }
-  
-    // Hamburger menu styles
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 25px;
-      height: 20px;
-      cursor: pointer;
-  
-      div {
-        width: 100%;
-        height: 3px;
-        background-color: black;
-        border-radius: 2px;
-        transition: transform 0.3s ease, opacity 0.3s ease;
-      }
-  
-      &.active {
-        div:nth-child(1) {
-          transform: rotate(45deg) translate(5px, 5px);
-        }
-  
-        div:nth-child(2) {
-          opacity: 0;
-        }
-  
-        div:nth-child(3) {
-          transform: rotate(-45deg) translate(5px, -5px);
-        }
-      }
-  
-      @media (max-width: 768px) {
-        display: flex;
-      }
-    }
   }
-  
-.modal-content {
-  background-color: #d9d9d9;
-  padding: 20px;
-  border-radius: 10px;
-  [v-cloak] {
-    display: none;
-  }
-
-  .modal-header {
-    h1 {
-      font-size: 24px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .btn-close {
-      margin-left: auto;
-    }
-  }
-
-  .modal-body {
-    flex-direction: column;
-    padding: 20px;
-
-    form {
-      width: 100%;
-
-      .d-flex {
-        flex-direction: column;
-        align-items: center;
-      }
-    }
-  }
-
-  p {
-    text-align: center;
-    font-size: 14px;
-
-    a {
-      color: blue;
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    padding: 15px;
-
-    .modal-header h1 {
-      font-size: 20px;
-    }
-
-    .modal-body {
-      padding: 10px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    padding: 10px;
-
-    .modal-header h1 {
-      font-size: 18px;
-    }
-
-    .modal-body {
-      padding: 5px;
-    }
-
-    p {
-      font-size: 12px;
-    }
-  }
-}
-
-  </style>
+  </style>  

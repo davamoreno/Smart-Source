@@ -24,7 +24,7 @@ export const usePostStore = defineStore('postStore', {
       report: '',
       userPost: [],
       status: '',
-      keyword: ''
+      keyword: '',
     };
   },
 

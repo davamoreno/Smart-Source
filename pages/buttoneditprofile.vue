@@ -1,39 +1,34 @@
 <template>
   <div>
+    <!-- Trigger Modal -->
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#completeProfileModal">
+      New Post
+    </button>
+
     <!-- Modal -->
     <div
       class="modal fade"
-      id="profileModal"
+      id="completeProfileModal"
       tabindex="-1"
-      aria-labelledby="profileModalLabel"
+      aria-labelledby="completeProfileModalLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content modal-custom">
-          <div class="modal-body text-center">
-            <!-- Warning Icon -->
-            <div class="icon-container">
-              <img
-                src="@/public/images/iconwarning.svg"
-                alt="Warning Icon"
-                class="icon-warning"
-              />
-            </div>
-
-            <!-- Modal Message -->
-            <h5 class="modal-title mt-3">Complete your profile first</h5>
-
+        <div class="modal-content custom-modal">
+          <div class="modal-body text-center p-4">
+            <!-- Title -->
+            <h2 class="fw-bold mb-3">Complete your Profile first</h2>
+            <!-- Description -->
+            <p class="text-muted mb-4">
+              You can’t create a post if you don’t complete your profile yet
+            </p>
             <!-- Buttons -->
-            <div class="d-flex justify-content-center gap-3 mt-4">
-              <button
-                type="button"
-                class="btn btn-outline-secondary"
-                data-bs-dismiss="modal"
-              >
-                Cancel
+            <div class="d-grid gap-2">
+              <button class="btn btn-dark btn-lg" @click="goToEditProfile">
+                Go to Edit Profile
               </button>
-              <button type="button" class="btn btn-primary">
-                Edit Profile
+              <button class="btn btn-outline-dark btn-lg" data-bs-dismiss="modal">
+                Cancel
               </button>
             </div>
           </div>
@@ -43,28 +38,53 @@
   </div>
 </template>
 
+<script>
+export default {
+  methods: {
+    goToEditProfile() {
+      this.$router.push('/member/editprofile');
+    },
+
+  },
+};
+</script>
+
 <style scoped lang="scss">
-.modal-custom {
-  background-color: #f5f5f5;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+.custom-modal {
+  width: 328px; // Lebar modal
+  height: 260px; // Tinggi modal
+  border-radius: 16px;
+  background-color: #e9ecef; // Warna abu-abu terang
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
+  margin: 0 auto; // Agar modal selalu di tengah
 }
 
-.icon-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.modal-body {
+  padding: 20px; // Mengurangi padding agar sesuai dengan ukuran kecil
 }
 
-.icon-warning {
-  width: 48px;
-  height: 48px;
+h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #000;
 }
 
-.modal-title {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
+p {
+  font-size: 0.875rem;
+  color: #6c757d; // Warna abu-abu terang
+}
+
+button {
+  border-radius: 8px;
+  height: 44px; // Tinggi tombol
+  font-size: 0.875rem; // Ukuran font tombol
+}
+.btn-dark {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-outline-dark {
+  border: 2px solid #000;
 }
 </style>

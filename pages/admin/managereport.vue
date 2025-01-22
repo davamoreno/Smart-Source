@@ -41,16 +41,18 @@ onMounted(() => {
                   :key="reports.id"
                   v-if="report.reports.length"
                   >
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ reports.title }}</td>
-                    <td>{{ reports.created_at }}</td>
+                    <td class="center-content">{{ index + 1 }}</td>
+                    <td class="center-content">{{ reports.title }}</td>
+                    <td class="center-content">{{ reports.created_at }}</td>
                     <td style="justify-items: center;">
                         <p class="rounded-5 bg-warning text-center text-white" style="height: 100%; width: 100px; margin-top: 10px;">{{ reports.report_status }}</p>
                     </td>
-                    <td><a href="/"  class="btn btn-sm btn-primary text-white" >
-                      <i class="fa-solid fa-envelope"></i>
-                      1</a></td>  
-                    <td>
+                    <td class="center-content"> 
+                      <a href="/" class="btn btn-sm btn-primary text-white px-3 text-center"> 
+                        <i class="fa-solid fa-envelope">
+                        </i> 1 </a> 
+                    </td> 
+                    <td class="center-content">
                       <button
                         class="btn btn-sm text-white g-3 ms-2 btn-success"
                         @click="postValidate(reports.id, 'accept')"> 
@@ -84,3 +86,10 @@ onMounted(() => {
         </div>
     </div>
 </template>
+
+<style scoped> 
+.center-content { 
+  text-align: center; 
+  vertical-align: middle; 
+  } 
+</style>

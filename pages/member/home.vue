@@ -76,6 +76,11 @@ const nextSlide = () => {
     startIndex.value += 1;
   }
 };
+
+const createdHistory = async (slug) => {
+    await postStore.createHistory(slug);
+};
+
 </script>
 
 <template>
@@ -109,6 +114,7 @@ const nextSlide = () => {
                 v-for="(post) in currentPosts"
                 :to="`/member/detailpost/${post.slug}`"
                 class="col-auto text-decoration-none"
+                @click ="createdHistory(post.slug)"
                 >
                 <div class="col-auto">
                   <div class="document-card">

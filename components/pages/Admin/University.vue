@@ -6,6 +6,7 @@
 
     async function handleCreateUniversity(){
        await universityStore.createUniversity();
+       await universityStore.getUniversity();
         if (!universityStore.isLoading) {
             const modal = document.getElementById('universityModal');
             const bootstrapModal = $bootstrap.Modal.getInstance(modal);
@@ -108,7 +109,7 @@ async function handleDeleteUniversity(id) {
                                         <button type="button" class="btn btn-danger btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal">No</button>
                                     </div>
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteUniversity(selectedUniv.id)">Yes</button> 
+                                        <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteUniversity(selectedUniv.id) ">Yes</button> 
                                     </div>
                                 </div>
                             </div>

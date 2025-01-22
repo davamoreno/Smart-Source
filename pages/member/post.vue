@@ -7,15 +7,15 @@ const postStore = usePostStore();
 const route = useRoute();
 const router = useRouter();
 
-onMounted(async () => { 
-  if (route.query.keyword) {
-    postStore.keyword = route.query.keyword;  
-    await postStore.getPost();
-  } else {
-    console.error('Keyword Not Available'); 
-    router.push('/member/home');
-  } 
-});
+// onMounted(async () => { 
+//   if (route.query.keyword) {
+//     postStore.keyword = route.query.keyword;  
+//     await postStore.getPost();
+//   } else {
+//     console.error('Keyword Not Available'); 
+//     router.push('/member/home');
+//   } 
+// });
 
 const onKeywordChange = async () => { 
   router.push({ 

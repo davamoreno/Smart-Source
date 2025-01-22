@@ -9,8 +9,9 @@ import { usePostStore } from '~/stores/MemberContent/post';
 const post = usePostStore();
 
 onMounted(() => {
-  post.getPost();
-});
+  post.getPost()
+    
+  });
 
 </script>
 
@@ -19,7 +20,7 @@ onMounted(() => {
     <AdminSideBar />
     <div class="flex-grow-1 p-4 bg-light adminpost">
       <div class="container-fluid">
-        <h2 class="fw-bold mb-4">Published Post</h2>
+        <h2 class="fw-bold mb-4">Denied Post</h2>
         <div class="card shadow-sm">
           <div class="card-body p-0">
             <table class="table table-bordered mb-0">
@@ -30,41 +31,36 @@ onMounted(() => {
                   <th class="col table-secondary">Date</th>
                   <th class="col table-secondary">Status</th>
                   <th class="col table-secondary">Details</th>
-                
                 </tr>
               </thead>
               <tbody>
-                <tr
-                  v-for="(post, index) in post.posts"
+                <tr  v-for="(post, index) in post.posts"
                   :key="post.id"
                   v-if="post.posts.length"
                 >
-                  <td>{{ index + 1 }}</td>
-                  <td>{{ post.title }}</td>
-                  <td>{{ post.created_at }}</td>
-                  <td>
+                <td>{{ index + 1 }}</td>
+                <td>{{ post.title }}</td>
+               <td>{{ post.created_at }}</td>
+                 <td>
                     <p
-                      class="rounded-5 bg-success text-center text-white"
+                      class="rounded-5 bg-danger text-center text-white"
                       style="height: 100%; width: 100px; margin-top: 10px;"
                     >
-                      {{ post.status }}
+                      {{ post.posts?.status === 'deny'  }}
                     </p>
-                  </td>
-                  <td>
-                    <a
-                      v-if="post.file"
-                      :href="`https://smartsource.nio.my.id/storage/${post.file.file_path}`"
-                      target="_blank"
-                      class="btn btn-sm btn-primary text-white"
-                    >
-                      <i class="fa-solid fa-eye"></i> View File
-                    </a>
-                    <span v-else>File not available</span>
-                  </td>
-                </tr>
-                <tr v-else>
+
+                 </td>
+                 <td>
+                   <a v-if="post.file" :href="`https://smartsource.nio.my.id/storage/${post.file.file_path}`" target="_blank" class="btn btn-sm btn-primary text-white">
+                    <i class="fa-solid fa-eye"></i> View File
+                  </a>
+                  <span v-else>File not available</span>
+             </td>
+            </tr>
+            <tr v-else>
                   <td colspan="6" class="text-center">No posts available</td>
                 </tr>
+
               </tbody>
             </table>
           </div>

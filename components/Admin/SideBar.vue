@@ -62,7 +62,7 @@ onMounted(() => {
                             <div id="dataPostMenu" class="accordion-collapse collapse" data-bs-parent="#accordionSidebar">
                                 <div class="accordion-body py-0">
                                     <a href="/admin/publishedpost" class="text-white text-decoration-none d-block py-2">Published</a>
-                                    <a href="#" class="text-white text-decoration-none d-block py-2">Denied</a>
+                                    <a href="/admin/deniedpost" class="text-white text-decoration-none d-block py-2">Denied</a>
                                 </div>
                             </div>
                         </div>

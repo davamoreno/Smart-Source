@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ref } from 'vue';
 import { useCookie } from '#app';
 import { useUrlStore } from '../BaseUrl/Url';
+import PaperTypeName from '~/pages/member/papertype/[paperTypeName].vue';
 
 export const usePostStore = defineStore('postStore', {
   state: () => {
@@ -24,7 +25,10 @@ export const usePostStore = defineStore('postStore', {
       report: '',
       userPost: [],
       status: '',
-      keyword: ''
+      keyword: '',
+      histories: <any>[],
+      paper_type: '',
+      papers: <any>[]
     };
   },
 
@@ -69,6 +73,7 @@ export const usePostStore = defineStore('postStore', {
           params: {
             page: this.page,
             keyword: this.keyword,
+            paper_type: this.paper_type
           },
           headers: {
             Authorization: `Bearer ${useCookie('jwt').value}`
@@ -92,7 +97,18 @@ export const usePostStore = defineStore('postStore', {
         this.error = err.response?.data?.message || 'An error occurred while showing post';
       }
     },
-
+    async getDenyPost() {
+      try {
+        const response = await axios.get(`${this.urlStore.url}user/post/deny`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.posts = response.data;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },
     async showPostDetail(slug: any) {
       try {
         const response = await axios.get(`${this.urlStore.url}user/post/${slug}`, {
@@ -218,6 +234,45 @@ export const usePostStore = defineStore('postStore', {
         URL.revokeObjectURL(objectURL); // 9
       } catch (err) {
         console.error('Error downloading file:', err);
+      }
+    },
+
+    async createHistory(slug: any) {
+      try {
+        const response = await axios.post(`${this.urlStore.url}user/history/${slug}`, {}, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`,
+          }
+        });
+      } catch (error) {
+        console.error('Error creating report:', error);
+      }
+    },
+
+    async getHistory() {
+      try {
+        const response = await axios.get(`${this.urlStore.url}post/history`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.histories = response.data;
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      }
+    },
+
+    async getPaper(paperTypeName: any) {
+      try {
+        const response = await axios.get(`${this.urlStore.url}user/post/papertype/${paperTypeName}`, {
+          headers: {
+            "Authorization": `Bearer ${useCookie('jwt').value}`
+          }
+        });
+        this.papers = response.data;
+        console.log('paper', response.data)
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
       }
     },
 

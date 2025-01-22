@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onActivated, onBeforeUnmount } from 'vue';
+import { onMounted } from 'vue';
 import { definePageMeta } from '#build/imports';
 import { usePostStore } from '~/stores/MemberContent/post';
 import { useBookmarkStore } from '~/stores/MemberContent/bookmark';
@@ -15,6 +15,14 @@ const router = useRouter();
 const bookmarkStore = useBookmarkStore();
 const keyword = ref('');
 const member = useMemberAuthStore();
+const startIndexLikes = ref(0);
+
+
+onMounted(() => {
+  if (route.name === 'member-home') {
+    postStore.keyword = '';
+  }
+});
 
 onMounted(async () => { 
   if (!member.isLogin) {
@@ -39,6 +47,15 @@ const onKeywordChange = async () => {
   }); 
   await postStore.getPost();
 };
+
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === '/member/home') {
+      postStore.keyword = '';
+    }
+  }
+);
 
 const createdBoomark = async (postId) => {
     await bookmarkStore.create(postId);
@@ -73,6 +90,21 @@ const currentPosts = computed(() => {
   return postStore.posts.slice(startIndex.value, startIndex.value + postsPerPage);
 });
 
+const sortedPostsByLikes = computed(() => {
+  if (!postStore.posts || !Array.isArray(postStore.posts)) {
+    return [];
+  }
+  return [...postStore.posts].sort((a, b) => b.likes_count - a.likes_count);
+});
+
+const currentLikedPosts = computed(() => {
+  if (!Array.isArray(sortedPostsByLikes.value)) {
+    return [];
+  }
+  return sortedPostsByLikes.value.slice(startIndexLikes.value, startIndexLikes.value + postsPerPage);
+});
+
+
 const prevSlide = () => {
   if (startIndex.value > 0) {
     startIndex.value -= 1;
@@ -84,6 +116,7 @@ const nextSlide = () => {
     startIndex.value += 1;
   }
 };
+
 </script>
 
 <template>
@@ -98,12 +131,12 @@ const nextSlide = () => {
         <div class="row">
             <div class="col-6 ms-5"><h5 class="pink-header">Latest Documents</h5></div>
             <div class="col-md-2 ms-auto">
-              <a href="#" class="view-more text-decoration-none">View More</a>
+              <NuxtLink to="/member/post" class="view-more text-decoration-none">View More</NuxtLink>
             </div>
         </div>
 
-        <section class="px-5" v-if="postStore.posts.length > 0">
-          <div class="d-flex align-items-center pt-3">
+        <section class="p-5" v-if="postStore.posts.length > 0">
+          <div class="d-flex align-items-center justify-content-center pt-3 pb-5">
             <button
               @click="prevSlide"
               class="btn btn-secondary me-3"
@@ -182,24 +215,68 @@ const nextSlide = () => {
         <div class="row">
             <div class="col-6 ms-5"><h5 class="pink-header">Most Liked Documents</h5></div>
             <div class="col-md-2 ms-auto">
-              <a href="#" class="view-more text-decoration-none">View More</a>
+              <NuxtLink to="/member/popular" href="#" class="view-more text-decoration-none">View More</NuxtLink>
             </div>
         </div>
-        <section class="mt-5 px-5 pb-5">
-          <div class="row g-5">
-            <DocumentCard
-              v-for="(doc, index) in likedDocuments"
-              :key="index"
-              :title="doc.title"
-              :category="doc.category"
-              :publisher="doc.publisher"
-            />
+        <section class="p-5" v-if="currentLikedPosts.length > 0">
+          <div class="d-flex align-items-center justify-content-center pt-3 pb-5">
+            <div class="row" style="gap: 30px; overflow: hidden;">
+              <router-link
+                v-for="(post) in currentLikedPosts"
+                :to="`/member/detailpost/${post.slug}`"
+                class="col-auto text-decoration-none"
+              >
+              <div class="col-auto">
+                              <div class="document-card">
+                                <div class="card-header text-center">
+                                  <a class="btn" style="border: 1px solid black;
+                                                        width: 52px;
+                                                        height: 53px;
+                                                        border-radius: 100%;
+                                                        margin-left: 75%;
+                                                        box-shadow: 0px 0px 4px 0px;
+                                                        opacity: 70%;
+                                                        position: relative;" 
+                                                        @click.prevent="createdBoomark(post.id)"
+                                                        v-if="!post.bookmark">
+                                    <img src="/images/bookmark.svg" alt="Bookmark" class="icon-bookmark" />
+                                  </a>
+                                  <a class="btn" style="border: 1px solid black;
+                                                        width: 52px;
+                                                        height: 53px;
+                                                        border-radius: 100%;
+                                                        margin-left: 75%;
+                                                        box-shadow: 0px 0px 4px 0px;
+                                                        opacity: 70%;
+                                                        position: relative;" 
+                                                        @click.prevent="deletedBoomark(post.id)" v-else>
+                                    <img src="/public/images/bookmark-fill.svg" alt="Bookmark" class="icon-bookmark" />
+                                  </a>
+                                  <img src="/public/images/File_light.svg" alt="Document" class="document-img my-4" />
+                                </div>
+                                <div class="container-fluid">
+                                    <p class="document-category">{{ post.category.name }}</p>
+                                    <h1 class="document-title">{{ post.title }}</h1>
+                                    <p class="document-publisher">Published by {{ post.user.username }}</p>
+                                </div>
+                                <div class="card-footer">
+                                  <a class="" @click.prevent="createdLike(post.slug)" v-if="!post.like">
+                                    <img src="/public/images/heart.svg" alt="Love" class="icon-love" />
+                                  </a>
+                                  <a class="" @click.prevent="deletedLike(post.slug)" v-else>
+                                    <img src="/public/images/heart-fill.svg" alt="Love" class="icon-love-filled ms-2" />
+                                  </a>
+                                  <span class="likes-count">{{ post.likes_count }} Likes</span>
+                                </div>
+                              </div>
+                            </div>
+              </router-link>
+            </div>
           </div>
         </section>
       </div>
     </div>
   </div>
-  
 </template>
 
 <style lang="scss">

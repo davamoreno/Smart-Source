@@ -1,53 +1,30 @@
 <script setup>
 import { usePostStore } from '~/stores/MemberContent/post';
-import { ref, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
 const postStore = usePostStore();
-const route = useRoute();
-const router = useRouter();
+const startIndexLikes = ref(0);
 
-onMounted(async () => { 
-  if (route.query.keyword) {
-    postStore.keyword = route.query.keyword; 
+onMounted( async () => {
     await postStore.getPost();
-  } else {
-    route.query.keyword = null;
-  } 
 });
 
-const onKeywordChange = async () => { 
-  router.push({ 
-    path: '/member/post', 
-    query: { keyword: postStore.keyword } 
-  }); 
-  await postStore.getPost();
-};
-
-
-watch(() => postStore.keyword , async (newKeyword) => {
-  router.push({ 
-    path: '/member/post', query: { keyword: postStore.keyword } 
-  });
-  await postStore.getPost({ keyword: newKeyword });
+const sortedPostsByLikes = computed(() => {
+  return [...postStore.posts].sort((a, b) => b.likes_count - a.likes_count);
 });
 
+const currentLikedPosts = computed(() => {
+  if (!Array.isArray(sortedPostsByLikes.value)) {
+    return [];
+  }
+  return sortedPostsByLikes.value.slice(startIndexLikes.value, startIndexLikes.value + postsPerPage);
+});
 </script>
 
 <template>
     <div class="container" style="padding-left: 98px; padding-right: 98px;">
 
-      <div class="row justify-content-center pt-5">
-        <div class="input-group w-50">
-          <input type="text" class="form-control border-dark rounded-4" id="university" name="university" v-model="postStore.keyword" placeholder="      Search for documents" @keyup.enter="onKeywordChange">
-          <span class="input-group-text position-absolute start-2 border-0 pt-2" style="background: transparent;">
-          <img src="/public/images/searchlogo.svg" alt="search icon" style="width: 20px; height: 20px;">
-          </span>               
-        </div>
-      </div>
-
-      <div class="d-flex row row-cols-4 gap-5 pt-5 pb-5">
-        <div class="card col" style="width: 250px; height: 400px;" v-for="(post, index) in postStore.posts" :key="index">
+        <div class="d-flex row row-cols-4 gap-5 pt-5 pb-5">
+        <router-link :to="`/member/detailpost/${post.slug}`" class="card col text-decoration-none" style="width: 250px; height: 400px;" v-for="(post, index) in sortedPostsByLikes" :key="index">
               <div class="col position-relative pb-4 pt-2">
                 <span class="position-absolute end-0 border-0">
                   <button class="rounded-circle" style="background-color: transparent; width: 40px; height: 40px;">
@@ -71,7 +48,7 @@ watch(() => postStore.keyword , async (newKeyword) => {
                       </li>
                   </ul>
               </div>
-        </div>
+            </router-link>
       </div>
     </div>
 </template>

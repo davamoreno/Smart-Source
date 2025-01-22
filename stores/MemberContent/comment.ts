@@ -8,7 +8,8 @@ export const useCommentStore = defineStore('commentPost', {
     state: () => {
         return{
             urlStore : useUrlStore(),
-            content: ref(''),
+            mainContent: ref(''),
+            replyContent: ref(''),
             isLoading: ref(false),
             comments: ref(<any>[]),
             userImage: ref({}),
@@ -22,7 +23,7 @@ export const useCommentStore = defineStore('commentPost', {
               const response = await axios.post(
                 `${this.urlStore.url}post/comment/${slug}/${parentId}`,
                 {
-                  content: this.content
+                  content: this.replyContent
                 },
                 {
                   headers: {
@@ -71,7 +72,7 @@ export const useCommentStore = defineStore('commentPost', {
             try {
                 this.isLoading = true;
                 const response = await axios.post(`${this.urlStore.url}post/comment/${slug}`, {
-                    content : this.content
+                    content : this.mainContent
                 },
                 {
                     headers : {

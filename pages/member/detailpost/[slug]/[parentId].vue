@@ -15,7 +15,7 @@ onMounted(async () => {
 const commentHandle = async () => {
   try {
     await comment.replyComment(slug, parentId);
-    comment.content = '';
+    comment.replyContent = '';
   } catch (error) {
     console.error('Error posting reply:', error);
   }
@@ -40,10 +40,9 @@ const commentHandle = async () => {
       </div>
     </div>
 
-    <!-- Reply Input Section -->
     <div class="reply-input mb-5">
       <textarea
-        v-model="comment.content"
+        v-model="comment.replyContent"
         placeholder="Write your reply..."
         rows="3"
         class="form-control mb-2"
@@ -51,7 +50,6 @@ const commentHandle = async () => {
       <button @click="commentHandle" class="btn btn-dark w-100">Post Reply</button>
     </div>
 
-    <!-- Replies Section -->
     <h4 class="mb-5 text-center">Replies</h4>
     <ul class="list-unstyled">
       <li v-for="commentItem in comment.repliesComment?.replies" :key="commentItem.id" class="reply-item mb-3 d-flex align-items-start">

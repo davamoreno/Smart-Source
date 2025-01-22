@@ -31,6 +31,10 @@ async function validateReportForm(PostId) {
   }
 }
 
+const countReplies = (replies) => {
+  return replies ? replies.length : 0;
+};
+
 const reportHandle = async (postId) => {
     await post.createReport(postId);
 }
@@ -79,15 +83,15 @@ onMounted(async () => {
 });
 
 const commentHandle = async (slug) => {
-    if (comment.content.trim() === '') {
+    if (comment.mainContent.trim() === '') {
+      comment.mainContent = ref('')
       commentErrorMessage.value = true;
     } else {
+      await comment.create(slug);
+      await comment.get(slug);
       commentErrorMessage.value = false;
-      comment.content = '';  
+      comment.mainContent = '';  
     }
-    await comment.create(slug);
-    await comment.get(slug);
-    comment.content = ref('')
 }
 
 onActivated(async () => {
@@ -180,7 +184,7 @@ const deletedBoomark = async (postId) => {
             <p class="fs-4 pb-4">Comments</p>
             <img :src="member.userProfile?.user_profile?.file_path ? 'https://smartsource.nio.my.id/storage/' + member.userProfile?.user_profile?.file_path : '/public/images/defaultprofile.svg'" alt="" style="height: 70px; width: 70px; padding-bottom: 20px;   ">
             <input type="text" class="form-control border border-dark" id="comment" name="comment" style="height: 48px; width: 1115px; background-color: transparent;"
-            v-model="comment.content"
+            v-model="comment.mainContent"
             @input="hideCommentErrorMessage"
             :placeholder="commentErrorMessage ? 'Kolom komentar tidak boleh kosong!' : 'Comment..'" 
             :class="{ 'error-placeholder': commentErrorMessage }"
@@ -206,10 +210,8 @@ const deletedBoomark = async (postId) => {
             >
             <div class="col">
                 <span class="d-flex">
-                    <h6 class="me-3"></h6>
-                    <img src="/public/images/dot.svg" alt="" class="pb-1">
-                    <small class="fw-lighter">{{ formatDate(commentars.created_at) }}</small>
-                    <img src="/public/images/dot.svg" alt="" class="pb-1">
+                    <h6 class="me-3">{{  commentars.user?.username }}</h6>
+                      <small class="fw-lighter">{{ formatDate(commentars.created_at) }}</small>
                 </span>
                 <p>{{ commentars.content }}</p>
             </div>
@@ -221,7 +223,7 @@ const deletedBoomark = async (postId) => {
                     >
                     <img src="/public/images/comment_light.svg" alt="" style="width: 40px; height: 40px;">
                 </button>  
-                <small class="fw-medium">20 Comments</small>
+                <small class="fw-medium">{{ countReplies(commentars.replies) }} Comments</small>
             </span>
         </div>
         </div>

@@ -1,22 +1,35 @@
 <script setup>
-import { computed,onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useMemberAuthStore } from '~/stores/Auth/Member/member';
 
 const member = useMemberAuthStore();
 const router = useRouter();
 
+// State
+const isLogin = ref(false);
+
+// On mounted, get user profile
 onMounted(async () => {
+  try {
     await member.getUserProfile();
+    isLogin.value = true;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    isLogin.value = false;
+  }
 });
 
-function logoutHandler() {
-    member.logout().then(() => {
-        member.isLogin = ref(false);
-        return router.push('/');
-    });
-}
-
+// Logout handler
+const logoutHandler = async () => {
+  try {
+    await member.logout();
+    isLogin.value = false;
+    await router.push('/');
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+};
 </script>
 
 <template>  

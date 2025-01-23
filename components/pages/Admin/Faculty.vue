@@ -4,7 +4,7 @@ import { usefacultyStore } from '~/stores/AdminManagement/faculty';
 
 const university = useUniversityStore();
 const faculty = usefacultyStore();
-const facultiesWithUniversity = ref([]);
+const selectedFaculty = '';
 
 async function handleCreateFaculty () {
   await faculty.createFaculty();
@@ -18,17 +18,21 @@ function setFacultyForDeletion(faculties) {
 async function handleDeleteFaculty (id) {
   await faculty.deleteFaculty(id);
   await faculty.getFaculty();
-
+  selectedFaculty.value = null;
 }
+
 onMounted(async () => {
   await university.getUniversity();
   await faculty.getFaculty();
-  
-  facultiesWithUniversity.value = faculty.faculties.map(fac => {
-    const uni = university.universities.find(u => u.id === fac.universityId);
+
+});
+
+const facultiesWithUniversity = computed(() => {
+  return faculty.faculty.map((fac) => {
+    const uni = university.universities.find((u) => u.id === fac.universityId);
     return {
       ...fac,
-      universityName: uni ? uni.name : 'Unknown'
+      universityName: uni ? uni.name : 'Unknown',
     };
   });
 });
@@ -51,7 +55,6 @@ function changePage(page) {
                 <th>No.</th>
                 <th>Faculty</th>
                 <th>University</th>
-                <th>Users Count</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -59,8 +62,7 @@ function changePage(page) {
               <tr  v-for="(faculties, index) in facultiesWithUniversity" :key="faculties.id">
                 <td>{{ index + 1 }}</td>
                 <td>{{ faculties.name }}</td>
-                <td>{{ faculties.universityName }}</td>
-                <td>20</td>
+                <td>{{ faculties.university.name }}</td>
                 <td><button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModalFaculty" @click="setFacultyForDeletion(faculties)"  >Delete</button></td>
 
               </tr>
@@ -81,7 +83,7 @@ function changePage(page) {
                                         <button type="button" class="btn btn-danger btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal">No</button>
                                     </div>
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteFaculty(selectedFaculty.id) ">Yes</button> 
+                                        <button type="button" class="btn btn-primary btn-outline-dark text-light w-100 rounded-3" data-bs-dismiss="modal" @click="handleDeleteFaculty(selectedFaculty?.id) ">Yes</button> 
                                     </div>
                                 </div>
                             </div>
@@ -160,7 +162,4 @@ function changePage(page) {
         </form>
       </div>
     </div>
-
-    
-  
 </template>

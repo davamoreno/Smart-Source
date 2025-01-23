@@ -12,5 +12,5 @@ const memberAuthStore = useMemberAuthStore();
 </script>
 
 <template>
-        
+
 </template>

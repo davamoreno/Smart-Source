@@ -13,7 +13,6 @@ const guestModal = ref(false);
 const bookmarkStore = useBookmarkStore();
 
 async function modal() {
-  
   guestModal.value = true; // Tampilkan moda
   
 };
@@ -85,6 +84,10 @@ const deletedLike = async (slug) => {
     post.likes_count = post.likes_count - 1;
 };
 
+const truncateTitle = (title) => {
+  return title.length > 10 ? title.substring(0, 10) + '...' : title;
+};
+
 
 </script>
 
@@ -124,7 +127,7 @@ const deletedLike = async (slug) => {
                 <div class="card-body position-relative">
                     <ul class="list-unstyled pt-3">
                         <li><small>{{ post.paper_type.name }}</small></li>  
-                        <li class="pt-2"><h5>{{ post.title }}</h5></li>
+                        <li class="pt-2"><h5>{{ truncateTitle(post.title) }}</h5></li>
                         <li><small>Published by {{ post.user?.username }}</small></li>  
                         <li class="card-foote">
                             <span class="position-absolute bottom-0 start-0 ps-2 pb-2">

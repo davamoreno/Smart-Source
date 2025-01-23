@@ -74,25 +74,6 @@ onMounted(() => {
                         </div>
                     </div>
                 </div>
-                <div class="menu-item pb-2">
-                    <div class="accordion" id="accordionSidebar2">
-                        <div class="accordion-item" style="background-color: #152259; border: none;">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button text-white bg-transparent border-0 shadow-none collapsed fw-bold" data-bs-toggle="collapse" data-bs-target="#dataReportMenu"
-                                        aria-expanded="false" aria-controls="dataPostMenu" style="padding: 0;">
-                                    <i class="fa-solid fa-circle-exclamation me-2"></i>
-                                    <p style="margin-top: 13px; margin-right: 15px;">Data Report</p>
-                                </button>
-                            </h2>
-                            <div id="dataReportMenu" class="accordion-collapse collapse" data-bs-parent="#accordionSidebar2">
-                                <div class="accordion-body py-0">
-                                    <a href="#" class="text-white text-decoration-none d-block py-2">Accepted</a>
-                                    <a href="#" class="text-white text-decoration-none d-block py-2">Rejected</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div v-if="adminStore.adminProfile.role === 'super_admin'" class="menu-item pb-4">
                     <i class="fa-regular fa-circle-user text-white"></i>
                     <a href="/admin/manageadmin" class="text-white text-decoration-none ms-1 fw-bold">Manage Admin</a>

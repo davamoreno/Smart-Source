@@ -79,19 +79,29 @@
   const handleDrop = (event) => {
     isDragging.value = false;
     const droppedFiles = Array.from(event.dataTransfer.files);
-    files.value.push(...droppedFiles);
-  };
-  
-  const handleFileInput = () => {
-    const selectedFiles = Array.from(fileInput.value.files);
-    const validFiles = selectedFiles.filter(file => allowedTypes.includes(file.type));
-    
-    if (validFiles.length !== selectedFiles.length) {
-        alert('Some files were rejected because they are not in the allowed formats (.pdf, .docx, .doc)');
+    const validFiles = droppedFiles.filter(file => allowedTypes.includes(file.type));
+
+    if (validFiles.length !== droppedFiles.length) {
+        alert('Some files were rejected because they are not in the allowed formats (.pdf)');
     }
 
     files.value.push(...validFiles);
 };
+
+  
+  const handleFileInput = () => {
+    const selectedFiles = Array.from(fileInput.value.files);
+    const validFiles = selectedFiles.filter(file => {
+        return allowedTypes.includes(file.type) && !files.value.some(f => f.name === file.name);
+    });
+
+    if (validFiles.length !== selectedFiles.length) {
+        alert('Some files were rejected because they are duplicates or not in the allowed formats (.pdf, .docx, .doc)');
+    }
+
+    files.value.push(...validFiles);
+};
+
   
   const openFileDialog = () => {
     fileInput.value.click();
@@ -100,6 +110,9 @@
   files.value.splice(index, 1);
 };
 
+const clearAllFiles = () => {
+    files.value = [];
+};
 
   </script>
   

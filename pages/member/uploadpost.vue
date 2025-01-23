@@ -16,6 +16,22 @@ const categoryError = ref('');
 const paperTypeError = ref('');
 
 async function handleCreatePost() {
+  let isValid = validateForm();
+
+  if (isValid) {
+    try {
+      await post.createPost(); // Kirim post ke server
+      if (!post.error) {
+        showModal.value = true; // Tampilkan modal jika sukses
+        resetForm(); // Reset form
+      }
+    } catch (error) {
+      console.error('Failed to create post:', error); // Debugging jika terjadi error
+    }
+  }
+}
+
+function validateForm() {
   let isValid = true;
 
   // Validasi Title
@@ -48,24 +64,18 @@ async function handleCreatePost() {
     isValid = false;
   } else {
     paperTypeError.value = '';
-    await post.createPost();
-    if (!post.error) {
-    showModal.value = true; // Tampilkan modal
-    resetForm();
   }
 
-  if (isValid) {
-    await post.createPost();
-    if (!post.error) {
-        resetForm();
-        showModal.value = true;
-      }
-    }
-  }
+  return isValid;
 }
 
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  post.file = file;
+};
+
 function resetForm() {
-  post.resetForm();
+  post.resetForm(); // Reset data form di store
   titleError.value = '';
   descriptionError.value = '';
   categoryError.value = '';
@@ -78,6 +88,7 @@ onMounted(() => {
 });
 
 </script>
+
 
 <template>
   <div class="container my-5" style="max-width: 820px;">
@@ -144,7 +155,7 @@ onMounted(() => {
       <!-- File Upload -->
       <div>
         <label class="form-label">Upload File</label>
-        <DragDropUpload @file-selected="(file) => post.file = file" />
+        <DragDropUpload @file-selected="(file) => post.file = file" @change="handleFileUpload" />
       </div>
 
       <!-- Submit Button -->

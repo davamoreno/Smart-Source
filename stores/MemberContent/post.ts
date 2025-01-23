@@ -62,6 +62,7 @@ export const usePostStore = defineStore('postStore', {
         this.posts.push(response.data.post);
         this.clearError();
       } catch (err) {
+        console.error('Error response:', err.response?.data || err.message);
         this.error = err.response?.data?.message || 'An error occurred while creating post';
       } finally {
         this.loading = false;

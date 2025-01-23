@@ -121,6 +121,10 @@ const createdHistory = async (slug) => {
     await postStore.createHistory(slug);
 };
 
+const truncateTitle = (title) => {
+  return title.length > 10 ? title.substring(0, 10) + '...' : title;
+};
+
 </script>
 
 <template>
@@ -186,7 +190,7 @@ const createdHistory = async (slug) => {
                     </div>
                     <div class="container-fluid">
                         <p class="document-category">{{ post.category.name }}</p>
-                        <h1 class="document-title">{{ post.title }}</h1>
+                        <h1 class="document-title">{{ truncateTitle(post.title) }}</h1>
                         <p class="document-publisher">Published by {{ post.user.username }}</p>
                     </div>
                     <div class="card-footer">
@@ -261,7 +265,7 @@ const createdHistory = async (slug) => {
                                 </div>
                                 <div class="container-fluid">
                                     <p class="document-category">{{ post.category.name }}</p>
-                                    <h1 class="document-title">{{ post.title }}</h1>
+                                    <h1 class="document-title">{{ truncateTitle(post.title) }}</h1>
                                     <p class="document-publisher">Published by {{ post.user.username }}</p>
                                 </div>
                                 <div class="card-footer">

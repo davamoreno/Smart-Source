@@ -37,6 +37,11 @@ const deletedLike = async (slug) => {
     post.like = false;
     post.likes_count = post.likes_count - 1;
 };
+
+const truncateTitle = (title) => {
+  return title.length > 10 ? title.substring(0, 10) + '...' : title;
+};
+
 </script>
 
 <template>
@@ -65,7 +70,7 @@ const deletedLike = async (slug) => {
                 <div class="card-body position-relative" style="height: 100px;">
                   <ul class="list-unstyled pt-3">
                     <li><small>{{ bookmark.post?.paper_type?.name }}</small></li>
-                    <li class="pt-2"><h5>{{ bookmark.post.title }}</h5></li>
+                    <li class="pt-2"><h5>{{ truncateTitle(bookmark.post.title) }}</h5></li>
                     <li><small>Published by {{ bookmark.user.username }}</small></li>
                     
                   </ul>

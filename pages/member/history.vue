@@ -9,6 +9,10 @@ onMounted(() => {
   postStore.getHistory();
 });
 
+const truncateTitle = (title) => {
+  return title.length > 10 ? title.substring(0, 10) + '...' : title;
+};
+
 </script>
 <template>
     <div class="container-fluid overflow-x-hidden">
@@ -33,7 +37,7 @@ onMounted(() => {
                           <div class="card-body position-relative">
                               <ul class="list-unstyled pt-4">
                                   <li><small>{{ history.posts?.papertype?.name }}</small></li>  
-                                  <li class="pt-2"><h5>{{ history.posts?.title }}</h5></li>
+                                  <li class="pt-2"><h5>{{ truncateTitle(history.posts?.title) }}</h5></li>
                                   <li><small>Published by {{ history.posts?.user?.username }}</small></li>  
                                   <!-- <li>
                                       <span class="position-absolute bottom-0 start-0 ps-2 pb-2">
